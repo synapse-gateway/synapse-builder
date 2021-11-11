@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start-gui": "node gui-server.js",
+    "start-apollo": "node apollo-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon gui-server.js",
+    "build:mesh": "yarn mesh build",
+    "build:ui": "rm -rf build && cd ../client/ && npm run build --prod && cp -r build ../server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-mesh/cli": "^0.42.6",
+    "@graphql-mesh/openapi": "^0.19.3",
+    "apollo-server": "^3.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "graphql": "^15.6.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}

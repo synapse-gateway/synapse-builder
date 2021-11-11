@@ -1,0 +1,5 @@
+sources:
+  - name: Exam
+    handler:
+      graphql:
+        endpoint: www.example.com
