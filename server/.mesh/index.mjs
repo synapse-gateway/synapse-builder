@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 import ExternalModule_0 from '@graphql-mesh/cache-inmemory-lru';
 import ExternalModule_1 from '@graphql-mesh/openapi';
 import ExternalModule_2 from '@graphql-mesh/merger-stitching';
-import ExternalModule_3 from './sources/AuthorService/oas-schema.js';
-import ExternalModule_4 from './sources/BookService/oas-schema.js';
+import ExternalModule_3 from './sources/BookService/oas-schema.js';
+import ExternalModule_4 from './sources/AuthorService/oas-schema.js';
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: ExternalModule_0,
@@ -15,9 +15,9 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-stitching"]: ExternalModule_2,
     // @ts-ignore
-    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_3,
+    [".mesh/sources/BookService/oas-schema.js"]: ExternalModule_3,
     // @ts-ignore
-    [".mesh/sources/BookService/oas-schema.js"]: ExternalModule_4
+    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_4
 };
 const baseDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const syncImportFn = (moduleId) => {

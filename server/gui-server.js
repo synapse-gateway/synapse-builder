@@ -12,7 +12,7 @@ app.use(express.static(path));
 
 app.use("/api", routes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 4005;
 app.listen(PORT, () => {
   console.log(`server is listening on port: ${PORT}`);
 })
