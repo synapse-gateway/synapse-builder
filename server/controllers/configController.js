@@ -13,7 +13,13 @@ const formatSource = (source) => {
     case "postgraphile":
       handlerInput = { "postgraphile": { connectionString: source.url } };
       break;
-  }
+    case "mongoose":
+      handlerInput = { "mongoose": { connectionString: source.url, models: source.models } };
+      break;
+    case "jsonSchema":
+      handlerInput = { "jsonSchema": { baseUrl: source.url, operations: source.operations } };
+      break;
+  };
 
   return { name: source.name, handler: handlerInput};
 };
