@@ -16,11 +16,6 @@ async function main() {
   } catch(err) {
     console.log(err)
   }
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
   mongoose.Promise = global.Promise
 
   const ResolverSchema = new Schema({
@@ -47,30 +42,14 @@ async function main() {
         skipIntrospection: true,
         onExecutionMeasurement: (args, timing) => {
           console.log('WE TIMING BOY')
-<<<<<<< HEAD
-
-=======
-          
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
           singleQueryObj = {rootFields: []}
           let operation = args.document.definitions.find(def => def.kind === Kind.OPERATION_DEFINITION)
           //console.log(operation.operation, "TESTING BOUUUUUUUUY")
           operation.selectionSet.selections.forEach((s) => {
             let fieldName = s.name.value
             singleQueryObj.rootFields.push(fieldName)
-<<<<<<< HEAD
-
-          })
 
           singleQueryObj.operation = operation.operation
-
-=======
-            
-          })
-
-          singleQueryObj.operation = operation.operation
-          
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
           singleQueryObj.latency = timing['ms']
           singleQueryObj.unixTime = new Date().getTime() / 1000
           SingleQuery.create(singleQueryObj).catch((err) => console.log(err))
@@ -103,11 +82,7 @@ async function main() {
     context: contextBuilder,
     executor: async requestContext => {
       const { schema, execute, contextFactory } = getEnveloped({ req: requestContext.request.http });
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
       return execute({
         schema: schema,
         document: requestContext.document,

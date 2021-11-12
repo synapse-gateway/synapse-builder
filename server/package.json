@@ -18,30 +18,16 @@
     "@envelop/core": "^1.6.1",
     "@graphql-mesh/cli": "^0.42.6",
     "@graphql-mesh/openapi": "^0.19.3",
-<<<<<<< HEAD
     "apollo-server": "^3.4.0",
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
-=======
-    "apollo-server": "^3.5.0",
-    "apollo-server-express": "^3.5.0",
-    "axios": "^0.24.0",
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
     "graphql": "^15.6.1",
-<<<<<<< HEAD
     "js-yaml": "^4.1.0",
     "mongoose": "^6.0.12"
-=======
-    "graphql-compose": "^9.0.4",
-    "js-yaml": "^4.1.0",
-    "mongoose": "^6.0.12",
-    "node-cron": "^3.0.0",
-    "prom-client": "^14.0.1"
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
   },
   "devDependencies": {
     "nodemon": "^2.0.14"

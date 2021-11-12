@@ -36,9 +36,3 @@ const getResolverData = async (req, res, next) => {
 
 exports.getResolverData = getResolverData
 exports.getIndividualQueryData = getIndividualQueryData
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
