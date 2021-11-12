@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes/api");
+<<<<<<< HEAD
+=======
+const cron = require('node-cron');
+>>>>>>> 6a23816041db9e754694fbb6b7e1e34c87ea3558
 const mongoose = require('mongoose');
 
 require("dotenv").config();

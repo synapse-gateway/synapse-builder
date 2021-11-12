@@ -4,15 +4,6 @@ schema {
 
 type Query {
   """
-  get all them authors
-  
-  Equivalent to GET /authors
-  """
-  getAuthors(
-    """Auto-generated argument that limits the size of returned list of objects/list, selecting the first `n` elements of the list"""
-    limit: Int
-  ): [AuthorsListItem]
-  """
   retrieves all books
   
   Equivalent to GET /books
@@ -27,11 +18,15 @@ type Query {
   Equivalent to GET /books/{id}
   """
   getBooksId(id: String!): Book
-}
-
-type AuthorsListItem {
-  author: String
-  id: Float
+  """
+  get all them authors
+  
+  Equivalent to GET /authors
+  """
+  getAuthors(
+    """Auto-generated argument that limits the size of returned list of objects/list, selecting the first `n` elements of the list"""
+    limit: Int
+  ): [AuthorsListItem]
 }
 
 type BooksListItem {
@@ -48,4 +43,9 @@ type Book {
   id: Float
   name: String
   yearPublished: Float
+}
+
+type AuthorsListItem {
+  author: String
+  id: Float
 }

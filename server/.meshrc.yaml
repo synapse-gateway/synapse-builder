@@ -1,5 +1,9 @@
 sources:
-  - name: Exam
+  - name: BookService
     handler:
-      graphql:
-        endpoint: www.example.com
+      openapi:
+        source: ./oas_books.yaml
+  - name: AuthorService
+    handler:
+      openapi:
+        source: ./oas_authors.yaml
