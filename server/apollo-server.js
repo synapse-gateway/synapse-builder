@@ -48,6 +48,7 @@ async function main() {
           operation.selectionSet.selections.forEach((s) => {
             let fieldName = s.name.value
             singleQueryObj.rootFields.push(fieldName)
+          })
 
           singleQueryObj.operation = operation.operation
           singleQueryObj.latency = timing['ms']
