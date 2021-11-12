@@ -8,8 +8,8 @@ const path_1 = require("path");
 const cache_inmemory_lru_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/cache-inmemory-lru"));
 const openapi_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/openapi"));
 const merger_stitching_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/merger-stitching"));
-const oas_schema_js_1 = (0, tslib_1.__importDefault)(require("./sources/AuthorService/oas-schema.js"));
-const oas_schema_js_2 = (0, tslib_1.__importDefault)(require("./sources/BookService/oas-schema.js"));
+const oas_schema_js_1 = (0, tslib_1.__importDefault)(require("./sources/BookService/oas-schema.js"));
+const oas_schema_js_2 = (0, tslib_1.__importDefault)(require("./sources/AuthorService/oas-schema.js"));
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: cache_inmemory_lru_1.default,
@@ -18,9 +18,9 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-stitching"]: merger_stitching_1.default,
     // @ts-ignore
-    [".mesh/sources/AuthorService/oas-schema.js"]: oas_schema_js_1.default,
+    [".mesh/sources/BookService/oas-schema.js"]: oas_schema_js_1.default,
     // @ts-ignore
-    [".mesh/sources/BookService/oas-schema.js"]: oas_schema_js_2.default
+    [".mesh/sources/AuthorService/oas-schema.js"]: oas_schema_js_2.default
 };
 const baseDir = (0, path_1.join)(__dirname, '..');
 const syncImportFn = (moduleId) => {
