@@ -20,9 +20,7 @@ const getIndividualQueryData = async (req, res, next) => {
 
 
 const getResolverDataForLast = async (minutes) => {
-  let d = new Date()
-  d.setMinutes(d.getMinutes() - minutes)
-  let mongoResponse = await Resolver.find({created_at: {$gte: d}})
+  let mongoResponse = await Resolver.find({createdAt: {$gte: new Date(Date.now() - (minutes * 60 * 1000))}})
   return mongoResponse
 }
 

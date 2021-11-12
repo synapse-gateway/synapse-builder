@@ -21,7 +21,8 @@ async function main() {
 
   const ResolverSchema = new Schema({
     name: String,
-    latency: Number
+    latency: Number,
+    unixTime: Number
   }, {timestamps: true})
 
   const Resolver = queryConn.model("resolver", ResolverSchema)
@@ -29,11 +30,12 @@ async function main() {
   const SingleQuerySchema = new Schema({
     operation: String,
     latency: Number,
-    rootFields: [String]
+    rootFields: [String],
+    unixTime: Number
   }, {timestamps: true})
 
   const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
-  
+
   const getEnveloped = envelop({
     plugins: [
       useSchema(schema),
@@ -54,6 +56,7 @@ async function main() {
           singleQueryObj.operation = operation.operation
           
           singleQueryObj.latency = timing['ms']
+          singleQueryObj.unixTime = new Date().getTime() / 1000
           SingleQuery.create(singleQueryObj).catch((err) => console.log(err))
         },
         onResolverMeasurement: (args, timing) => {
@@ -61,7 +64,8 @@ async function main() {
 
           Resolver.create({
             name: `${args.path.typename}.${args.path.key}`,
-            latency: timing['ms']
+            latency: timing['ms'],
+            unixTime: new Date().getTime() / 1000
           }).catch((err) => console.log(err))
         }
       }),
