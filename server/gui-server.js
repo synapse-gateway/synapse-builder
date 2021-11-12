@@ -2,7 +2,17 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes/api");
+const mongoose = require('mongoose');
+
 require("dotenv").config();
+
+
+
+mongoose.connect(process.env.MONGO_DB)
+  .then((res) => console.log('MONGO DB CONNECTED :)'))
+  .catch((err) => console.log(err));
+
+
 
 app.use(express.json());
 app.use(cors());
@@ -12,7 +22,7 @@ app.use(express.static(path));
 
 app.use("/api", routes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 4005;
 app.listen(PORT, () => {
   console.log(`server is listening on port: ${PORT}`);
 })
