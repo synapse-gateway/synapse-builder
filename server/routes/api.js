@@ -5,8 +5,6 @@ const monitoringController = require("../controllers/monitoringController");
 
 router.post("/config", configController.createConfig)
 
-router.get("/monitor", monitoringController.getTimeData)
-
-router.get("/aneeshmongo", monitoringController.getMongoData)
+router.get("/monitor/resolvers", monitoringController.getResolverData)
 
 module.exports = router;
