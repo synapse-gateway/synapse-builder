@@ -1,65 +1,56 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react'
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import Title from '../Title';
-import apiClient from "../../lib/apiClient"
-
-// Generate Graph Data
-
-
-// const values = [
-//   [1636653152.106, "5.573"],
-//   [1636653167.106, "5.929"],
-//   [1636653182.106, "6.5840000000000005"],
-//   [1636653197.106, "6.5840000000000005"],
-//   [1636653212.106, "6.5840000000000005"],
-//   [1636653227.106, "6.5840000000000005"],
-//   [1636653242.106, "6.5840000000000005"],
-//   [1636653257.106, "6.5840000000000005"],
-//   [1636653272.106, "6.5840000000000005"],
-//   [1636653287.106, "6.5840000000000005"]
-// ]
-
-// let time = new Date(1636653212.106 * 1000);
-
-
+import * as React from "react";
+import moment from "moment";
+import { useTheme } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Label,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import Title from "../Title";
+import apiClient from "../../lib/apiClient";
 
 export default function Chart() {
-  const [data, setData] = useState([])
-  useEffect(() => {
-    apiClient.getTimeData().then((resData) => {
-      function createData(time, amount) {
-        return { time, amount };
-      }
+  // const [data, setData] = useState([])
+  // useEffect(() => {
+  //   apiClient.getTimeData().then((resData) => {
+  //     function createData(time, amount) {
+  //       return { time, amount };
+  //     }
 
-      console.log(resData.data)
-      
-      setData(resData.data["Query.getAuthors"].map((pair) => {
-        return createData(pair[0], pair[1])
-      }))
-    })
-  }, [])
+  //     console.log(resData.data)
+
+  //     setData(resData.data["Query.getAuthors"].map((pair) => {
+  //       return createData(pair[0], pair[1])
+  //     }))
+  //   })
+  // }, [])
   const theme = useTheme();
-  
-  // const data = [
-  //   // createData(time, 5.573),
-  //   createData('03:00', 5.929),
-  //   createData('06:00', 6.5840000000000005),
-  //   createData('09:00', 6.5840000000000005),
-  //   createData('12:00', 6.5840000000000005),
-  //   createData('15:00', 6.5840000000000005),
-  //   createData('18:00', 6.5840000000000005),
-  //   createData('21:00', 6.5840000000000005),
-  //   createData('24:00', undefined),
-  // ]
+
+  function createData(time, amount) {
+    return { time, amount };
+  }
+
+  const baseTime = 1636672182;
+
+  let rawData = [
+    { unix: 1636672195, latency: "1.929", count: "1" },
+    { unix: 1636672196, latency: "6.584", count: "1" },
+    { unix: 1636672882, latency: "6.584", count: "1" },
+    { unix: 1636672902, latency: "6.584", count: "1" },
+    { unix: 1636672987, latency: "3.584", count: "1" },
+  ];
 
   return (
     <>
       <Title>Today</Title>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={rawData}
           margin={{
             top: 16,
             right: 16,
@@ -68,9 +59,13 @@ export default function Chart() {
           }}
         >
           <XAxis
-            dataKey="time"
+            dataKey="unix"
+            tickFormatter={(timeStr) => moment.unix(timeStr).format("HH:mm")}
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
+            scale="time"
+            type="number"
+            domain={["dataMin - 60", "dataMax"]}
           />
           <YAxis
             stroke={theme.palette.text.secondary}
@@ -80,7 +75,7 @@ export default function Chart() {
               angle={270}
               position="left"
               style={{
-                textAnchor: 'middle',
+                textAnchor: "middle",
                 fill: theme.palette.text.primary,
                 ...theme.typography.body1,
               }}
@@ -88,12 +83,16 @@ export default function Chart() {
               Requests
             </Label>
           </YAxis>
+          <Tooltip
+            labelFormatter={(timeStr) => moment.unix(timeStr).format("HH:mm")}
+            formatter={(value) => `${value} ms`}
+          />
           <Line
             isAnimationActive={false}
             type="monotone"
-            dataKey="amount"
+            dataKey="latency"
             stroke={theme.palette.primary.main}
-            dot={false}
+            dot={true}
           />
         </LineChart>
       </ResponsiveContainer>
