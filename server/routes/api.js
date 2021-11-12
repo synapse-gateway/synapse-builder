@@ -7,4 +7,6 @@ router.post("/config", configController.createConfig)
 
 router.get("/monitor/resolvers", monitoringController.getResolverData)
 
+router.get("/monitor/queries", monitoringController.getIndividualQueryData)
+
 module.exports = router;

@@ -8,6 +8,6 @@ const SingleQuerySchema = new Schema({
   rootFields: [String]
 }, {timestamps: true})
 
-const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
+const SingleQuery = mongoose.model("singleQuery", SingleQuerySchema)
 
 exports.SingleQuery = SingleQuery
