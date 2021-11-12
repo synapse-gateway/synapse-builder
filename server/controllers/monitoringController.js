@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { ResolutionBin } = require('../models/ResolutionBin')
 
 const fetchPrometheusData = async (timeRange) => {
   let durationSumData = await axios.get(`http://localhost:9090/api/v1/query?query=apollo_query_field_resolution_duration_sum[${timeRange}m]`)
@@ -16,9 +17,14 @@ const fetchPrometheusData = async (timeRange) => {
   return responseObj
 }
 
+const getMongoData = (req, res, next) => {
+  ResolutionBin.find({queryInfo: "query: AuthorsListItem.author"}).then((data) => res.status(200).json(data))
+}
+
 const getTimeData = (req, res, next) => {
   fetchPrometheusData(1).then((resData) => res.status(200).json(resData))
 }
 
 exports.fetchPrometheusData = fetchPrometheusData
 exports.getTimeData = getTimeData
+exports.getMongoData = getMongoData

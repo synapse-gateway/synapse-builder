@@ -7,4 +7,6 @@ router.post("/config", configController.createConfig)
 
 router.get("/monitor", monitoringController.getTimeData)
 
+router.get("/aneeshmongo", monitoringController.getMongoData)
+
 module.exports = router;
