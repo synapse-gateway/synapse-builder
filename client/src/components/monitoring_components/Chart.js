@@ -67,7 +67,7 @@ export default function Chart({ timeFormat, data, currentTime }) {
             }
             formatter={(value, name) => {
               if (name === "Average Latency") {
-                return [`${value.toFixed(0)} ms`, name];
+                return [`${value.toFixed(0)}ms`, name];
               } else return [`${value}`, name];
             }}
           />
