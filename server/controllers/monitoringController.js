@@ -14,7 +14,7 @@ const getIndividualQueryDataSinceUnix = async (unixTimestamp) => {
 }
 
 const getResolversDataSinceUnix = (unixTimestamp) => {
-  let mongoResponse = await Resolver.find(createdAt: {$gte: new Date(unixTimestamp * 1000)})
+  let mongoResponse = await Resolver.find({createdAt: {$gte: new Date(unixTimestamp * 1000)}})
   return mongoResponse
 }
 
