@@ -25,34 +25,29 @@ import apiClient from "../../lib/apiClient"
 
 
 
-export default function Chart() {
+export default function Chart({loggedInUser}) {
   const [data, setData] = useState([])
   useEffect(() => {
-    apiClient.getTimeData().then((resData) => {
+    apiClient.getTimeData(loggedInUser).then((resData) => {
       function createData(time, amount) {
         return { time, amount };
       }
 
-      console.log(resData.data)
+      console.log(resData, "IN CHART BOYOYOYOYOYOY")
       
-      setData(resData.data["Query.getAuthors"].map((pair) => {
-        return createData(pair[0], pair[1])
-      }))
+      setData([
+        // createData(time, 5.573),
+        {'03:00': 5.929},
+        {'06:00': 6.5840000000000005},
+        {'09:00': 6.5840000000000005},
+        {'12:00': 6.5840000000000005},
+        {'15:00': 6.5840000000000005},
+        {'18:00': 6.5840000000000005},
+        {'21:00': 6.5840000000000005},
+      ])
     })
   }, [])
-  const theme = useTheme();
-  
-  // const data = [
-  //   // createData(time, 5.573),
-  //   createData('03:00', 5.929),
-  //   createData('06:00', 6.5840000000000005),
-  //   createData('09:00', 6.5840000000000005),
-  //   createData('12:00', 6.5840000000000005),
-  //   createData('15:00', 6.5840000000000005),
-  //   createData('18:00', 6.5840000000000005),
-  //   createData('21:00', 6.5840000000000005),
-  //   createData('24:00', undefined),
-  // ]
+  const theme = useTheme(); 
 
   return (
     <>

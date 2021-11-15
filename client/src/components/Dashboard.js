@@ -1,5 +1,6 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom'
+import Link from '@mui/material/Link';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,6 +22,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems, secondaryListItems } from './Navigation';
 import Monitoring from './monitoring_components/Monitoring';
 import DataSources from './datasources_components/DataSources';
+import Home from './Home';
+import SignUp from './authentication_components/Signup';
+import SignIn from './authentication_components/Signin';
 
 // function Copyright(props) {
 //   return (
@@ -85,9 +89,18 @@ const mdTheme = createTheme();
 
 const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
+  const [loggedInUser, setLoggedInUser] = useState(null)
+  console.log(loggedInUser, "dahsboard logged in")
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const toggleLoggedIn = (e) => {
+    e.preventDefault()
+    if (loggedInUser) {
+      setLoggedInUser(null)
+    }
+  } 
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -123,11 +136,12 @@ const Dashboard = () => {
               Team 5 GUI
             </Typography>
             {/* Notifications */}
-            {/* <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
+            <IconButton color="inherit" onClick={toggleLoggedIn}>
+              {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+              </Badge> */}
+              {loggedInUser ? "Logout" : "Login/Signup"}
+            </IconButton>
           </Toolbar>
         </AppBar>
 
@@ -170,9 +184,14 @@ const Dashboard = () => {
 
               {/* Features */}
               <Routes>
+                <Route path="/" element={<Home loggedInUser={loggedInUser} />} />
+                <Route path="/monitoring" element={<Monitoring loggedInUser={loggedInUser} />} />
+                <Route path="/datasources" element={<DataSources loggedInUser={loggedInUser} />} />
+              
+                <Route path="/signup" element={<SignUp setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} />}/>
+                <Route path="/signin" element={<SignIn setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} />}/>
                 {/* <Route path="/" element={} /> */}
-                <Route path="/monitoring" element={<Monitoring />} />
-                <Route path="/datasources" element={<DataSources />} />
+                
                 {/* <Route path="/permissions" element={<Permissions />} /> */}
                 {/* <Route path="/graphiql" element={<GraphiQL />} /> */}
               </Routes>

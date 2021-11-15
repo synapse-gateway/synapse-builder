@@ -19,8 +19,8 @@ function authenticateToken(req, res, next) {
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     console.log(err)
     if (err) return res.sendStatus(403)
-    console.log(user)
     req.user = user
+    console.log('made it here HOMIE')
     next()
   })
 }
@@ -40,8 +40,9 @@ router.get("/testjwt", authenticateToken, testJWT)
 // Create new user
 router.post('/users', async (req, res) => {
   try {
+    console.log(req.body, "HERE ANEESH RIGHT HERE")
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = { username: req.body.name, password: hashedPassword };
+    const user = { username: req.body.username, password: hashedPassword, firstName: req.body.firstName, lastName: req.body.lastName};
     console.log(user)
     let userObj = await User.create(user); // push to "real" database
     res.status(201).json({token: jsonwebtoken.sign({user: userObj._id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10h'})})
@@ -54,11 +55,12 @@ router.post('/users', async (req, res) => {
 
 // Authenticate login
 router.post('/users/login', async (req, res) => {
-  const user = User.find({username: req.body.name}); // find user from "real" database
+  const user = await User.findOne({username: req.body.username}); // find user from "real" database
+  console.log(user.password)
   if (!user) {
     return res.status(400).send('User does not exist');
   }
-
+  console.log(user.password)
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       // Give back JWT
@@ -68,8 +70,9 @@ router.post('/users/login', async (req, res) => {
     } else {
       res.send('Login > Failed');
     }
-  } catch {
-    res.status(500).send()
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({error: err})
   }
 });
 
