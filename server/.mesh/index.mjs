@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 import ExternalModule_0 from '@graphql-mesh/cache-inmemory-lru';
 import ExternalModule_1 from '@graphql-mesh/openapi';
 import ExternalModule_2 from '@graphql-mesh/merger-stitching';
-import ExternalModule_3 from './sources/Bored/oas-schema.js';
-import ExternalModule_4 from './sources/Yoda/oas-schema.js';
+import ExternalModule_3 from './sources/BookService/oas-schema.js';
+import ExternalModule_4 from './sources/AuthorService/oas-schema.js';
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: ExternalModule_0,
@@ -15,9 +15,9 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-stitching"]: ExternalModule_2,
     // @ts-ignore
-    [".mesh/sources/Bored/oas-schema.js"]: ExternalModule_3,
+    [".mesh/sources/BookService/oas-schema.js"]: ExternalModule_3,
     // @ts-ignore
-    [".mesh/sources/Yoda/oas-schema.js"]: ExternalModule_4
+    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_4
 };
 const baseDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const syncImportFn = (moduleId) => {
@@ -42,7 +42,7 @@ import { DefaultLogger } from '@graphql-mesh/utils';
 import OpenapiHandler from '@graphql-mesh/openapi';
 import StitchingMerger from '@graphql-mesh/merger-stitching';
 import { resolveAdditionalResolvers } from '@graphql-mesh/utils';
-export const rawConfig = { "sources": [{ "name": "Bored", "handler": { "openapi": { "source": "http://www.boredapi.com/api/activity/" } } }, { "name": "Yoda", "handler": { "openapi": { "source": "http://www.boredapi.com/api/activity/" } } }] };
+export const rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./oas_books.yaml" } } }, { "name": "AuthorService", "handler": { "openapi": { "source": "./oas_authors.yaml" } } }] };
 export async function getMeshOptions() {
     const cache = new MeshCache({
         ...(rawConfig.cache || {}),
@@ -55,10 +55,10 @@ export async function getMeshOptions() {
     const logger = new DefaultLogger('🕸️');
     const sources = [];
     const transforms = [];
-    const boredTransforms = [];
-    const yodaTransforms = [];
+    const bookServiceTransforms = [];
+    const authorServiceTransforms = [];
     const additionalTypeDefs = [];
-    const boredHandler = new OpenapiHandler({
+    const bookServiceHandler = new OpenapiHandler({
         name: rawConfig.sources[0].name,
         config: rawConfig.sources[0].handler["openapi"],
         baseDir,
@@ -68,7 +68,7 @@ export async function getMeshOptions() {
         logger: logger.child(rawConfig.sources[0].name),
         importFn
     });
-    const yodaHandler = new OpenapiHandler({
+    const authorServiceHandler = new OpenapiHandler({
         name: rawConfig.sources[1].name,
         config: rawConfig.sources[1].handler["openapi"],
         baseDir,
@@ -79,14 +79,14 @@ export async function getMeshOptions() {
         importFn
     });
     sources.push({
-        name: 'Bored',
-        handler: boredHandler,
-        transforms: boredTransforms
+        name: 'BookService',
+        handler: bookServiceHandler,
+        transforms: bookServiceTransforms
     });
     sources.push({
-        name: 'Yoda',
-        handler: yodaHandler,
-        transforms: yodaTransforms
+        name: 'AuthorService',
+        handler: authorServiceHandler,
+        transforms: authorServiceTransforms
     });
     const merger = new StitchingMerger({
         cache,

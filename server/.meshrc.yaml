@@ -1,5 +1,9 @@
 sources:
-  - name: Bored
+  - name: BookService
     handler:
       openapi:
-        source: http://www.boredapi.com/api/activity/
+        source: ./oas_books.yaml
+  - name: AuthorService
+    handler:
+      openapi:
+        source: ./oas_authors.yaml
