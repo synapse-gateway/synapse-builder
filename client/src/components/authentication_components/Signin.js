@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Navigate } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
+import { Alert } from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -31,6 +33,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn({loggedInUser, setLoggedInUser}) {
+  const [errorMessage, setErrorMessage] = useState(null)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,8 +43,14 @@ export default function SignIn({loggedInUser, setLoggedInUser}) {
       password: data.get('password'),
     };
 
-    let jwt = await apiClient.loginUser(userObj)
-    setLoggedInUser(jwt)
+
+    let responseData = await apiClient.loginUser(userObj)
+    if (responseData.error) {
+      setErrorMessage(responseData.error)
+    } else {
+      setLoggedInUser(responseData.token)
+    }
+    
   };
 
   if (loggedInUser) {
@@ -51,6 +60,7 @@ export default function SignIn({loggedInUser, setLoggedInUser}) {
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
+          {errorMessage ? <Alert severity="error" variant="filled">{errorMessage}</Alert> : <></> }
           <Box
             sx={{
               marginTop: 8,

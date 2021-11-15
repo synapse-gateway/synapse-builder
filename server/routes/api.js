@@ -68,7 +68,7 @@ router.post('/users/login', async (req, res) => {
 
       res.status(201).json({token: jsonwebtoken.sign({user: user._id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10h'})})
     } else {
-      res.send('Login > Failed');
+      res.status(401).json({error: 'Login Failed'});
     }
   } catch(err) {
     console.log(err)

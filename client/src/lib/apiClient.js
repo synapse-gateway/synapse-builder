@@ -28,8 +28,13 @@ const apiClient = {
     
   },
   async loginUser(user) {
-    let response = await axios.post("http://localhost:4005/api/users/login", user)
-    return response.data.token
+    try {
+      let response = await axios.post("http://localhost:4005/api/users/login", user)
+      return response.data
+    } catch (err) {
+      return {"error": "Username/password combination failed. Please try again."}
+    }
+    
   }
 };
 
