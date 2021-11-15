@@ -8,10 +8,22 @@ const getIndividualQueryDataForLast = async (minutes) => {
   return mongoResponse
 }
 
+const getIndividualQueryDataSinceUnix = async (unixTimestamp) => {
+  let mongoResponse = await SingleQuery.find({createdAt: {$gte: new Date(unixTimestamp * 1000)}})
+  return mongoResponse
+}
+
+const getResolversDataSinceUnix = (unixTimestamp) => {
+  let mongoResponse = await Resolver.find(createdAt: {$gte: new Date(unixTimestamp * 1000)})
+  return mongoResponse
+}
+
 const getIndividualQueryData = async (req, res, next) => {
   let queryData
   if (req.query.minutes) {
     queryData = await getIndividualQueryDataForLast(parseInt(req.query.minutes, 10))
+  } else if (req.query.since) {
+    queryData = await getIndividualQueryDataSinceUnix(parseInt(req.query.since, 10))
   } else {
     queryData = await getIndividualQueryDataForLast(5)
   }
@@ -28,6 +40,8 @@ const getResolverData = async (req, res, next) => {
   let resolverData
   if (req.query.minutes) {
     resolverData = await getResolverDataForLast(parseInt(req.query.minutes, 10))
+  } else if (req.query.since) {
+    queryData = await getResolversDataSinceUnix(parseInt(req.query.since, 10))
   } else {
     resolverData = await getResolverDataForLast(5)
   }
