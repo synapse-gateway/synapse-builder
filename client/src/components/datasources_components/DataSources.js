@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import apiClient from "../../lib/apiClient";
+// import apiClient from "../../lib/apiClient";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import ExistingSources from "./ExistingSources";
@@ -16,10 +16,10 @@ const DataSources = () => {
   const [sourceList, setSourceList] = useState([]);
   const [currentHandler, setCurrentHandler] = useState("");
 
-  const handleOnSubmit = (e) => {
-    e.preventDefault();
-    apiClient.createConfig(sourceList);
-  };
+  // const handleOnSubmit = (e) => {
+  //   e.preventDefault();
+  //   apiClient.createConfig(sourceList);
+  // };
 
   const handlerForms = {
     openapi: <OpenAPI sourceList={sourceList} setSourceList={setSourceList} />,

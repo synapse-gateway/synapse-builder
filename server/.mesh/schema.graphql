@@ -2,50 +2,8 @@ schema {
   query: Query
 }
 
+"""Placeholder object"""
 type Query {
-  """
-  retrieves all books
-  
-  Equivalent to GET /books
-  """
-  getBooks(
-    """Auto-generated argument that limits the size of returned list of objects/list, selecting the first `n` elements of the list"""
-    limit: Int
-  ): [BooksListItem]
-  """
-  retrieve individual Book
-  
-  Equivalent to GET /books/{id}
-  """
-  getBooksId(id: String!): Book
-  """
-  get all them authors
-  
-  Equivalent to GET /authors
-  """
-  getAuthors(
-    """Auto-generated argument that limits the size of returned list of objects/list, selecting the first `n` elements of the list"""
-    limit: Int
-  ): [AuthorsListItem]
-}
-
-type BooksListItem {
-  authorId: Float
-  genre: String
-  id: Float
-  name: String
-  yearPublished: Float
-}
-
-type Book {
-  authorId: Float
-  genre: String
-  id: Float
-  name: String
-  yearPublished: Float
-}
-
-type AuthorsListItem {
-  author: String
-  id: Float
+  """Placeholder field"""
+  message: String
 }
