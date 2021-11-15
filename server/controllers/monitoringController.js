@@ -41,7 +41,7 @@ const getResolverData = async (req, res, next) => {
   if (req.query.minutes) {
     resolverData = await getResolverDataForLast(parseInt(req.query.minutes, 10))
   } else if (req.query.since) {
-    queryData = await getResolversDataSinceUnix(parseInt(req.query.since, 10))
+    resolverData = await getResolversDataSinceUnix(parseInt(req.query.since, 10))
   } else {
     resolverData = await getResolverDataForLast(5)
   }
