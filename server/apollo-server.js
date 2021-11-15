@@ -2,6 +2,7 @@ const { ApolloServer } = require('apollo-server');
 const { getBuiltMesh} = require('./.mesh/index.js');
 const { envelop, useSchema, useTiming, useLogger } = require('@envelop/core')
 const { Kind } = require('graphql-compose/lib/graphql');
+const { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageDisabled } = require('apollo-server-core');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require('dotenv').config()
@@ -92,7 +93,9 @@ async function main() {
         operationName: requestContext.operationName,
       });
     },
-    plugins:[]
+    plugins:[
+      process.env.NODE_ENV === 'production' ? ApolloServerPluginLandingPageDisabled() : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ],
   });
   server.listen(process.env.PORT || 5000).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
