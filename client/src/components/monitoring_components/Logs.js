@@ -12,9 +12,9 @@ import Title from "../Title";
 import moment from "moment";
 
 // Generate Log Data
-function createData(id, date, name, origin, stuff, stuff2) {
-  return { id, date, name, origin, stuff, stuff2 };
-}
+// function createData(id, date, name, origin, stuff, stuff2) {
+//   return { id, date, name, origin, stuff, stuff2 };
+// }
 
 // const rows = [
 //   createData(0, "16 Mar, 2019", "Book Service", "0.0.0.0"),
@@ -52,7 +52,7 @@ export default function Logs({ data }) {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>API Name</TableCell>
+            <TableCell>Root Fields</TableCell>
             <TableCell>Latency</TableCell>
             <TableCell>IP Address</TableCell>
             <TableCell>Status</TableCell>
@@ -64,7 +64,7 @@ export default function Logs({ data }) {
               <TableCell>
                 {moment.unix(row.unixTime).format("MMM DD, 'YY @ HH:mm:ss")}
               </TableCell>
-              <TableCell>{"placeholder"}</TableCell>
+              <TableCell>{row.rootField.join(", ")}</TableCell>
               <TableCell>
                 <LinearProgressWithLabel
                   value={(row.latency * 100) / data[0].latency}

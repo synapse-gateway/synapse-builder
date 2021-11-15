@@ -1,29 +1,54 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import ToggleButton from "@mui/material/ToggleButton";
 import moment from "moment";
 import Chart from "./Chart";
-import TotalRequests from "./TotalRequests";
+import Dropdown from "./Dropdown";
+import ScaleToggler from "./ScaleToggler";
 import Logs from "./Logs";
 import testData from "./data";
 
 const Monitoring = () => {
+  // console.log(moment(moment.unix(1636290516).format("MMM DD YYYY")).unix());
   let [timeScale, setTimeScale] = useState("hour");
+  let [filterValue, setFilterValue] = useState("all");
+  const rootFieldOptions = ["all"];
 
   const currentTime = Math.round(new Date().getTime() / 1000);
+  const TIME_CONSTANTS_IN_SECONDS = {
+    hour: 60 * 60,
+    day: 60 * 60 * 24,
+    week: 60 * 60 * 24 * 7,
+    month: 60 * 60 * 24 * 30,
+  };
 
   const timeRange = {
-    hour: { unixStart: currentTime - 60 * 60, timeFormat: "HH:mm" },
-    day: { unixStart: currentTime - 60 * 60 * 24, timeFormat: "HH:00" },
+    hour: {
+      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.hour,
+      timeFormat: "HH:mm",
+      timeConversion: "MMM DD YYYY HH:mm",
+      divisionInterval: TIME_CONSTANTS_IN_SECONDS.hour / 6,
+      // divisions: 6
+    },
+    day: {
+      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.day,
+      timeFormat: "HH:00",
+      timeConversion: "MMM DD YYYY HH:00",
+      divisionInterval: TIME_CONSTANTS_IN_SECONDS.day / 24,
+      // divisions: 24
+    },
     week: {
-      unixStart: currentTime - 60 * 60 * 24 * 7,
+      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.week,
       timeFormat: "MMM D",
+      timeConversion: "MMM DD YYYY",
+      divisionInterval: TIME_CONSTANTS_IN_SECONDS.week / 7,
+      // divisions: 7
     },
     month: {
-      unixStart: currentTime - 60 * 60 * 24 * 30,
+      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.month,
       timeFormat: "MMM D",
+      timeConversion: "MMM DD YYYY",
+      divisionInterval: TIME_CONSTANTS_IN_SECONDS.month / 30,
     },
   };
 
@@ -35,8 +60,29 @@ const Monitoring = () => {
     return data.filter((dataArr) => dataArr.unixTime >= timeRange.unixStart);
   };
 
+  const filterDataByDropdown = (data, filterVal) => {
+    return data.filter(
+      (dataArr) => filterVal === "all" || dataArr.rootField.includes(filterVal)
+    );
+  };
+
   const binDataByTimestamp = (data, timeRange) => {
     let binObj = {};
+
+    for (
+      let idx = timeRange.unixStart;
+      idx < currentTime;
+      idx += timeRange.divisionInterval
+    ) {
+      data.push({
+        unixTime: moment(
+          moment.unix(idx).format(timeRange.timeConversion)
+        ).unix(),
+        latency: 0,
+        count: 0,
+        fake: true,
+      });
+    }
 
     data.forEach((arr) => {
       let timeBin = moment.unix(arr.unixTime).format(timeRange.timeFormat);
@@ -46,107 +92,93 @@ const Monitoring = () => {
 
     let chartData = Object.keys(binObj).map((key) => {
       return {
-        unixTime: binObj[key][0].unixTime,
+        unixTime: moment(
+          moment.unix(binObj[key][0].unixTime).format(timeRange.timeConversion)
+        ).unix(),
         latency: `
           ${(
             binObj[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /
             binObj[key].length
           ).toFixed(3)}ms`,
-        count: binObj[key].length,
+        count: binObj[key].filter(
+          (datapoint) => !datapoint.hasOwnProperty("fake")
+        ).length,
       };
     });
 
     chartData.unshift({
-      unixTime: timeRange.unixStart,
+      unixTime: moment(
+        moment.unix(timeRange.unixStart).format(timeRange.timeConversion)
+      ).unix(),
       latency: 0,
       count: 0,
     });
 
     return chartData.sort((a, b) => a.unixTime - b.unixTime);
-    // .filter((dataArr) => dataArr.unix >= timeRange[timeScale].unixStart);
   };
 
-  // let data = testData.sort((a, b) => a.unix - b.unix);
-  let data = testData.slice(0, 10);
-  console.log("raw data", data);
-  let filteredData = filterDataByTimescale(data, timeRange[timeScale]);
+  const getFilterOptions = (data) => {
+    rootFieldOptions.push(
+      ...new Set(filteredData.map((datapoint) => datapoint.rootField).flat())
+    );
+  };
+
+  const handleFilter = (e) => {
+    setFilterValue(e.target.value);
+  };
+
+  let data = testData; //<---don't forget to change me
+
+  let filteredData = filterDataByTimescale(
+    filterDataByDropdown(data, filterValue),
+    timeRange[timeScale]
+  );
+
+  getFilterOptions(filteredData);
 
   let chartData = binDataByTimestamp(filteredData, timeRange[timeScale]);
   let logData = filteredData.sort((a, b) => b.latency - a.latency).slice(0, 10);
 
-  console.log("log data", logData);
-
+  console.log("finessed data", chartData);
   return (
     <>
-      {/* Timescale Toggle Buttons */}
       <Grid item xs={12} md={9} lg={6}>
         <Grid container direction="row" wrap="nowrap">
           <Paper
             sx={{
-              p: 2,
-              py: 2,
+              p: 3,
+              py: 3,
               display: "inline",
               flexDirection: "column",
             }}
           >
-            <ToggleButtonGroup
-              value={timeScale}
+            <ScaleToggler
+              selection={timeScale}
               onChange={handleToggle}
-              aria-label="time range filter"
-              exclusive
-            >
-              {Object.keys(timeRange).map((range, idx) => {
-                return (
-                  <ToggleButton
-                    key={idx}
-                    value={range}
-                    aria-label={`last ${range}`}
-                    sx={{ width: 90 }}
-                    color="primary"
-                    disabled={timeScale === range}
-                  >
-                    {range}
-                  </ToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
+              timeRange={timeRange}
+            />
           </Paper>
+
           <Paper
             sx={{
-              p: 2,
+              p: 3,
               py: 2,
               mx: 2,
+              minWidth: 300,
               display: "inline",
               flexDirection: "column",
             }}
           >
-            <ToggleButtonGroup
-              value={timeScale}
-              onChange={handleToggle}
-              aria-label="time range filter"
-              exclusive
-            >
-              {Object.keys(timeRange).map((range, idx) => {
-                return (
-                  <ToggleButton
-                    key={idx}
-                    value={range}
-                    aria-label={`last ${range}`}
-                    sx={{ width: 90 }}
-                    color="primary"
-                    disabled={timeScale === range}
-                  >
-                    {range}
-                  </ToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
+            <Dropdown
+              value={filterValue}
+              onChange={handleFilter}
+              options={rootFieldOptions}
+            />
           </Paper>
         </Grid>
       </Grid>
 
-      {/* Chart */}
-      <Grid item xs={12} md={8} lg={9}>
+      <Grid item xs={12}>
         <Paper
           sx={{
             p: 2,
@@ -155,11 +187,14 @@ const Monitoring = () => {
             height: 240,
           }}
         >
-          <Chart timeScale={timeScale} data={chartData} />
+          <Chart
+            data={chartData}
+            timeFormat={timeRange[timeScale].timeFormat}
+            currentTime={currentTime}
+          />
         </Paper>
       </Grid>
-
-      {/* Recent TotalRequests */}
+      {/* 
       <Grid item xs={12} md={4} lg={3}>
         <Paper
           sx={{
@@ -176,10 +211,9 @@ const Monitoring = () => {
               .format("MMMM D, YYYY")}
           />
         </Paper>
-      </Grid>
+      </Grid> */}
 
-      {/* Recent Logs */}
-      {logData.length ? (
+      {logData.filter((log) => log.count !== 0).length ? (
         <Grid item xs={12}>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
             <Logs data={logData} />
