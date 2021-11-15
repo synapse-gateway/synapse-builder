@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -32,6 +33,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp({setLoggedInUser, loggedInUser}) {
+  const [errorMessage, setErrorMessage] = useState(null)
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,9 +45,13 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
       lastName: data.get('lastName')
     };
 
-    let jwt = await apiClient.signupUser(userObj)
-    console.log(jwt, 'WE MADE IT BOY')
-    setLoggedInUser(jwt)
+    let responseData = await apiClient.signupUser(userObj)
+    if (responseData.error) {
+      setErrorMessage(responseData.error)
+    } else {
+      setLoggedInUser(responseData.token)
+    }
+    
   };
   if (loggedInUser) {
     return <Navigate to="/" />
@@ -54,6 +60,7 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
+          {errorMessage ? <Alert severity="error" variant="filled">{errorMessage}</Alert> : <></> }
           <Box
             sx={{
               marginTop: 8,

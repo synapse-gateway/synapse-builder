@@ -19,8 +19,13 @@ const apiClient = {
     return response
   },
   async signupUser(user) {
-    let response = await axios.post("http://localhost:4005/api/users", user)
-    return response.data.token
+    try {
+      let response = await axios.post("http://localhost:4005/api/users", user)
+      return response.data
+    } catch (err) {
+      return {"error": "All fields are required and must use unique username"}
+    }
+    
   },
   async loginUser(user) {
     let response = await axios.post("http://localhost:4005/api/users/login", user)
