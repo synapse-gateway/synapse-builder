@@ -8,49 +8,45 @@ import ScaleToggler from "./ScaleToggler";
 import Logs from "./Logs";
 import testData from "./data";
 
+const TIME_CONSTANTS_IN_SECONDS = {
+  hour: 60 * 60,
+  day: 60 * 60 * 24,
+  week: 60 * 60 * 24 * 7,
+  month: 60 * 60 * 24 * 30,
+};
+
+const currentTime = Math.round(new Date().getTime() / 1000);
+
+const timeRange = {
+  hour: {
+    unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.hour,
+    timeFormat: "HH:mm",
+    timeConversion: "MMM DD YYYY HH:mm",
+    divisionInterval: TIME_CONSTANTS_IN_SECONDS.hour / 6,
+  },
+  day: {
+    unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.day,
+    timeFormat: "HH:00",
+    timeConversion: "MMM DD YYYY HH:00",
+    divisionInterval: TIME_CONSTANTS_IN_SECONDS.day / 24,
+  },
+  week: {
+    unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.week,
+    timeFormat: "MMM D",
+    timeConversion: "MMM DD YYYY",
+    divisionInterval: TIME_CONSTANTS_IN_SECONDS.week / 7,
+  },
+  month: {
+    unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.month,
+    timeFormat: "MMM D",
+    timeConversion: "MMM DD YYYY",
+    divisionInterval: TIME_CONSTANTS_IN_SECONDS.month / 30,
+  },
+};
 const Monitoring = () => {
-  // console.log(moment(moment.unix(1636290516).format("MMM DD YYYY")).unix());
   let [timeScale, setTimeScale] = useState("hour");
   let [filterValue, setFilterValue] = useState("all");
   const rootFieldOptions = ["all"];
-
-  const currentTime = Math.round(new Date().getTime() / 1000);
-  const TIME_CONSTANTS_IN_SECONDS = {
-    hour: 60 * 60,
-    day: 60 * 60 * 24,
-    week: 60 * 60 * 24 * 7,
-    month: 60 * 60 * 24 * 30,
-  };
-
-  const timeRange = {
-    hour: {
-      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.hour,
-      timeFormat: "HH:mm",
-      timeConversion: "MMM DD YYYY HH:mm",
-      divisionInterval: TIME_CONSTANTS_IN_SECONDS.hour / 6,
-      // divisions: 6
-    },
-    day: {
-      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.day,
-      timeFormat: "HH:00",
-      timeConversion: "MMM DD YYYY HH:00",
-      divisionInterval: TIME_CONSTANTS_IN_SECONDS.day / 24,
-      // divisions: 24
-    },
-    week: {
-      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.week,
-      timeFormat: "MMM D",
-      timeConversion: "MMM DD YYYY",
-      divisionInterval: TIME_CONSTANTS_IN_SECONDS.week / 7,
-      // divisions: 7
-    },
-    month: {
-      unixStart: currentTime - TIME_CONSTANTS_IN_SECONDS.month,
-      timeFormat: "MMM D",
-      timeConversion: "MMM DD YYYY",
-      divisionInterval: TIME_CONSTANTS_IN_SECONDS.month / 30,
-    },
-  };
 
   const handleToggle = (e, newTimeScale) => {
     setTimeScale(newTimeScale);
@@ -95,23 +91,14 @@ const Monitoring = () => {
         unixTime: moment(
           moment.unix(binObj[key][0].unixTime).format(timeRange.timeConversion)
         ).unix(),
-        latency: `
-          ${(
-            binObj[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /
-            binObj[key].length
-          ).toFixed(3)}ms`,
+        latency: +(
+          binObj[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /
+          binObj[key].length
+        ).toFixed(3),
         count: binObj[key].filter(
           (datapoint) => !datapoint.hasOwnProperty("fake")
         ).length,
       };
-    });
-
-    chartData.unshift({
-      unixTime: moment(
-        moment.unix(timeRange.unixStart).format(timeRange.timeConversion)
-      ).unix(),
-      latency: 0,
-      count: 0,
     });
 
     return chartData.sort((a, b) => a.unixTime - b.unixTime);
@@ -139,7 +126,7 @@ const Monitoring = () => {
   let chartData = binDataByTimestamp(filteredData, timeRange[timeScale]);
   let logData = filteredData.sort((a, b) => b.latency - a.latency).slice(0, 10);
 
-  console.log("finessed data", chartData);
+  // console.log("finessed data", chartData);
   return (
     <>
       <Grid item xs={12} md={9} lg={6}>
@@ -184,7 +171,7 @@ const Monitoring = () => {
             p: 2,
             display: "flex",
             flexDirection: "column",
-            height: 240,
+            height: 400,
           }}
         >
           <Chart

@@ -2,8 +2,9 @@ import React from "react";
 import moment from "moment";
 import { useTheme } from "@mui/material/styles";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Legend,
+  Area,
   XAxis,
   YAxis,
   Label,
@@ -12,6 +13,18 @@ import {
   Tooltip,
 } from "recharts";
 import Title from "../Title";
+
+// const RenderLegend = ({ payload }) => {
+//   console.log(payload);
+
+//   return (
+//     <ul>
+//       {payload.map((entry, index) => (
+//         <li key={`item-${index}`}>{entry.value}</li>
+//       ))}
+//     </ul>
+//   );
+// };
 
 export default function Chart({ timeFormat, data, currentTime }) {
   // const [data, setData] = useState([])
@@ -43,7 +56,7 @@ export default function Chart({ timeFormat, data, currentTime }) {
     <>
       <Title>{`Requests & Latency`}</Title>
       <ResponsiveContainer>
-        <LineChart
+        <AreaChart
           data={data}
           margin={{
             top: 16,
@@ -66,42 +79,52 @@ export default function Chart({ timeFormat, data, currentTime }) {
             minTickGap={75}
           />
           <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: "middle",
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Requests
-            </Label>
-          </YAxis>
+            yAxisId="left"
+            tick={{ fontSize: 15 }}
+            tickFormatter={(tickVal) => `${tickVal} ms`}
+          />
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            tick={{ fontSize: 15 }}
+            tickFormatter={(tickVal) => `${tickVal}reqs`}
+          />
           <Tooltip
             labelFormatter={(timeStr) =>
               moment.unix(timeStr).format(timeFormat)
             }
+            formatter={(value, name) => {
+              if (name === "Average Latency") {
+                return [`${value.toFixed(0)} ms`, name];
+              } else return [`${value}`, name];
+            }}
           />
-          <Line
+          <Legend />
+          <Area
+            yAxisId="left"
             isAnimationActive={false}
             type="monotone"
             dataKey="latency"
-            stroke={theme.palette.primary.main}
-            dot={true}
-            activeDot={{ r: 10 }}
+            stroke="#a83260" //{theme.palette.primary.main}
+            fillOpacity={0.5}
+            strokeWidth={3}
+            dot={false}
+            name="Average Latency"
+            activeDot={{ r: 5 }}
+            fill="#a83260"
           />
-          <Line
+          <Area
+            yAxisId="right"
             isAnimationActive={false}
             type="monotone"
             dataKey="count"
-            stroke={theme.palette.primary.light}
-            dot={true}
+            strokeWidth={3}
+            fillOpacity={0}
+            dot={false}
+            name="Request Count"
+            stroke={theme.palette.primary.main}
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </>
   );
