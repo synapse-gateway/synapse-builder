@@ -10,4 +10,5 @@ const SingleQuerySchema = new Schema({
 
 const SingleQuery = mongoose.model("singleQuery", SingleQuerySchema)
 
+
 exports.SingleQuery = SingleQuery

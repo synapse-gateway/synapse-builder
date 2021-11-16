@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes/api");
-const cron = require('node-cron');
+
 const mongoose = require('mongoose');
 
 require("dotenv").config();

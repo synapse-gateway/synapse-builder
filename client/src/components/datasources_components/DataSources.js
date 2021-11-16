@@ -6,13 +6,14 @@ import ExistingSources from "./ExistingSources";
 import HandlerList from "./HandlerList";
 import Title from "../Title";
 import ConnectedSources from "./ConnectedSources";
+import { Navigate } from "react-router-dom"
 
 // Handler Forms
 import OpenAPI from "./handler_form_components/OpenAPI";
 import GraphQL from "./handler_form_components/GraphQL";
 import Postgres from "./handler_form_components/Postgres";
 
-const DataSources = () => {
+const DataSources = ({loggedInUser}) => {
   const [sourceList, setSourceList] = useState([]);
   const [currentHandler, setCurrentHandler] = useState("");
 
@@ -28,27 +29,31 @@ const DataSources = () => {
       <Postgres sourceList={sourceList} setSourceList={setSourceList} />
     ),
   };
-
-  return (
-    <>
-      <Grid item xs={12}>
-        {sourceList.length > 0 ? (
+  if (loggedInUser) {
+    return (
+      <>
+        <Grid item xs={12}>
+          {sourceList.length > 0 ? (
+            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+              <ConnectedSources sourceList={sourceList} />
+            </Paper>
+          ) : null}
+        </Grid>
+        <Grid item xs={12}>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <ConnectedSources sourceList={sourceList} />
+            <HandlerList
+              setCurrentHandler={setCurrentHandler}
+              sourceList={sourceList}
+              setSourceList={setSourceList}
+            />
           </Paper>
-        ) : null}
-      </Grid>
-      <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <HandlerList
-            setCurrentHandler={setCurrentHandler}
-            sourceList={sourceList}
-            setSourceList={setSourceList}
-          />
-        </Paper>
-      </Grid>
-    </>
-  );
+        </Grid>
+      </>
+    );
+  } else {
+    return <Navigate to="/signin" />
+  }
+  
 };
 
 export default DataSources;

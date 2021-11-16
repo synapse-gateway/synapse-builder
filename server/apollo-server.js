@@ -2,6 +2,7 @@ const { ApolloServer } = require('apollo-server');
 const { getBuiltMesh} = require('./.mesh/index.js');
 const { envelop, useSchema, useTiming, useLogger } = require('@envelop/core')
 const { Kind } = require('graphql-compose/lib/graphql');
+const { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandingPageDisabled } = require('apollo-server-core');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require('dotenv').config()
@@ -16,7 +17,6 @@ async function main() {
   } catch(err) {
     console.log(err)
   }
-  
   mongoose.Promise = global.Promise
 
   const ResolverSchema = new Schema({
@@ -36,6 +36,14 @@ async function main() {
 
   const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
 
+  QueryErrorsSchema = new Schema({
+    errs: [Object],
+    sourceQuery: String,
+    metrics: Object,
+  })
+
+  const QueryErrors = queryConn.model('queryErrors', QueryErrorsSchema)
+
   const getEnveloped = envelop({
     plugins: [
       useSchema(schema),
@@ -43,18 +51,16 @@ async function main() {
         skipIntrospection: true,
         onExecutionMeasurement: (args, timing) => {
           console.log('WE TIMING BOY')
-          
+          console.log(args, "EXECUTRION ENDING ARGS ARE HERE +++++=================")
           singleQueryObj = {rootFields: []}
           let operation = args.document.definitions.find(def => def.kind === Kind.OPERATION_DEFINITION)
           //console.log(operation.operation, "TESTING BOUUUUUUUUY")
           operation.selectionSet.selections.forEach((s) => {
             let fieldName = s.name.value
             singleQueryObj.rootFields.push(fieldName)
-            
           })
 
           singleQueryObj.operation = operation.operation
-          
           singleQueryObj.latency = timing['ms']
           singleQueryObj.unixTime = new Date().getTime() / 1000
           SingleQuery.create(singleQueryObj).catch((err) => console.log(err))
@@ -87,7 +93,7 @@ async function main() {
     context: contextBuilder,
     executor: async requestContext => {
       const { schema, execute, contextFactory } = getEnveloped({ req: requestContext.request.http });
-  
+
       return execute({
         schema: schema,
         document: requestContext.document,
@@ -96,7 +102,23 @@ async function main() {
         operationName: requestContext.operationName,
       });
     },
-    plugins:[]
+    debug: false,
+    plugins:[
+      process.env.NODE_ENV === 'production' ? ApolloServerPluginLandingPageDisabled() : ApolloServerPluginLandingPageGraphQLPlayground(),
+      {
+        requestDidStart(a) {
+          return {
+            didEncounterErrors(reqCtx) {
+              QueryErrors.create({
+                sourceQuery: reqCtx.source,
+                errs: reqCtx.errors,
+                metrics: reqCtx.metrics,
+              })
+            }
+          }
+        }
+      }
+    ],
   });
   server.listen(process.env.PORT || 5000).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
