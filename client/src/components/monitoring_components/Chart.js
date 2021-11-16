@@ -1,59 +1,34 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react'
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import Title from '../Title';
-import apiClient from "../../lib/apiClient"
+import React from "react";
+import moment from "moment";
+import { useTheme } from "@mui/material/styles";
+import {
+  AreaChart,
+  Legend,
+  Area,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
+import Title from "../Title";
 
-// Generate Graph Data
+export default function Chart({ timeFormat, data, currentTime }) {
+  const theme = useTheme();
 
-
-// const values = [
-//   [1636653152.106, "5.573"],
-//   [1636653167.106, "5.929"],
-//   [1636653182.106, "6.5840000000000005"],
-//   [1636653197.106, "6.5840000000000005"],
-//   [1636653212.106, "6.5840000000000005"],
-//   [1636653227.106, "6.5840000000000005"],
-//   [1636653242.106, "6.5840000000000005"],
-//   [1636653257.106, "6.5840000000000005"],
-//   [1636653272.106, "6.5840000000000005"],
-//   [1636653287.106, "6.5840000000000005"]
-// ]
-
-// let time = new Date(1636653212.106 * 1000);
-
-
-
-export default function Chart({loggedInUser}) {
-  const [data, setData] = useState([])
-  useEffect(() => {
-    apiClient.getTimeData(loggedInUser).then((resData) => {
-      function createData(time, amount) {
-        return { time, amount };
-      }
-
-      console.log(resData, "IN CHART BOYOYOYOYOYOY")
-      
-      setData([
-        // createData(time, 5.573),
-        {'03:00': 5.929},
-        {'06:00': 6.5840000000000005},
-        {'09:00': 6.5840000000000005},
-        {'12:00': 6.5840000000000005},
-        {'15:00': 6.5840000000000005},
-        {'18:00': 6.5840000000000005},
-        {'21:00': 6.5840000000000005},
-      ])
-    })
-  }, [])
-  const theme = useTheme(); 
+  const ticks = (() => {
+    let tickArr = [...new Set(data.map((data) => data.unixTime))].slice(1);
+    if (tickArr.length > 10) {
+      tickArr = tickArr.filter((_, idx) => idx % 2 === 1);
+    }
+    return tickArr;
+  })();
 
   return (
     <>
-      <Title>Today</Title>
+      <Title>{`Requests & Latency`}</Title>
       <ResponsiveContainer>
-        <LineChart
+        <AreaChart
           data={data}
           margin={{
             top: 16,
@@ -62,35 +37,73 @@ export default function Chart({loggedInUser}) {
             left: 24,
           }}
         >
+          <CartesianGrid strokeDasharray="4" />
           <XAxis
-            dataKey="time"
+            dataKey="unixTime"
+            tickFormatter={(timeStr) => moment.unix(timeStr).format(timeFormat)}
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
+            scale="time"
+            type="number"
+            domain={[
+              (dataMin) => data[0].unixTime,
+              (dataMax) => data[data.length - 1].unixTime,
+            ]}
+            interval="preserveStart"
+            ticks={ticks}
+            minTickGap={75}
           />
           <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Requests
-            </Label>
-          </YAxis>
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="amount"
-            stroke={theme.palette.primary.main}
-            dot={false}
+            yAxisId="left"
+            tick={{ fontSize: 15 }}
+            tickFormatter={(tickVal) => `${tickVal}ms`}
+            allowDecimals={false}
           />
-        </LineChart>
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            tick={{ fontSize: 15 }}
+            tickFormatter={(tickVal) => `${tickVal}reqs`}
+            allowDecimals={false}
+          />
+          <Tooltip
+            labelFormatter={(timeStr) =>
+              moment.unix(timeStr).format(timeFormat)
+            }
+            formatter={(value, name) => {
+              if (name === "Average Latency") {
+                return [`${value.toFixed(0)} ms`, name];
+              } else return [`${value}`, name];
+            }}
+          />
+          <Legend />
+          <Area
+            yAxisId="left"
+            isAnimationActive={true}
+            type="monotone"
+            dataKey="latency"
+            stroke="#a83260" //{theme.palette.primary.main}
+            fillOpacity={0.5}
+            strokeWidth={3}
+            dot={false}
+            name="Average Latency"
+            activeDot={{ r: 5 }}
+            fill="#a83260"
+            animationEasing="ease"
+          />
+          <Area
+            yAxisId="right"
+            isAnimationActive={true}
+            type="monotone"
+            dataKey="count"
+            strokeWidth={3}
+            fillOpacity={0}
+            dot={false}
+            name="Request Count"
+            stroke={theme.palette.primary.main}
+            animationEasing="ease"
+          />
+        </AreaChart>
       </ResponsiveContainer>
     </>
   );
