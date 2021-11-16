@@ -36,7 +36,7 @@ async function main() {
 
   const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
 
-  QueryErrorsSchema = new Schema({
+  const QueryErrorsSchema = new Schema({
     errs: [Object],
     sourceQuery: String,
     metrics: Object,

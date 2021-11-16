@@ -12,8 +12,8 @@ const { User } = require("../models/User")
 
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers['authorization'] // bearer <token>
+  const token = authHeader && authHeader.split(' ')[1] 
   if (token == null) return res.sendStatus(401)
 
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -25,17 +25,17 @@ function authenticateToken(req, res, next) {
   })
 }
 
-const testJWT = (req, res) => {
-  res.status(200).json({message: "IT WORKED :)"})
-}
+// const testJWT = (req, res) => {
+//   res.status(200).json({message: "IT WORKED :)"})
+// }
 
 router.post("/config", authenticateToken, configController.createConfig)
 
-router.get("/monitor/resolvers", monitoringController.getResolverData)
+router.get("/monitor/resolvers", authenticateToken, monitoringController.getResolverData)
 
 router.get("/monitor/queries", authenticateToken, monitoringController.getIndividualQueryData)
 
-router.get("/testjwt", authenticateToken, testJWT)
+// router.get("/testjwt", authenticateToken, testJWT)
 
 // Create new user
 router.post('/users', async (req, res) => {
