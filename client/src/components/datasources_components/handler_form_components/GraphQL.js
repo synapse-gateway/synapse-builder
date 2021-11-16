@@ -25,6 +25,7 @@ const GraphQL = ({ sourceList, setSourceList, setOpen }) => {
       { name, url, handler: "graphql", created: createTimeStamp() },
     ]);
     setOpen(false);
+
     console.log(name, url);
     console.log(sourceList);
   };

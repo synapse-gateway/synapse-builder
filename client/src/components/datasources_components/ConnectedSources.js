@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../Title";
 import { Button } from "@mui/material";
+import ApiClient from '../../lib/apiClient'
 
 // // Generate Source Data
 // function createData(id, name, type, status, active, created, actions) {
@@ -35,11 +36,31 @@ import { Button } from "@mui/material";
 //   ),
 // ];
 
+// const SubmitSourceButton = ({handleSubmitButton, sourceList})=>{
+//   return <Button sx={{ width: "40%", mt: 2 }} variant='contained' onClick={handleSubmitSources}>
+//         Create Your Synapse
+//       </Button>
+// }
+
+const handleSubmitSources = (sources)=>{
+  ApiClient.createConfig(sources);
+  console.log('sources submitted!')
+}
+
+
+
 function preventDefault(event) {
   event.preventDefault();
 }
 
-const ExistingSources = ({ sourceList }) => {
+const ConnectedSources = ({ sourceList }) => {
+  const sources = sourceList;
+  const handleSubmit = () => {
+  console.log('submit 1')
+    ApiClient.createConfig(sources);
+
+  // handleSubmitSources(sourceList);
+}
   return (
     <>
       <Title>Your connected data sources</Title>
@@ -65,7 +86,7 @@ const ExistingSources = ({ sourceList }) => {
           ))}
         </TableBody>
       </Table>
-      <Button sx={{ width: "40%", mt: 2 }} variant='contained'>
+      <Button sx={{ width: "40%", mt: 2 }} variant='contained' onClick={handleSubmit}>
         Create Your Synapse
       </Button>
       {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
@@ -75,4 +96,4 @@ const ExistingSources = ({ sourceList }) => {
   );
 };
 
-export default ExistingSources;
+export default ConnectedSources;
