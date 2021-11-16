@@ -37,6 +37,7 @@ async function main() {
   const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
 
   const QueryErrorsSchema = new Schema({
+    ip: String,
     errs: [Object],
     sourceQuery: String,
     metrics: Object,
@@ -51,7 +52,6 @@ async function main() {
         skipIntrospection: true,
         onExecutionMeasurement: (args, timing) => {
           console.log('WE TIMING BOY')
-          console.log(args, "EXECUTRION ENDING ARGS ARE HERE +++++=================")
           singleQueryObj = {rootFields: []}
           let operation = args.document.definitions.find(def => def.kind === Kind.OPERATION_DEFINITION)
           //console.log(operation.operation, "TESTING BOUUUUUUUUY")
@@ -109,7 +109,9 @@ async function main() {
         requestDidStart(a) {
           return {
             didEncounterErrors(reqCtx) {
+              // console.log(a.context.req)
               QueryErrors.create({
+                ip: a.context.req.ip,
                 sourceQuery: reqCtx.source,
                 errs: reqCtx.errors,
                 metrics: reqCtx.metrics,
@@ -120,7 +122,7 @@ async function main() {
       }
     ],
   });
-  server.listen(process.env.PORT || 5000).then(({ url }) => {
+  server.listen(process.env.PORT || 6868).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
   });
 }
