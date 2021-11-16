@@ -56,11 +56,9 @@ router.post('/users', async (req, res) => {
 // Authenticate login
 router.post('/users/login', async (req, res) => {
   const user = await User.findOne({username: req.body.username}); // find user from "real" database
-  console.log(user.password)
   if (!user) {
     return res.status(400).send('User does not exist');
   }
-  console.log(user.password)
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       // Give back JWT

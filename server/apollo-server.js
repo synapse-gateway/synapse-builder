@@ -6,13 +6,14 @@ const { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandin
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require('dotenv').config()
+const { mongourl } = require('./config/db.config.js');
 
 
 async function main() {
   const { schema, contextBuilder } = await getBuiltMesh();
   let queryConn
   try {
-    queryConn = await mongoose.createConnection(process.env.MONGO_DB)
+    queryConn = await mongoose.createConnection(mongourl)
     console.log('Mongoose connected successfully!')
   } catch(err) {
     console.log(err)
@@ -120,7 +121,7 @@ async function main() {
       }
     ],
   });
-  server.listen(process.env.PORT || 5000).then(({ url }) => {
+  server.listen(process.env.NODE_DOCKER_PORT || 6868).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
   });
 }
