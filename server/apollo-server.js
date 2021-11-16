@@ -36,6 +36,14 @@ async function main() {
 
   const SingleQuery = queryConn.model("singleQuery", SingleQuerySchema)
 
+  QueryErrorsSchema = new Schema({
+    errs: [Object],
+    sourceQuery: String,
+    metrics: Object,
+  })
+
+  const QueryErrors = queryConn.model('queryErrors', QueryErrorsSchema)
+
   const getEnveloped = envelop({
     plugins: [
       useSchema(schema),
@@ -43,6 +51,7 @@ async function main() {
         skipIntrospection: true,
         onExecutionMeasurement: (args, timing) => {
           console.log('WE TIMING BOY')
+          console.log(args, "EXECUTRION ENDING ARGS ARE HERE +++++=================")
           singleQueryObj = {rootFields: []}
           let operation = args.document.definitions.find(def => def.kind === Kind.OPERATION_DEFINITION)
           //console.log(operation.operation, "TESTING BOUUUUUUUUY")
@@ -93,8 +102,22 @@ async function main() {
         operationName: requestContext.operationName,
       });
     },
+    debug: false,
     plugins:[
       process.env.NODE_ENV === 'production' ? ApolloServerPluginLandingPageDisabled() : ApolloServerPluginLandingPageGraphQLPlayground(),
+      {
+        requestDidStart(a) {
+          return {
+            didEncounterErrors(reqCtx) {
+              QueryErrors.create({
+                sourceQuery: reqCtx.source,
+                errs: reqCtx.errors,
+                metrics: reqCtx.metrics,
+              })
+            }
+          }
+        }
+      }
     ],
   });
   server.listen(process.env.PORT || 5000).then(({ url }) => {
