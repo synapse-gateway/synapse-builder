@@ -10,7 +10,7 @@ require("dotenv").config();
 
 
 
-mongoose.connect("mongodb+srv://team5admin:neeshykins@cluster0.pcknm.mongodb.net/synapse?retryWrites=true&w=majority")
+mongoose.connect(mongourl)
   .then((res) => console.log('MONGO DB CONNECTED :)'))
   .catch((err) => console.log(err));
 
