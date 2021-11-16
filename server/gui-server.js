@@ -10,7 +10,7 @@ require("dotenv").config();
 
 
 
-mongoose.connect(mongourl)
+mongoose.connect("mongodb+srv://team5admin:neeshykins@cluster0.pcknm.mongodb.net/synapse?retryWrites=true&w=majority")
   .then((res) => console.log('MONGO DB CONNECTED :)'))
   .catch((err) => console.log(err));
 
@@ -21,7 +21,23 @@ app.use(cors());
 
 const path = __dirname + "/build/";
 app.use(express.static(path));
-app.get('/*', (req, res) => {
+app.get('/monitoring', (req, res) => {
+  res.sendFile(path + 'index.html');
+})
+
+app.get('/signin', (req, res) => {
+  res.sendFile(path + 'index.html');
+})
+
+app.get("/signup", (req, res) => {
+  res.sendFile(path + 'index.html');
+})
+
+app.get('/datasources', (req, res) => {
+  res.sendFile(path + 'index.html');
+})
+
+app.get('/', (req, res) => {
   res.sendFile(path + 'index.html');
 })
 
