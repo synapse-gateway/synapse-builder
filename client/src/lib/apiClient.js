@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const apiClient = {
-  createConfig(sources) {
+  createConfig(jwt, sources) {
+    console.log(sources);
     return axios
       .post(
         "http://localhost:4005/api/config",

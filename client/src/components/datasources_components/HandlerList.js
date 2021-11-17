@@ -13,15 +13,14 @@ function createData(id, name, description, value) {
 }
 
 const rows = [
-  createData(0, "GraphQL", "Load remote GraphQL Schemas", "graphql"),
+  createData(0, "GraphQL", "Load remote GraphQL Schema", "graphql"),
   createData(1, "OpenAPI", "Load remote OpenAPI and Swagger", "openapi"),
-  createData(1, "PostgreSQL", "Connect to your PostgreSQL DB", "postgraphile"),
+  createData(2, "JSON Schema", "Load remote JSON Schema", "json-schema"),
+  createData(3, "PostgreSQL", "Connect to your PostgreSQL DB", "postgraphile"),
+  createData(4, "Mongoose", "Connect to your MongoDB", "mongoose"),
 ];
 
-const HandlerList = ({ setCurrentHandler, sourceList, setSourceList }) => {
-  const handleAddClick = (handler) => {
-    setCurrentHandler(handler);
-  };
+const HandlerList = ({ sourceList, setSourceList }) => {
 
   return (
     <>
@@ -40,7 +39,6 @@ const HandlerList = ({ setCurrentHandler, sourceList, setSourceList }) => {
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.description}</TableCell>
               <TableCell align='right'>
-                {/* <button onClick={() => handleAddClick(row.value)}>Add</button> */}
                 <InputModal
                   handlerName={row.name}
                   sourceList={sourceList}
