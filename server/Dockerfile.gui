@@ -1,6 +1,8 @@
 FROM node:16-alpine
-WORKDIR "/meshapp"
+
+WORKDIR "/synapse/src"
 COPY ./package.json ./
 RUN yarn install
 COPY ./ ./
+EXPOSE 4005
 CMD ["npm", "run", "start-gui"]
