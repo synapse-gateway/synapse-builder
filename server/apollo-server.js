@@ -6,13 +6,16 @@ const { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginLandin
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require('dotenv').config()
-const { mongourl } = require('./config/db.config.js');
+let { mongourl } = require('./config/db.config.js');
 
 
 async function main() {
   const { schema, contextBuilder } = await getBuiltMesh();
   let queryConn
   try {
+    if (process.env.PRODUCTION === 'false') {
+      mongourl = "mongodb://localhost:27017/synapse"
+    }
     queryConn = await mongoose.createConnection(mongourl)
     console.log('Mongoose connected successfully!')
   } catch(err) {

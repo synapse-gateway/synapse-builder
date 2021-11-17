@@ -8,11 +8,12 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
       - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
-    ports:
-      - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
-    volumes:
-      - db:/data/db
+    # ports:
+    #   - 7017:27017
+    # volumes:
+    #   - db:/data/db
   apolloserver:
+    image: patelaneesh4/apolloserver
     depends_on:
       - mongodb
     build:
@@ -28,11 +29,13 @@ services:
       - DB_PASSWORD=$MONGODB_PASSWORD
       - DB_NAME=$MONGODB_DATABASE
       - DB_PORT=$MONGODB_DOCKER_PORT
+      - PRODUCTION=true
     stdin_open: true
     tty: true
-    volumes:
-      - node_modules:/server/node_modules
+    # volumes:
+    #   - node_modules:/server/node_modules
   guiserver:
+    image: patelaneesh4/guiserver
     depends_on:
       - mongodb
     build:
@@ -48,9 +51,10 @@ services:
       - DB_PASSWORD=$MONGODB_PASSWORD
       - DB_NAME=$MONGODB_DATABASE
       - DB_PORT=$MONGODB_DOCKER_PORT
+      - PRODUCTION=true
     stdin_open: true
     tty: true
 
-volumes:
-  db:
-  node_modules:
+# volumes:
+#   db:
+#   node_modules:

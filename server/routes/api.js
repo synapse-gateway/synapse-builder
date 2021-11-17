@@ -29,7 +29,7 @@ function authenticateToken(req, res, next) {
 //   res.status(200).json({message: "IT WORKED :)"})
 // }
 
-router.post("/config", authenticateToken, configController.createConfig)
+router.post("/config", configController.createConfig)
 
 router.get("/monitor/resolvers", authenticateToken, monitoringController.getResolverData)
 

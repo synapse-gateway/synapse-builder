@@ -2,13 +2,18 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes/api");
-const {mongourl} = require("./config/db.config")
+let {mongourl} = require("./config/db.config")
 
 const mongoose = require('mongoose');
 
 require("dotenv").config();
 
 
+
+
+if (process.env.PRODUCTION === 'false') {
+  mongourl = "mongodb://localhost:27017/synapse"
+}
 
 mongoose.connect(mongourl)
   .then((res) => console.log('MONGO DB CONNECTED :)'))

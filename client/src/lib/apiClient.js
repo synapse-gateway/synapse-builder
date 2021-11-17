@@ -4,13 +4,13 @@ const apiClient = {
   createConfig(sources) {
     return axios
       .post(
-        "http://localhost:4005/api/config",
-        { sources },
-        {
-          headers: {
-            authorization: `bearer ${jwt}`,
-          },
-        }
+        "api/config",
+        { sources }
+        // {
+        //   headers: {
+        //     authorization: `bearer ${jwt}`,
+        //   },
+        // }
       )
       .then((res) => console.log("Sources sent!"));
   },
@@ -20,7 +20,7 @@ const apiClient = {
       : `?minutes=${minutesSince}`;
 
     let response = await axios.get(
-      `http://localhost:4005/api/monitor/queries${queryString}`,
+      `api/monitor/queries${queryString}`,
       {
         headers: {
           authorization: `bearer ${jwt}`,
@@ -31,7 +31,7 @@ const apiClient = {
   },
   async signupUser(user) {
     try {
-      let response = await axios.post("http://localhost:4005/api/users", user);
+      let response = await axios.post("api/users", user);
       return response.data;
     } catch (err) {
       return { error: "All fields are required and must use unique username" };
@@ -40,7 +40,7 @@ const apiClient = {
   async loginUser(user) {
     try {
       let response = await axios.post(
-        "http://localhost:4005/api/users/login",
+        "api/users/login",
         user
       );
       return response.data;
