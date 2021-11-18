@@ -4,5 +4,13 @@ WORKDIR "/synapse/src"
 COPY ./package.json ./
 RUN yarn install
 COPY ./ ./
+ENV ACCESS_TOKEN_SECRET="synapseisawesome123fhdsuifhsd8932982"
+ENV DB_HOST="mongodb.prod.synapse-gateway.local"
+ENV DB_USER="root"
+ENV DB_PASSWORD="foobar"
+ENV DB_NAME="synapse_db"
+ENV DB_PORT="27017"
+ENV PRODUCTION="true"
+ENV NODE_DOCKER_PORT="6868"
 EXPOSE 4005
 CMD ["npm", "run", "start-gui"]
