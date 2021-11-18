@@ -1,13 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
+import DragDrop from "./DragDrop";
 
 const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [modelName, setModelName] = useState("");
-  const [modelUrl, setModelUrl] = useState("");
   const [models, setModels] = useState([]);
+  const [modelFile, setModelFile] = useState(null);
 
   const createTimeStamp = () => {
     var options = {
@@ -30,14 +31,15 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
     setOpen(false);
   };
 
-  const handleAddModelClick = (e) => {
+  const handleAddModelClick = async (e) => {
     e.preventDefault();
+    const modelContent = await modelFile.text()
     setModels([
       ...models,
-      { name: modelName, path: modelUrl }
+      { name: modelName, path: `./models#${modelName}`, content: modelContent }
     ]);
     setModelName("");
-    setModelUrl("");
+    setModelFile(null);
   }
 
   return (
@@ -94,7 +96,7 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <TextField
+        {/* <TextField
           fullWidth
           label='Model Endpoint URL'
           color='primary'
@@ -105,7 +107,9 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setModelUrl(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
-        />
+        /> */}
+
+        <DragDrop setFile={setModelFile} />
 
         <Button variant='contained' onClick={handleAddModelClick}>
           Add Model

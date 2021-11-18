@@ -14,7 +14,15 @@ const formatSource = (source) => {
       handlerInput = { "postgraphile": { connectionString: source.url } };
       break;
     case "mongoose":
-      handlerInput = { "mongoose": { connectionString: source.url, models: source.models } };
+      const models = source.models.map(model => {
+        fs.writeFile(`./models/${model.name}.js`, model.content, (err) => {
+          if (err) throw err;
+          console.log(`Successfully created ${model.name}.js file`);
+        });
+
+        return { name: model.name, path: model.path };
+      });
+      handlerInput = { "mongoose": { connectionString: source.url, models } };
       break;
     case "jsonSchema":
       handlerInput = { "jsonSchema": { baseUrl: source.url, operations: source.operations } };
@@ -25,6 +33,7 @@ const formatSource = (source) => {
 };
 
 const createConfig = (req, res, next) => {
+  console.log("REQ BODY SOURCES", req.body.sources);
   const sources = req.body.sources;
   const yamlContent = { sources: [] };
 

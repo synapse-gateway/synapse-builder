@@ -4,15 +4,5 @@ sources:
       mongoose:
         connectionString: www.example.com
         models:
-          - name: People
-            path: /path/models
-  - name: JSONSchemaService
-    handler:
-      jsonSchema:
-        baseUrl: test
-        operations:
-          - type: Query
-            field: users
-            path: /users
-            method: GET
-            responseSchema: ./json-schemas/users.json
+          - name: User2
+            path: ./models#User2
