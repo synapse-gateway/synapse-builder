@@ -18,16 +18,13 @@ const GraphQL = ({ sourceList, setSourceList, setOpen }) => {
 
   const handleCreateClick = (e) => {
     e.preventDefault();
-    setName("");
-    setUrl("");
     setSourceList([
       ...sourceList,
       { name, url, handler: "graphql", created: createTimeStamp() },
     ]);
+    setName("");
+    setUrl("");
     setOpen(false);
-
-    console.log(name, url);
-    console.log(sourceList);
   };
 
   return (

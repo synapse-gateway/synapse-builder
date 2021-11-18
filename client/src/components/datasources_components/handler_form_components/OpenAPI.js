@@ -22,10 +22,11 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
       ...sourceList,
       { name, url, handler: "openapi", created: createTimeStamp() },
     ]);
-    setOpen(false);
     setName("");
     setUrl("");
+    setOpen(false);
   };
+
   return (
     <div>
       <div>

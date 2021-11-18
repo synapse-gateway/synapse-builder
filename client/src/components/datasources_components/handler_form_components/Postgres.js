@@ -22,10 +22,11 @@ const Postgres = ({ sourceList, setSourceList, setOpen }) => {
       ...sourceList,
       { name, url, handler: "postgraphile", created: createTimeStamp() },
     ]);
-    setOpen(false);
     setName("");
     setUrl("");
+    setOpen(false);
   };
+
   return (
     <div>
       <div>

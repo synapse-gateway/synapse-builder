@@ -6,6 +6,8 @@ import Modal from "@mui/material/Modal";
 import GraphQL from "./handler_form_components/GraphQL";
 import OpenAPI from "./handler_form_components/OpenAPI";
 import Postgres from "./handler_form_components/Postgres";
+import Mongoose from "./handler_form_components/Mongoose";
+import JSONSchema from "./handler_form_components/JSONSchema";
 
 const style = {
   position: "absolute",
@@ -46,6 +48,22 @@ const selectMeshHandler = (handlerName, sourceList, setSourceList, setOpen) => {
           setOpen={setOpen}
         />
       );
+    case "Mongoose":
+      return (
+        <Mongoose
+          sourceList={sourceList}
+          setSourceList={setSourceList}
+          setOpen={setOpen}
+        />
+      );
+    case "JSON Schema":
+      return (
+        <JSONSchema
+          sourceList={sourceList}
+          setSourceList={setSourceList}
+          setOpen={setOpen}
+        />
+      )
     default:
       return "No Handler Selected";
   }
@@ -55,7 +73,7 @@ export default function BasicModal({ handlerName, sourceList, setSourceList }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(handlerName);
+
   return (
     <div>
       <Button onClick={handleOpen} variant='contained'>

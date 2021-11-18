@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../Title";
 import { Button } from "@mui/material";
-import ApiClient from '../../lib/apiClient'
+import apiClient from '../../lib/apiClient';
 
 // // Generate Source Data
 // function createData(id, name, type, status, active, created, actions) {
@@ -42,24 +42,20 @@ import ApiClient from '../../lib/apiClient'
 //       </Button>
 // }
 
-const handleSubmitSources = (sources)=>{
-  ApiClient.createConfig(sources);
-  console.log('sources submitted!')
-}
+// const handleSubmitSources = (sources)=>{
+//   apiClient.createConfig(sources);
+//   console.log('sources submitted!')
+// }
 
+// function preventDefault(event) {
+//   event.preventDefault();
+// }
 
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-const ConnectedSources = ({ sourceList }) => {
+const ConnectedSources = ({ loggedInUser, sourceList }) => {
   const sources = sourceList;
   const handleSubmit = () => {
-  console.log('submit 1')
-    ApiClient.createConfig(sources);
-
-  // handleSubmitSources(sourceList);
+    apiClient.createConfig(loggedInUser, sources);
+    console.log('Sources submitted!');
 }
   return (
     <>
