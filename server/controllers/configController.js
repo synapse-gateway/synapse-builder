@@ -46,7 +46,7 @@ const formatSource = (source) => {
         return { type: op.type, field: op.field, path: op.path, method: op.method, responseSchema: `./json-schemas/${source.name}-schemas/${op.field}.json`};
       });
 
-      handlerInput = { "jsonSchema": { baseUrl: source.url, operations: source.operations } };
+      handlerInput = { "jsonSchema": { baseUrl: source.url, operations } };
       break;
   };
 
