@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 
-const fileTypes = ["JavaScript"];
+// const fileTypes = ["JavaScript"];
 
-function DragDrop({ setFile }) {
+function DragDrop({ setFile, fileTypes }) {
   // const [file, setFile] = useState(null);
 
   const handleChange = file => {
@@ -11,7 +11,8 @@ function DragDrop({ setFile }) {
   };
 
   return (
-    <FileUploader 
+    <FileUploader
+        onTypeError={(err) => console.log(err)}
         handleChange={handleChange} 
         name="file" 
         types={fileTypes} 

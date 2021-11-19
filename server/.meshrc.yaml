@@ -1,8 +1,5 @@
 sources:
-  - name: TestService
+  - name: AuthorService
     handler:
-      mongoose:
-        connectionString: www.example.com
-        models:
-          - name: User2
-            path: ./models#User2
+      openapi:
+        source: ./openapi-schemas/AuthorService-schema.yaml

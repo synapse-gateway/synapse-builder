@@ -8,7 +8,14 @@ const formatSource = (source) => {
       handlerInput = { "graphql": { endpoint: source.url } };
       break;
     case "openapi":
-      handlerInput = { "openapi": { source: source.url } };
+      console.log("SOURCE", source);
+      const schemaFileName = `${source.name}-schema.${source.schemaFileType}`;
+      fs.writeFile(`./openapi-schemas/${schemaFileName}`, source.schemaFileContent, (err) => {
+        if (err) throw err;
+        console.log(`Successfully created ${schemaFileName} file`);
+      });
+
+      handlerInput = { "openapi": { source: `./openapi-schemas/${schemaFileName}` } };
       break;
     case "postgraphile":
       handlerInput = { "postgraphile": { connectionString: source.url } };
@@ -20,11 +27,26 @@ const formatSource = (source) => {
           console.log(`Successfully created ${model.name}.js file`);
         });
 
-        return { name: model.name, path: model.path };
+        return { name: model.name, path: `./models/${model.name}` };
       });
+
       handlerInput = { "mongoose": { connectionString: source.url, models } };
       break;
     case "jsonSchema":
+      const schemaDir = `./json-schemas/${source.name}-schemas`
+      if (!fs.existsSync(schemaDir)) {
+        fs.mkdirSync(schemaDir);
+      }
+
+      const operations = source.operations.map(op => {
+        fs.writeFile(`${schemaDir}/${op.field}.json`, op.responseSchemaContent, (err) => {
+          if (err) throw err;
+          console.log(`Successfully created ${op.field}.json file`);
+        });
+
+        return { type: op.type, field: op.field, path: op.path, method: op.method, responseSchema: `./json-schemas/${source.name}-schemas/${op.field}.json`};
+      });
+
       handlerInput = { "jsonSchema": { baseUrl: source.url, operations: source.operations } };
       break;
   };
@@ -33,7 +55,6 @@ const formatSource = (source) => {
 };
 
 const createConfig = (req, res, next) => {
-  console.log("REQ BODY SOURCES", req.body.sources);
   const sources = req.body.sources;
   const yamlContent = { sources: [] };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
+import DragDrop from "./DragDrop";
 
 const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
   const [name, setName] = useState("");
@@ -10,7 +11,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
   const [operationField, setOperationField] = useState("");
   const [operationPath, setOperationPath] = useState("");
   const [operationMethod, setOperationMethod] = useState("");
-  const [operationResponseSchema, setOperationResponseSchema] = useState("");
+  // const [operationResponseSchema, setOperationResponseSchema] = useState("");
+  const [operationResponseSchemaFile, setOperationResponseSchemaFile] = useState(null);
+  const fileTypes = ["json"];
 
   const createTimeStamp = () => {
     var options = {
@@ -33,18 +36,21 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
     setOpen(false);
   };
 
-  const handleAddOperationClick = (e) => {
+  const handleAddOperationClick = async (e) => {
     e.preventDefault();
+
+    const content = await operationResponseSchemaFile.text();
     setOperations([
       ...operations,
-      { type: operationType, field: operationField, path: operationPath, method: operationMethod, responseSchema: operationResponseSchema }
+      { type: operationType, field: operationField, path: operationPath, method: operationMethod, responseSchemaContent: content }
     ]);
     setOperationType("");
     setOperationField("");
     setOperationPath("");
     setOperationMethod("");
-    setOperationResponseSchema("");
-  }
+    // setOperationResponseSchema("");
+    setOperationResponseSchemaFile(null);
+  };
 
   return (
     <div>
@@ -139,7 +145,7 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <TextField
+        {/* <TextField
           fullWidth
           label='Operation Response Schema Path'
           color='primary'
@@ -150,9 +156,11 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setOperationResponseSchema(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
-        />
+        /> */}
 
-        <Button variant='contained' onClick={handleAddOperationClick}>
+        <DragDrop setFile={setOperationResponseSchemaFile} fileTypes={fileTypes} />
+
+        <Button sx={{ mb: 2, mt: 2 }} variant='contained' onClick={handleAddOperationClick}>
           Add Operation
         </Button>
       </div>
