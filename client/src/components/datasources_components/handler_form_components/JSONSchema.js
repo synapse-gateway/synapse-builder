@@ -26,7 +26,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
     e.preventDefault();
     setSourceList([
       ...sourceList,
-      { name, url, operations, handler: "jsonSchema", created: createTimeStamp() },
+      {
+        name,
+        url,
+        operations,
+        handler: "jsonSchema",
+        created: createTimeStamp(),
+      },
     ]);
     setName("");
     setUrl("");
@@ -37,14 +43,20 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
     e.preventDefault();
     setOperations([
       ...operations,
-      { type: operationType, field: operationField, path: operationPath, method: operationMethod, responseSchema: operationResponseSchema }
+      {
+        type: operationType,
+        field: operationField,
+        path: operationPath,
+        method: operationMethod,
+        responseSchema: operationResponseSchema,
+      },
     ]);
     setOperationType("");
     setOperationField("");
     setOperationPath("");
     setOperationMethod("");
     setOperationResponseSchema("");
-  }
+  };
 
   return (
     <div>
@@ -152,12 +164,16 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <Button variant='contained' onClick={handleAddOperationClick}>
+        <Button
+          variant='contained'
+          onClick={handleAddOperationClick}
+          sx={{ mb: 2 }}
+        >
           Add Operation
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick}>
+      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
         Create
       </Button>
     </div>
