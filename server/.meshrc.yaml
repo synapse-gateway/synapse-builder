@@ -1,18 +1,22 @@
 sources:
-  - name: TestService
+  - name: AuthorService
     handler:
-      mongoose:
-        connectionString: www.example.com
-        models:
-          - name: People
-            path: /path/models
-  - name: JSONSchemaService
+      openapi:
+        source: ./openapi-schemas/AuthorService-schema.yaml
+  - name: JsonTestService
     handler:
       jsonSchema:
-        baseUrl: test
+        baseUrl: www.example.com
         operations:
           - type: Query
             field: users
             path: /users
             method: GET
-            responseSchema: ./json-schemas/users.json
+            responseSchema: ./json-schemas/JsonTestService-schemas/users.json
+  - name: MongooseTestService
+    handler:
+      mongoose:
+        connectionString: www.example.com
+        models:
+          - name: Dogs
+            path: ./models/Dogs
