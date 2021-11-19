@@ -8,7 +8,6 @@ const formatSource = (source) => {
       handlerInput = { "graphql": { endpoint: source.url } };
       break;
     case "openapi":
-      console.log("SOURCE", source);
       const schemaFileName = `${source.name}-schema.${source.schemaFileType}`;
       fs.writeFile(`./openapi-schemas/${schemaFileName}`, source.schemaFileContent, (err) => {
         if (err) throw err;
