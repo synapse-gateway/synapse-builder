@@ -32,13 +32,10 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
 
   const handleAddModelClick = (e) => {
     e.preventDefault();
-    setModels([
-      ...models,
-      { name: modelName, path: modelUrl }
-    ]);
+    setModels([...models, { name: modelName, path: modelUrl }]);
     setModelName("");
     setModelUrl("");
-  }
+  };
 
   return (
     <div>
@@ -107,12 +104,16 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <Button variant='contained' onClick={handleAddModelClick}>
+        <Button
+          variant='contained'
+          onClick={handleAddModelClick}
+          sx={{ mb: 2 }}
+        >
           Add Model
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick}>
+      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
         Create
       </Button>
     </div>
