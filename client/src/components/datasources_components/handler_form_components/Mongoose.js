@@ -117,7 +117,7 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick}>
+      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
         Create
       </Button>
     </div>

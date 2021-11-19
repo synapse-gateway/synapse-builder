@@ -32,7 +32,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn({loggedInUser, setLoggedInUser}) {
+export default function SignIn({loggedInUser, setLoggedInUser, setIsAdmin}) {
   const [errorMessage, setErrorMessage] = useState(null)
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -49,12 +49,13 @@ export default function SignIn({loggedInUser, setLoggedInUser}) {
       setErrorMessage(responseData.error)
     } else {
       setLoggedInUser(responseData.token)
+      setIsAdmin(responseData.admin)
     }
     
   };
 
   if (loggedInUser) {
-    return <Navigate to="/" />
+    return <Navigate to="/monitoring" />
   } else {
     return (
       <ThemeProvider theme={theme}>
@@ -108,18 +109,18 @@ export default function SignIn({loggedInUser, setLoggedInUser}) {
               >
                 Sign In
               </Button>
-              <Grid container>
-                {/* <Grid item xs>
+              {/* <Grid container>
+                <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
-                </Grid> */}
+                </Grid>
                 <Grid item>
                   <Link href="/signup" variant="body2" >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Box>
           </Box>
           <Copyright sx={{ mt: 8, mb: 4 }} />

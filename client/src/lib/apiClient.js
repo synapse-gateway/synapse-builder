@@ -32,7 +32,7 @@ const apiClient = {
   },
   async signupUser(user) {
     try {
-      let response = await axios.post("api/users", user);
+      let response = await axios.post("api/users", user)
       return response.data;
     } catch (err) {
       return { error: "All fields are required and must use unique username" };

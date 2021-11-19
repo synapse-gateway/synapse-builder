@@ -18,6 +18,7 @@ function authenticateToken(req, res, next) {
 
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     console.log(err)
+    console.log(token)
     if (err) return res.sendStatus(403)
     req.user = user
     console.log('made it here HOMIE')
@@ -40,12 +41,10 @@ router.get("/monitor/queries", authenticateToken, monitoringController.getIndivi
 // Create new user
 router.post('/users', async (req, res) => {
   try {
-    console.log(req.body, "HERE ANEESH RIGHT HERE")
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = { username: req.body.username, password: hashedPassword, firstName: req.body.firstName, lastName: req.body.lastName};
-    console.log(user)
-    let userObj = await User.create(user); // push to "real" database
-    res.status(201).json({token: jsonwebtoken.sign({user: userObj._id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10h'})})
+    const user = { username: req.body.username, password: hashedPassword, firstName: req.body.firstName, lastName: req.body.lastName, admin: 'true' === (req.body.admin)};
+    await User.create(user); // push to "real" database
+    res.status(201).json({success: "true"})
   } catch(err) {
     console.log(err)
     res.status(500).json({error: "Something went wrong"});
@@ -64,7 +63,7 @@ router.post('/users/login', async (req, res) => {
       // Give back JWT
       console.log(user._id)
 
-      res.status(201).json({token: jsonwebtoken.sign({user: user._id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10h'})})
+      res.status(201).json({admin: user.admin, token: jsonwebtoken.sign({user: user._id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '10h'})})
     } else {
       res.status(401).json({error: 'Login Failed'});
     }
