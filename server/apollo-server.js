@@ -16,7 +16,6 @@ async function main() {
       mongourl = "mongodb://localhost:27017/synapse"
     }
     queryConn = await mongoose.createConnection(mongourl)
-    console.log('Mongoose connected successfully!')
   } catch(err) {
     console.log(err)
   }

@@ -19,12 +19,18 @@ import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from "./Navigation";
+import {
+  mainListItems,
+  secondaryListItems,
+  mainListItemsAdmin,
+} from "./Navigation";
 import Monitoring from "./monitoring_components/Monitoring";
 import DataSources from "./datasources_components/DataSources";
 import Home from "./Home";
 import SignUp from "./authentication_components/Signup";
 import SignIn from "./authentication_components/Signin";
+import NavBarLeft from "./navbar-left/NavBarLeft";
+import MenuButton from "./navbar-left/MenuButton";
 
 // function Copyright(props) {
 //   return (
@@ -90,7 +96,8 @@ const mdTheme = createTheme();
 const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
   const [loggedInUser, setLoggedInUser] = useState(null);
-  console.log(loggedInUser, "dahsboard logged in");
+  const [isAdmin, setIsAdmin] = useState(false);
+  console.log(isAdmin);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -99,6 +106,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (loggedInUser) {
       setLoggedInUser(null);
+      setIsAdmin(false);
     }
   };
 
@@ -106,68 +114,49 @@ const Dashboard = () => {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position='absolute' open={!!loggedInUser && open}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
             }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-
+            {loggedInUser ? (
+              <MenuButton toggleDrawer={toggleDrawer} open={open} />
+            ) : null}
             {/* GUI Title */}
             <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
+              component='h1'
+              variant='h6'
+              color='inherit'
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Team 5 GUI
+              SYNAPSE
             </Typography>
             {/* Notifications */}
-            <IconButton color="inherit" onClick={toggleLoggedIn}>
+            <IconButton color='inherit' onClick={toggleLoggedIn}>
               {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge> */}
-              {loggedInUser ? "Logout" : "Login/Signup"}
+              {loggedInUser ? "Logout" : ""}
             </IconButton>
           </Toolbar>
         </AppBar>
 
         {/* Nav Bar */}
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List>{mainListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
-        </Drawer>
 
+        {loggedInUser ? (
+          <NavBarLeft
+            Drawer={Drawer}
+            open={open}
+            mainListItems={isAdmin ? mainListItemsAdmin : mainListItems}
+            secondaryListItems={secondaryListItems}
+            toggleDrawer={toggleDrawer}
+          />
+        ) : null}
         {/* Main Content Area */}
         <Box
-          component="main"
+          component='main'
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
@@ -179,36 +168,38 @@ const Dashboard = () => {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Features */}
               <Routes>
                 <Route
-                  path="/"
+                  path='/'
                   element={<Home loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path="/monitoring"
+                  path='/monitoring'
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path="/datasources"
+                  path='/datasources'
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
 
                 <Route
-                  path="/signup"
+                  path='/createuser'
                   element={
                     <SignUp
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
+                      isAdmin={isAdmin}
                     />
                   }
                 />
                 <Route
-                  path="/signin"
+                  path='/signin'
                   element={
                     <SignIn
+                      setIsAdmin={setIsAdmin}
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
                     />

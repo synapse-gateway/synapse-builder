@@ -1,13 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
+import DragDrop from "./DragDrop";
 
 const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [modelName, setModelName] = useState("");
-  const [modelUrl, setModelUrl] = useState("");
   const [models, setModels] = useState([]);
+  const [modelFile, setModelFile] = useState(null);
+  const fileTypes = ["javascript"];
 
   const createTimeStamp = () => {
     var options = {
@@ -30,15 +32,16 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
     setOpen(false);
   };
 
-  const handleAddModelClick = (e) => {
+  const handleAddModelClick = async (e) => {
     e.preventDefault();
+    const modelContent = await modelFile.text()
     setModels([
       ...models,
-      { name: modelName, path: modelUrl }
+      { name: modelName, content: modelContent }
     ]);
     setModelName("");
-    setModelUrl("");
-  }
+    setModelFile(null);
+  };
 
   return (
     <div>
@@ -94,7 +97,7 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <TextField
+        {/* <TextField
           fullWidth
           label='Model Endpoint URL'
           color='primary'
@@ -105,14 +108,16 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setModelUrl(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
-        />
+        /> */}
 
-        <Button variant='contained' onClick={handleAddModelClick}>
+        <DragDrop setFile={setModelFile} fileTypes={fileTypes} />
+
+        <Button sx={{ mb: 2, mt: 2 }} variant='contained' onClick={handleAddModelClick}>
           Add Model
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick}>
+      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
         Create
       </Button>
     </div>

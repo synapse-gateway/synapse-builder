@@ -16,7 +16,7 @@ const linkStyle = {
   textDecoration: 'none',
 };
 
-export const mainListItems = (
+export const mainListItemsAdmin = (
   <div>
     <Link style={linkStyle} to="/">
       <ListItem button>
@@ -45,12 +45,12 @@ export const mainListItems = (
       </ListItem>
     </Link>
 
-    <Link style={linkStyle} to="/permissions">
+    <Link style={linkStyle} to="/createuser">
       <ListItem button>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Permissions" />
+        <ListItemText primary="Create Users" />
       </ListItem>
     </Link>
   </div>
@@ -65,6 +65,37 @@ export const secondaryListItems = (
           {/* <AssignmentIcon /> REPLACE ICON */}
         </ListItemIcon>
         <ListItemText primary="GraphiQL" />
+      </ListItem>
+    </Link>
+  </div>
+);
+
+export const mainListItems = (
+  <div>
+    <Link style={linkStyle} to="/">
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+    </Link>
+
+    <Link style={linkStyle} to="/datasources">
+      <ListItem button>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Data Sources" />
+      </ListItem>
+    </Link>
+
+    <Link style={linkStyle} to="/monitoring">
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Metrics & Logs" />
       </ListItem>
     </Link>
   </div>

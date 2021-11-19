@@ -19,6 +19,7 @@
     "@graphql-mesh/cli": "^0.42.6",
     "@graphql-mesh/openapi": "^0.19.3",
     "apollo-server": "^3.4.0",
+    "apollo-server-express": "^3.5.0",
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",

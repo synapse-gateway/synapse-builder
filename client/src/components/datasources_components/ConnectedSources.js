@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../Title";
 import { Button } from "@mui/material";
-import apiClient from '../../lib/apiClient';
+import apiClient from "../../lib/apiClient";
 
 // // Generate Source Data
 // function createData(id, name, type, status, active, created, actions) {
@@ -50,13 +50,30 @@ import apiClient from '../../lib/apiClient';
 // function preventDefault(event) {
 //   event.preventDefault();
 // }
+const DeleteSourceButton = ({ sourceList, sourceName, setSourceList }) => {
+  const handleSourceDelete = () => {
+    let filteredSourceList = sourceList.filter((source) => {
+      return source.name !== sourceName;
+    });
+    setSourceList([...filteredSourceList]);
+  };
+  return (
+    <Button
+      sourceList={sourceList}
+      sourceName={sourceName}
+      onClick={handleSourceDelete}
+    >
+      🗑
+    </Button>
+  );
+};
 
-const ConnectedSources = ({ loggedInUser, sourceList }) => {
+const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
   const sources = sourceList;
   const handleSubmit = () => {
     apiClient.createConfig(loggedInUser, sources);
-    console.log('Sources submitted!');
-}
+    console.log("Sources submitted!");
+  };
   return (
     <>
       <Title>Your connected data sources</Title>
@@ -77,12 +94,23 @@ const ConnectedSources = ({ loggedInUser, sourceList }) => {
               <TableCell>{source.handler}</TableCell>
               <TableCell align='center'>✓</TableCell>
               <TableCell>{source.created}</TableCell>
-              <TableCell align='center'>🗑</TableCell>
+              <TableCell align='center'>
+                <DeleteSourceButton
+                  sourceList={sourceList}
+                  sourceName={source.name}
+                  setSourceList={setSourceList}
+                  align='center'
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Button sx={{ width: "40%", mt: 2 }} variant='contained' onClick={handleSubmit}>
+      <Button
+        sx={{ width: "40%", mt: 2 }}
+        variant='contained'
+        onClick={handleSubmit}
+      >
         Create Your Synapse
       </Button>
       {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>

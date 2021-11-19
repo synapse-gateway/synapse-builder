@@ -32,8 +32,15 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp({setLoggedInUser, loggedInUser}) {
+export default function SignUp({setLoggedInUser, loggedInUser, isAdmin}) {
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [makeAdmin, setMakeAdmin] = useState(false)
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,19 +48,33 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
     const userObj = {
       username: data.get('username'),
       password: data.get('password'),
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName')
+      firstName: firstName,
+      lastName: data.get('lastName'),
+      admin: makeAdmin ? 'true' : 'false',
     };
+    
+    
 
     let responseData = await apiClient.signupUser(userObj)
     if (responseData.error) {
       setErrorMessage(responseData.error)
     } else {
-      setLoggedInUser(responseData.token)
+      setErrorMessage(null)
+      setSuccessMessage(`Successfully created user ${username}`)
+      clearForm()
     }
     
   };
-  if (loggedInUser) {
+
+  const clearForm = () => {
+    setFirstName("")
+    setLastName("")
+    setUsername("")
+    setPassword("")
+    setMakeAdmin(false)
+  }
+
+  if (!loggedInUser && !isAdmin) {
     return <Navigate to="/" />
   } else {
     return (
@@ -61,6 +82,7 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           {errorMessage ? <Alert severity="error" variant="filled">{errorMessage}</Alert> : <></> }
+          {successMessage ? <Alert severity="success" variant="filled">{successMessage}</Alert>: <></> }
           <Box
             sx={{
               marginTop: 8,
@@ -73,7 +95,7 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign up
+              Create a User
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -81,6 +103,8 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
                   <TextField
                     autoComplete="given-name"
                     name="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     required
                     fullWidth
                     id="firstName"
@@ -92,6 +116,8 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
                   <TextField
                     required
                     fullWidth
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     id="lastName"
                     label="Last Name"
                     name="lastName"
@@ -102,6 +128,8 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
                   <TextField
                     required
                     fullWidth
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     id="username"
                     label="Username"
                     name="username"
@@ -112,6 +140,8 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
                   <TextField
                     required
                     fullWidth
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     name="password"
                     label="Password"
                     type="password"
@@ -119,12 +149,12 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
                     autoComplete="new-password"
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
+                <Grid item xs={12}>
                   <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    control={<Checkbox value={makeAdmin} checked={makeAdmin} onChange={() => setMakeAdmin(!makeAdmin)} color="primary" />}
+                    label="Make user an admin"
                   />
-                </Grid> */}
+                </Grid>
               </Grid>
               <Button
                 type="submit"
@@ -134,13 +164,13 @@ export default function SignUp({setLoggedInUser, loggedInUser}) {
               >
                 Sign Up
               </Button>
-              <Grid container justifyContent="center">
+              {/* <Grid container justifyContent="center">
                 <Grid item>
                   <Link href="/signin" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Box>
           </Box>
           <Copyright sx={{ mt: 5 }} />

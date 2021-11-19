@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bcrypt = require('bcrypt');
 const routes = require("./routes/api");
 let {mongourl} = require("./config/db.config")
+const { User } = require("./models/User")
 
 const mongoose = require('mongoose');
 
@@ -49,6 +51,22 @@ app.get('/', (req, res) => {
 app.use("/api", routes);
 
 const PORT = 4005;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  let hasAdmin = await User.exists({admin: true})
+  if (!hasAdmin) {
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+    try {
+      await User.create({
+        firstName: "Root",
+        lastName: "Admin",
+        username: process.env.ADMIN_USERNAME,
+        password: hashedPassword,
+        admin: true
+      })
+      console.log('Admin user successfully initiated')
+    } catch(err) {
+      console.log(err)
+    }
+  }
   console.log(`server is listening on port: ${4005}`);
 })

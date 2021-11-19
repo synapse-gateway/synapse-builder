@@ -1,10 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import { Button, TextField } from "@mui/material";
+import DragDrop from "./DragDrop";
 
 const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
   const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
+  // const [url, setUrl] = useState("");
+  const [schemaFile, setSchemaFile] = useState(null);
+  const [schemaContent, setSchemaContent] = useState("");
+  const [schemaFileType, setSchemaFileType] = useState("");
+  const fileTypes = ["x-yaml", "json"];
 
   const createTimeStamp = () => {
     var options = {
@@ -16,16 +21,30 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
     return today.toLocaleDateString("en-US", options);
   };
 
-  const handleCreateClick = (e) => {
+  const handleCreateClick = async (e) => {
     e.preventDefault();
+    const schemaFileContent = await schemaFile.text();
+    const schemaFileType = schemaFile.type.includes("json") ? "json" : "yaml";
     setSourceList([
       ...sourceList,
-      { name, url, handler: "openapi", created: createTimeStamp() },
+      { name, schemaFileType, schemaFileContent, handler: "openapi", created: createTimeStamp() },
     ]);
     setName("");
-    setUrl("");
+    // setUrl("");
+    // setSchemaContent("");
+    // setSchemaFileType("");
+    setSchemaFile(null);
     setOpen(false);
   };
+
+  // const handleAddSchemaClick = async (e) => {
+  //   e.preventDefault();
+  //   const content = await schemaFile.text();
+  //   const type = schemaFile.type.includes("json") ? "json" : "yaml";
+  //   setSchemaContent(content);
+  //   setSchemaFileType(type);
+  //   setSchemaFile(null);
+  // };
 
   return (
     <div>
@@ -43,7 +62,9 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         />
 
-        <TextField
+        <DragDrop setFile={setSchemaFile} fileTypes={fileTypes} />
+
+        {/* <TextField
           fullWidth
           label='Source URL'
           color='primary'
@@ -54,9 +75,13 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setUrl(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
-        />
+        /> */}
+        {/* <Button sx={{ mb: 2, mt: 2 }} variant='contained' onClick={handleAddSchemaClick}>
+          Add Schema
+        </Button> */}
       </div>
-      <Button variant='contained' onClick={handleCreateClick}>
+
+      <Button sx={{ mt: 2 }} variant='contained' onClick={handleCreateClick}>
         Create
       </Button>
     </div>
