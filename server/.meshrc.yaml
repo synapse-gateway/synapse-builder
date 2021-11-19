@@ -1,18 +1,9 @@
 sources:
-  - name: TestService
+  - name: BookService
     handler:
-      mongoose:
-        connectionString: www.example.com
-        models:
-          - name: People
-            path: /path/models
-  - name: JSONSchemaService
+      openapi:
+        source: ./oas_books.yaml
+  - name: AuthorService
     handler:
-      jsonSchema:
-        baseUrl: test
-        operations:
-          - type: Query
-            field: users
-            path: /users
-            method: GET
-            responseSchema: ./json-schemas/users.json
+      openapi:
+        source: ./oas_authors.yaml

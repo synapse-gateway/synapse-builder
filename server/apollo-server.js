@@ -8,7 +8,6 @@ const Schema = mongoose.Schema;
 require('dotenv').config()
 let { mongourl } = require('./config/db.config.js');
 
-
 async function main() {
   const { schema, contextBuilder } = await getBuiltMesh();
   let queryConn
