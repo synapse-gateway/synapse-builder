@@ -8,6 +8,7 @@ import Chart from "./Chart";
 import Logs from "./Logs";
 import apiClient from "../../lib/apiClient";
 import { Navigate } from "react-router-dom";
+import MultipleSelector from "./MultipleSelector"
 
 const REFRESH_RATE_IN_MINUTES = 5;
 
@@ -76,7 +77,7 @@ const Monitoring = ({ loggedInUser }) => {
 
   const filterDataByDropdown = (data, filterVal) => {
     return data.filter(
-      (arr) => filterVal === "all" || arr.rootFields.includes(filterVal)
+      (arr) => filterVal.includes('all') || arr.rootFields.some((e) => filterVal.includes(e))
     );
   };
 
@@ -174,16 +175,22 @@ const Monitoring = ({ loggedInUser }) => {
                 p: 3,
                 py: 2,
                 mx: 2,
-                minWidth: 300,
+                minWidth: 365,
                 display: "inline",
                 flexDirection: "column",
               }}
             >
-              <Dropdown
+              {/* <Dropdown
                 value={filterValue}
                 onChange={handleFilter}
                 options={rootFieldOptions}
+              /> */}
+              <MultipleSelector
+                value={filterValue}
+                setFilterValue={setFilterValue}
+                options={rootFieldOptions}
               />
+              
             </Paper>
           </Grid>
         </Grid>
