@@ -1,82 +1,96 @@
-import * as React from 'react';
-import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Navigate } from 'react-router-dom';
-import apiClient from '../../lib/apiClient';
-import { Alert } from '@mui/material';
+import * as React from "react";
+import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Navigate } from "react-router-dom";
+import apiClient from "../../lib/apiClient";
+import { Alert } from "@mui/material";
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
 const theme = createTheme();
 
-export default function SignIn({loggedInUser, setLoggedInUser, setIsAdmin}) {
-  const [errorMessage, setErrorMessage] = useState(null)
+export default function SignIn({ loggedInUser, setLoggedInUser, setIsAdmin }) {
+  const [errorMessage, setErrorMessage] = useState(null);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     let userObj = {
-      username: data.get('username'),
-      password: data.get('password'),
+      username: data.get("username"),
+      password: data.get("password"),
     };
 
-
-    let responseData = await apiClient.loginUser(userObj)
+    let responseData = await apiClient.loginUser(userObj);
     if (responseData.error) {
-      setErrorMessage(responseData.error)
+      setErrorMessage(responseData.error);
     } else {
-      setLoggedInUser(responseData.token)
-      setIsAdmin(responseData.admin)
+      setLoggedInUser(responseData.token);
+      setIsAdmin(responseData.admin);
     }
-    
   };
 
   if (loggedInUser) {
-    return <Navigate to="/monitoring" />
+    return <Navigate to="/monitoring" />;
   } else {
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
-          {errorMessage ? <Alert severity="error" variant="filled">{errorMessage}</Alert> : <></> }
+          {errorMessage ? (
+            <Alert severity="error" variant="filled">
+              {errorMessage}
+            </Alert>
+          ) : (
+            <></>
+          )}
           <Box
             sx={{
               marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -128,5 +142,4 @@ export default function SignIn({loggedInUser, setLoggedInUser, setIsAdmin}) {
       </ThemeProvider>
     );
   }
-  
 }

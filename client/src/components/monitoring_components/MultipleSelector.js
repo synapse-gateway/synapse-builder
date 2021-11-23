@@ -1,23 +1,9 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 function getStyles(name, personName, theme) {
   return {
@@ -28,7 +14,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect({options, setFilterValue, value}) {
+export default function MultipleSelect({ options, setFilterValue, value }) {
   const theme = useTheme();
   const [selections, setSelections] = React.useState([]);
 
@@ -36,26 +22,25 @@ export default function MultipleSelect({options, setFilterValue, value}) {
     const {
       target: { value },
     } = event;
-    console.log(value, "VALUE")
+    console.log(value, "VALUE");
     setSelections(
       // On autofill we get a the stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
-    setFilterValue(value)
+    setFilterValue(value);
   };
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label">{selections.length === 0 ? 'all' : selections.join(', ')}</InputLabel>
+      <FormControl fullWidth={true} sx={{ minHeight: 65 }}>
+        <InputLabel id="demo-multiple-name-label">Root Queries</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           multiple
           value={selections}
           onChange={handleChange}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
+          label="Root Queries"
         >
           {options.map((item) => (
             <MenuItem

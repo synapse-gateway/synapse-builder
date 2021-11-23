@@ -11,7 +11,7 @@ import MultipleSelector from "./MultipleSelector";
 import Title from "../Title";
 import * as time from "../../constants/Monitoring";
 
-const Monitoring = ({ loggedInUser }) => {
+const FrontendDashboard = ({ loggedInUser }) => {
   const [timeScale, setTimeScale] = useState("hour");
   const [currentView, setCurrentView] = useState("frontend");
   const [filterValue, setFilterValue] = useState("all");
