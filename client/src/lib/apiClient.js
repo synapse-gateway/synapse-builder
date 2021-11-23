@@ -20,19 +20,16 @@ const apiClient = {
       ? `?since=${sinceUnixTime}`
       : `?minutes=${minutesSince}`;
 
-    let response = await axios.get(
-      `api/monitor/queries${queryString}`,
-      {
-        headers: {
-          authorization: `bearer ${jwt}`,
-        },
-      }
-    );
+    let response = await axios.get(`api/monitor/queries${queryString}`, {
+      headers: {
+        authorization: `bearer ${jwt}`,
+      },
+    });
     return response;
   },
   async signupUser(user) {
     try {
-      let response = await axios.post("api/users", user)
+      let response = await axios.post("api/users", user);
       return response.data;
     } catch (err) {
       return { error: "All fields are required and must use unique username" };
@@ -40,15 +37,28 @@ const apiClient = {
   },
   async loginUser(user) {
     try {
-      let response = await axios.post(
-        "api/users/login",
-        user
-      );
+      let response = await axios.post("api/users/login", user);
       return response.data;
     } catch (err) {
       return {
         error: "Username/password combination failed. Please try again.",
       };
+    }
+  },
+  async getAllUsers() {
+    try {
+      let response = await axios.get("api/users");
+      return response.data;
+    } catch (err) {
+      return { error: "All fields are required and must use unique username" };
+    }
+  },
+  async deleteUser(username) {
+    try {
+      let response = await axios.delete("api/users", { data: username });
+      return response;
+    } catch (err) {
+      return { error: "All fields are required and must use unique username" };
     }
   },
 };

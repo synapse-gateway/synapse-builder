@@ -31,6 +31,7 @@ import SignUp from "./authentication_components/Signup";
 import SignIn from "./authentication_components/Signin";
 import NavBarLeft from "./navbar-left/NavBarLeft";
 import MenuButton from "./navbar-left/MenuButton";
+import ManageUsers from "./authentication_components/ManageUsers";
 
 // function Copyright(props) {
 //   return (
@@ -97,7 +98,7 @@ const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log(isAdmin);
+  const [username, setUsername] = useState("");
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -109,7 +110,6 @@ const Dashboard = () => {
       setIsAdmin(false);
     }
   };
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -138,7 +138,11 @@ const Dashboard = () => {
               {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge> */}
-              {loggedInUser ? "Logout" : ""}
+              {loggedInUser ? (
+                <Typography>Hi {username} | Logout</Typography>
+              ) : (
+                ""
+              )}
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -184,7 +188,16 @@ const Dashboard = () => {
                   path='/datasources'
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
-
+                <Route
+                  path='/manageusers'
+                  element={
+                    <ManageUsers
+                      setLoggedInUser={setLoggedInUser}
+                      loggedInUser={loggedInUser}
+                      isAdmin={isAdmin}
+                    />
+                  }
+                />
                 <Route
                   path='/createuser'
                   element={
@@ -199,6 +212,7 @@ const Dashboard = () => {
                   path='/signin'
                   element={
                     <SignIn
+                      setUsername={setUsername}
                       setIsAdmin={setIsAdmin}
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
