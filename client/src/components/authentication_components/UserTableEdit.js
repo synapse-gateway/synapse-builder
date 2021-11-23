@@ -66,6 +66,9 @@ const handleUserDelete = async (username, allUsers, setUsers) => {
 };
 
 export default function UserTable({ allUsers, setUsers }) {
+  const [isEdit, setEdit] = React.useState(false);
+  const [disable, setDisable] = React.useState(true);
+  const [showConfirm, setShowConfirm] = React.useState(false);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label='customized table'>

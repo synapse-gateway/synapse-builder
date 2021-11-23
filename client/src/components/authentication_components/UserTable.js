@@ -45,14 +45,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 //   createData('Gingerbread', 356, 16.0, 49, 3.9),
 // ];
 
-const rows = [
-  { lastName: "Snow", firstName: "Jon", admin: true, username: "Snowmonkey" },
-  { lastName: "Johnson", firstName: "Sue", admin: true, username: "Gamer1" },
-  { lastName: "Porter", firstName: "Bill", admin: false, username: "Mailman" },
-  { lastName: "Brown", firstName: "Camilla", admin: true, username: "Pooboy" },
-  { lastName: "Unts", firstName: "George", admin: false, username: "Lollipop" },
-];
-
 const handleUserEdit = (username) => {
   console.log(username);
 };
@@ -65,9 +57,13 @@ const handleUserDelete = async (username, allUsers, setUsers) => {
   }
 };
 
-export default function UserTable({ allUsers, setUsers }) {
+// const deleteConfirmation () => {
+
+// }
+
+export default function UserTable({ allUsers, setUsers, setPopup }) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ mt: 2 }}>
       <Table sx={{ minWidth: 700 }} aria-label='customized table'>
         <TableHead>
           <TableRow>
@@ -111,10 +107,13 @@ export default function UserTable({ allUsers, setUsers }) {
               </StyledTableCell>
               <StyledTableCell align='center'>
                 <DeleteIcon
-                  onClick={() =>
-                    handleUserDelete(row.username, allUsers, setUsers)
-                  }
+                  onClick={() => setPopup({ show: true, user: row.username })}
                 />
+                {/* <DeleteIcon
+                  onClick={() =>
+                    handleUserDelete(row.username, allUsers, setUsers, setPopup)
+                  }
+                /> */}
               </StyledTableCell>
             </StyledTableRow>
           ))}
