@@ -11,21 +11,19 @@ import MultipleSelector from "./MultipleSelector";
 import Title from "../Title";
 import * as time from "../../constants/Monitoring";
 
-const FrontendDashboard = ({ loggedInUser }) => {
+const Dashboard = ({ currentView, token }) => {
   const [timeScale, setTimeScale] = useState("hour");
-  const [currentView, setCurrentView] = useState("frontend");
   const [filterValue, setFilterValue] = useState("all");
   const [data, setData] = useState([]);
-  const rootFieldOptions = ["all"];
-  const viewOptions = ["frontend", "backend"];
+  const rootFieldOptions = ["all"]; // refactor me
 
   const getAPIData = useCallback(() => {
     apiClient
-      .getTimeData(loggedInUser, timeRange["month"].unixStart)
+      .getTimeData(token, currentView, timeRange["month"].unixStart)
       .then((resData) => {
         setData(resData.data);
       });
-  }, []);
+  }, [currentView]);
 
   useEffect(() => {
     getAPIData();
@@ -34,33 +32,29 @@ const FrontendDashboard = ({ loggedInUser }) => {
       getAPIData();
     }, time.REFRESH_RATE_IN_MINUTES * 1000 * 60);
     return () => clearInterval(interval);
-  }, [getAPIData]);
+  }, [getAPIData, currentView]);
 
   const currentTime = Math.round(new Date().getTime() / 1000);
 
   const timeRange = {
     hour: {
+      ...time.FORMATS.hour,
       unixStart: currentTime - time.IN_SECONDS.hour,
-      timeFormat: "HH:mm",
-      timeConversion: "MMM DD YYYY HH:mm",
       divisionInterval: time.IN_SECONDS.hour / 12,
     },
     day: {
+      ...time.FORMATS.day,
       unixStart: currentTime - time.IN_SECONDS.day,
-      timeFormat: "HH:00",
-      timeConversion: "MMM DD YYYY HH:00",
       divisionInterval: time.IN_SECONDS.day / 24,
     },
     week: {
+      ...time.FORMATS.week,
       unixStart: currentTime - time.IN_SECONDS.week,
-      timeFormat: "MMM D",
-      timeConversion: "MMM DD YYYY",
       divisionInterval: time.IN_SECONDS.week / 7,
     },
     month: {
+      ...time.FORMATS.month,
       unixStart: currentTime - time.IN_SECONDS.month,
-      timeFormat: "MMM D",
-      timeConversion: "MMM DD YYYY",
       divisionInterval: time.IN_SECONDS.month / 30,
     },
   };
@@ -139,85 +133,60 @@ const FrontendDashboard = ({ loggedInUser }) => {
     .filter((datapoint) => !datapoint.fake)
     .slice(0, 10);
 
-  const handleViewToggle = (e, newView) => {
-    setCurrentView(newView);
-  };
-
   const handleRangeToggle = (e, newTimeScale) => {
     setTimeScale(newTimeScale);
   };
 
-  if (loggedInUser) {
-    return (
-      <>
-        <Title>
-          Hello {currentView} {currentTime}
-        </Title>
+  return (
+    <>
+      {/* <Title>Hello {currentView}</Title> */}
+
+      <Grid item xs={12} md={6}>
+        <Paper sx={{ p: 3 }}>
+          <ScaleToggler
+            groupName={"Time scale toggle"}
+            selection={timeScale}
+            onChange={handleRangeToggle}
+            options={Object.keys(timeRange)}
+          />
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Paper sx={{ p: 3 }}>
+          <MultipleSelector
+            value={filterValue}
+            setFilterValue={setFilterValue}
+            options={rootFieldOptions}
+          />
+        </Paper>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Paper
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            height: 400,
+          }}
+        >
+          <Chart
+            data={chartData}
+            timeFormat={timeRange[timeScale].timeFormat}
+            currentTime={currentTime}
+          />
+        </Paper>
+      </Grid>
+
+      {logData.filter((log) => log.count !== 0).length ? (
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              py: 3,
-            }}
-          >
-            <ScaleToggler
-              groupName={"View toggle"}
-              selection={currentView}
-              onChange={handleViewToggle}
-              options={viewOptions}
-            />
+          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+            <Logs data={logData} />
           </Paper>
         </Grid>
-
-        <Grid item xs={12} md={6} wrap="wrap">
-          <Paper sx={{ p: 3 }}>
-            <ScaleToggler
-              groupName={"Time scale toggle"}
-              selection={timeScale}
-              onChange={handleRangeToggle}
-              options={Object.keys(timeRange)}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6} wrap="wrap">
-          <Paper sx={{ p: 3 }}>
-            <MultipleSelector
-              value={filterValue}
-              setFilterValue={setFilterValue}
-              options={rootFieldOptions}
-            />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              height: 400,
-            }}
-          >
-            <Chart
-              data={chartData}
-              timeFormat={timeRange[timeScale].timeFormat}
-              currentTime={currentTime}
-            />
-          </Paper>
-        </Grid>
-
-        {logData.filter((log) => log.count !== 0).length ? (
-          <Grid item xs={12}>
-            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Logs data={logData} />
-            </Paper>
-          </Grid>
-        ) : null}
-      </>
-    );
-  } else {
-    return <Navigate to="/signin" />;
-  }
+      ) : null}
+    </>
+  );
 };
 
-export default Monitoring;
+export default Dashboard;
