@@ -8,32 +8,34 @@ import Logs from "./Logs";
 import apiClient from "../../lib/apiClient";
 import { Navigate } from "react-router-dom";
 import MultipleSelector from "./MultipleSelector";
+import TableContainer from "@mui/material/TableContainer";
 import Title from "../Title";
 import * as time from "../../constants/Monitoring";
 import { getContrastRatio } from "@mui/system";
+import { filterDataByDropdown } from "../../funcs/Monitoring";
 
 const BackendDash = ({
   data,
-  timeRangeProps,
-  handleRangeToggle,
-  currentRange,
+  timeScaleProps,
+  // handleRangeToggle,
+  // currentRange,
 }) => {
   const [filterValue, setFilterValue] = useState("all");
   const [resolverValue, setResolverValue] = useState(["all"]);
   const [subfieldValue, setSubfieldValue] = useState(["all"]);
-  const rootQueryTypes = ["Query", "Mutation", "Subscription"];
+  const rootQueries = ["Query", "Mutation", "Subscription"];
 
-  const filterDataByTimescale = (data, timeRange) => {
-    return data.filter((arr) => arr.unixTime >= timeRange.unixStart);
-  };
+  // const filterDataByTimescale = (data, timeRange) => {
+  //   return data.filter((arr) => arr.unixTime >= timeRange.unixStart);
+  // };
 
-  const filterDataByDropdown = (data, selected) => {
-    return data.filter(
-      (arr) =>
-        selected.includes("all") ||
-        arr.rootFields.some((e) => selected.includes(e))
-    );
-  };
+  // const filterDataByDropdown = (data, selected) => {
+  //   return data.filter(
+  //     (arr) =>
+  //       selected.includes("all") ||
+  //       arr.rootFields.some((e) => selected.includes(e))
+  //   );
+  // };
 
   // const binDataByTimestamp = (data, timeRange) => {
   //   let bin = {};
@@ -93,13 +95,14 @@ const BackendDash = ({
   let filterOptions = getFilterOptions(data);
 
   console.log("filterOptions", filterOptions);
-
-  let filteredData = filterDataByTimescale(
-    filterDataByDropdown(data, filterValue),
-    timeRangeProps[timeScale]
-  );
-
+  
   */
+
+  //  let filteredData = filterDataByDropdown(data, "name", filterValue)
+  //  filterDataByTimescale(
+
+  //    timeRangeProps[timeScale]
+  //  );
 
   // let chartData = binDataByTimestamp(filteredData, timeRange[timeScale]);
   // let logData = filteredData
@@ -107,47 +110,58 @@ const BackendDash = ({
   //   .filter((datapoint) => !datapoint.fake)
   //   .slice(0, 10);
 
-  const filterOptions = (rawData, selectionArr) => {
+  const filterOptions = (rawData, fieldToFilter, selectionArr = []) => {
     const options = ["all"];
-    if (rawData[0].name === undefined) return options;
 
     options.push(
       ...new Set(
         rawData
-          .filter((v) => {
-            if (selectionArr) {
+          .filter((datum) => {
+            if (rootQueries.includes(datum.resolver)) return false;
+
+            if (selectionArr.length > 0) {
               if (selectionArr.includes("all")) return true;
-              return selectionArr.includes(v.name.split(".")[0]);
-            } else {
-              return !["Query", "Mutation", "Subscription"].includes(
-                v.name.split(".")[0]
-              );
+              return selectionArr.includes(datum.resolver);
             }
+
+            return true;
           })
-          .map((v) => (selectionArr ? v.name : v.name.split(".")[0]))
+          .map((datum) => datum[fieldToFilter])
           .flat()
       )
     );
     return options;
   };
 
-  const resolverOptions = filterOptions(data);
-  const subfieldOptions = filterOptions(data, resolverValue);
+  // IIFE to reshape datapoints
+  ((rawData) => {
+    let callback;
+    if (rawData.length === 0) return;
+    if (!rawData[0].hasOwnProperty("name")) {
+      callback = (datum) => {
+        datum.resolver = "";
+        datum.field = "";
+      };
+    } else {
+      callback = (datum) => {
+        [datum.resolver, datum.field] = datum.name.split(".");
+      };
+    }
+
+    rawData.forEach(callback);
+  })(data);
+
+  const resolverOptions = filterOptions(data, "resolver");
+  const subfieldOptions = filterOptions(data, "field", resolverValue);
+
+  let filteredData = filterDataByDropdown(
+    filterDataByDropdown(data, "resolver", resolverValue),
+    "field",
+    subfieldValue
+  ).filter((datum) => !rootQueries.includes(datum.resolver));
 
   return (
     <>
-      {/* <Title>Hello Frontend</Title> */}
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 3 }}>
-          <ScaleToggler
-            groupName={"Time scale toggle"}
-            selection={currentRange}
-            onChange={handleRangeToggle}
-            options={Object.keys(timeRangeProps)}
-          />
-        </Paper>
-      </Grid>
       <Grid item xs={12} md={6}>
         <Paper sx={{ p: 3 }}>
           <MultipleSelector
@@ -168,7 +182,7 @@ const BackendDash = ({
           />
         </Paper>
       </Grid>
-
+      {/*  */}
       {/* <Grid item xs={12}>
         <Paper
           sx={{
@@ -194,6 +208,15 @@ const BackendDash = ({
         </Grid>
       ) : null} */}
       {/* {!data ? <Title>Loading...</Title> : null} */}
+      {filteredData.length ? (
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+            <TableContainer>
+              <Logs data={filteredData.slice(0, 10)} />
+            </TableContainer>
+          </Paper>
+        </Grid>
+      ) : null}
     </>
   );
 };

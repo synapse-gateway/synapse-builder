@@ -8,28 +8,30 @@ import Logs from "./Logs";
 import apiClient from "../../lib/apiClient";
 import { Navigate } from "react-router-dom";
 import MultipleSelector from "./MultipleSelector";
+import TableContainer from "@mui/material/TableContainer";
 import Title from "../Title";
 import * as time from "../../constants/Monitoring";
+import { filterDataByDropdown } from "../../funcs/Monitoring";
 
 const FrontendDash = ({
   data,
-  timeRangeProps,
-  handleRangeToggle,
-  currentRange,
+  timeScaleProps,
+  // handleRangeToggle,
+  // currentRange,
 }) => {
   const [filterValue, setFilterValue] = useState("all");
 
-  const filterDataByTimescale = (data, timeRange) => {
-    return data.filter((arr) => arr.unixTime >= timeRange.unixStart);
-  };
+  // const filterDataByTimescale = (data, timeRange) => {
+  //   return data.filter((datum) => datum.unixTime >= timeRange.unixStart);
+  // };
 
-  const filterDataByDropdown = (data, selected) => {
-    return data.filter(
-      (arr) =>
-        selected.includes("all") ||
-        arr.rootFields.some((e) => selected.includes(e))
-    );
-  };
+  // const filterDataByDropdown = (data, dataField, dropdownSelections) => {
+  //   return data.filter(
+  //     (arr) =>
+  //       dropdownSelections.includes("all") ||
+  //       arr[dataField].some((e) => dropdownSelections.includes(e))
+  //   );
+  // };
 
   // const binDataByTimestamp = (data, timeRange) => {
   //   let bin = {};
@@ -74,53 +76,44 @@ const FrontendDash = ({
   //   return chartData.sort((a, b) => a.unixTime - b.unixTime);
   // };
 
-  const getFilterOptions = (data) => {
+  const filterOptions = ((rawData) => {
     let options = ["all"];
 
+    if (rawData.length === 0 || !rawData[0].hasOwnProperty("rootFields"))
+      return options;
+
     options.push(
-      ...new Set(data.map((datapoint) => datapoint.rootFields).flat())
+      ...new Set(rawData.map((datapoint) => datapoint.rootFields).flat())
     );
 
     return options;
-  };
+  })(data);
 
-  let filterOptions = getFilterOptions(data);
+  // let filterOptions = getFilterOptions(data);
 
   console.log("filterOptions", filterOptions);
 
-  let filteredData = filterDataByTimescale(
-    filterDataByDropdown(data, filterValue),
-    timeRangeProps[currentRange]
-  );
+  const filteredData = filterDataByDropdown(data, "rootFields", filterValue);
 
   // let chartData = binDataByTimestamp(filteredData, timeRange[timeScale]);
-  let logData = filteredData
-    .sort((a, b) => b.latency - a.latency)
-    .filter((datapoint) => !datapoint.fake)
-    .slice(0, 10);
+  // let logData = filteredData
+  //   .sort((a, b) => b.latency - a.latency)
+  //   .filter((datapoint) => !datapoint.fake)
+  //   .slice(0, 10);
 
-  console.log("data", data);
+  // console.log("dataFilteredByDropdown", dataFilteredByDropdown);
+  // console.log("dataFilteredByTimescale", dataFilteredByDropdown);
+  console.log("filteredData", filteredData);
+
+  // console.log("timeScale", timeRangeProps[currentRange]);
 
   return (
     <>
-      {/* <Title>Hello Frontend</Title> */}
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 3 }}>
-          <ScaleToggler
-            groupName={"Time scale toggle"}
-            selection={currentRange}
-            onChange={handleRangeToggle}
-            options={Object.keys(timeRangeProps)}
-          />
-        </Paper>
-      </Grid>
       <Grid item xs={12} md={6}>
         <Paper sx={{ p: 3 }}>
           <MultipleSelector
             labelName="Root Queries"
             options={filterOptions}
-            // value={filterValue}
             setFilterValue={setFilterValue}
           />
         </Paper>
@@ -142,6 +135,16 @@ const FrontendDash = ({
           />
         </Paper>
       </Grid> */}
+
+      {filteredData.length ? (
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+            <TableContainer>
+              <Logs data={filteredData.slice(0, 10)} />
+            </TableContainer>
+          </Paper>
+        </Grid>
+      ) : null}
 
       {/* {logData.filter((log) => log.count !== 0).length ? (
         <Grid item xs={12}>

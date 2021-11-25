@@ -12,11 +12,12 @@ import { Navigate } from "react-router-dom";
 import MultipleSelector from "./MultipleSelector";
 import Title from "../Title";
 import * as time from "../../constants/Monitoring";
+import { filterDataByTimescale } from "../../funcs/Monitoring";
 
 const Dashboard = ({ currentView, token }) => {
   const [timeScale, setTimeScale] = useState("hour");
   // const [filterValue, setFilterValue] = useState("all");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{ name: null, rootFields: null }]);
   // const rootFieldOptions = ["all"]; // refactor me
   const currentTime = Math.round(new Date().getTime() / 1000);
 
@@ -59,18 +60,6 @@ const Dashboard = ({ currentView, token }) => {
     }, time.REFRESH_RATE_IN_MINUTES * 1000 * 60);
     return () => clearInterval(interval);
   }, [getAPIData, currentView]);
-
-  // const filterDataByTimescale = (data, timeRange) => {
-  //   return data.filter((arr) => arr.unixTime >= timeRange.unixStart);
-  // };
-
-  // const filterDataByDropdown = (data, selected) => {
-  //   return data.filter(
-  //     (arr) =>
-  //       selected.includes("all") ||
-  //       arr.rootFields.some((e) => selected.includes(e))
-  //   );
-  // };
 
   // const binDataByTimestamp = (data, timeRange) => {
   //   let bin = {};
@@ -123,7 +112,11 @@ const Dashboard = ({ currentView, token }) => {
 
   // getFilterOptions(data);
 
-  // let filteredData = filterDataByTimescale(
+  // let dataFilteredByTimeScale = filterDataByTimescale(
+  //   data,
+  //   timeRangeProps[timeScale]
+  // );
+  // = filterDataByTimescale(
   //   filterDataByDropdown(data, filterValue),
   //   timeRange[timeScale]
   // );
@@ -134,6 +127,15 @@ const Dashboard = ({ currentView, token }) => {
   //   .filter((datapoint) => !datapoint.fake)
   //   .slice(0, 10);
 
+  const filterDataByTimescale = (data, timeRange) => {
+    return data.filter((arr) => arr.unixTime >= timeRange.unixStart);
+  };
+
+  const dataFilteredByTimescale = filterDataByTimescale(
+    data,
+    timeRangeProps[timeScale]
+  );
+
   console.log("data", data);
 
   const handleRangeToggle = (e, newTimeScale) => {
@@ -142,23 +144,33 @@ const Dashboard = ({ currentView, token }) => {
 
   return (
     <>
+      {" "}
+      <Grid item xs={12} md={6}>
+        <Paper sx={{ p: 3 }}>
+          <ScaleToggler
+            groupName={"Time scale toggle"}
+            selection={timeScale}
+            onChange={handleRangeToggle}
+            options={Object.keys(timeRangeProps)}
+          />
+        </Paper>
+      </Grid>
       {currentView === "frontend" ? (
         <FrontendDash
-          data={data}
-          timeRangeProps={timeRangeProps}
-          handleRangeToggle={handleRangeToggle}
-          currentRange={timeScale}
+          data={dataFilteredByTimescale}
+          timeScaleProps={timeRangeProps[timeScale]}
+          // handleRangeToggle={handleRangeToggle}
+          // currentRange={timeScale}
         />
       ) : (
         <BackendDash
-          data={data}
-          timeRangeProps={timeRangeProps}
-          handleRangeToggle={handleRangeToggle}
-          currentRange={timeScale}
+          data={dataFilteredByTimescale}
+          timeScaleProps={timeRangeProps[timeScale]}
+          // handleRangeToggle={handleRangeToggle}
+          // currentRange={timeScale}
         />
       )}
       {/* <Title>Hello {currentView}</Title> */}
-
       {/* <Grid item xs={12} md={6}>
         <Paper sx={{ p: 3 }}>
           <ScaleToggler

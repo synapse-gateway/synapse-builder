@@ -26,6 +26,15 @@ function LinearProgressWithLabel(props) {
 }
 
 export default function Logs({ data }) {
+  data = data.sort((a, b) => b.latency - a.latency);
+  data = data.map((datum) => {
+    let newCell = { ...datum };
+    if (datum.hasOwnProperty("rootFields")) {
+      newCell.name = datum.rootFields;
+    }
+    return newCell;
+  });
+
   return (
     <React.Fragment>
       <Title>Slowest Requests</Title>
@@ -42,12 +51,12 @@ export default function Logs({ data }) {
         </TableHead>
         <TableBody>
           {data.map((row, idx) => (
-            <TableRow key={idx}>
+            <TableRow key={row._id.toString()}>
               <TableCell>
                 {moment.unix(row.unixTime).format("MMM DD, 'YY @ HH:mm:ss")}
               </TableCell>
               <TableCell>
-                {row.rootFields ? row.rootFields.join(", ") : ""}
+                {Array.isArray(row.name) ? row.name.join(", ") : row.name}
               </TableCell>
               <TableCell>
                 <LinearProgressWithLabel
