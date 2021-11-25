@@ -14,33 +14,41 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect({ options, setFilterValue, value }) {
+export default function MultipleSelect({ options, setFilterValue, labelName }) {
   const theme = useTheme();
   const [selections, setSelections] = React.useState([]);
 
   const handleChange = (event) => {
-    const {
+    let {
       target: { value },
     } = event;
-    console.log(value, "VALUE");
-    setSelections(
-      // On autofill we get a the stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+
+    // On autofill we get a stringified value.
+    value = typeof value === "string" ? value.split(",") : value;
+
+    if (!selections.includes("all") && value.includes("all")) {
+      value = ["all"];
+    } else if (selections.includes("all") && value.length > 1) {
+      value.splice(value.indexOf("all"), 1);
+    }
+
+    setSelections(value);
     setFilterValue(value);
   };
 
   return (
     <div>
       <FormControl fullWidth={true} sx={{ minHeight: 65 }}>
-        <InputLabel id="demo-multiple-name-label">Root Queries</InputLabel>
+        <InputLabel id={`multiple-name-label-${labelName}`}>
+          {labelName}
+        </InputLabel>
         <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
+          labelId={`multiple-name-label-${labelName}`}
+          id={`multiple-name-${labelName}`}
           multiple
           value={selections}
           onChange={handleChange}
-          label="Root Queries"
+          label={labelName}
         >
           {options.map((item) => (
             <MenuItem

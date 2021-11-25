@@ -20,8 +20,6 @@ const apiClient = {
       ? `?since=${sinceUnixTime}`
       : `?minutes=${minutesSince}`;
 
-    console.log("current view API CLIENT", view);
-
     let dataLookup = view === "frontend" ? "queries" : "resolvers";
 
     let response = await axios.get(`api/monitor/${dataLookup}${queryString}`, {

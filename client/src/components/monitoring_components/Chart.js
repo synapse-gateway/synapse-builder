@@ -24,6 +24,49 @@ export default function Chart({ timeFormat, data, currentTime }) {
     return tickArr;
   })();
 
+  // const binDataByTimestamp = (data, timeRange) => {
+  //   let bin = {};
+
+  //   for (
+  //     let idx = timeRange.unixStart;
+  //     idx <= currentTime;
+  //     idx += timeRange.divisionInterval
+  //   ) {
+  //     data.push({
+  //       unixTime: moment(
+  //         moment.unix(idx).format(timeRange.timeConversion)
+  //       ).unix(),
+  //       latency: 0,
+  //       count: 0,
+  //       fake: true,
+  //     });
+  //   }
+
+  //   data.forEach((datapoint) => {
+  //     let timeBin = moment
+  //       .unix(datapoint.unixTime)
+  //       .format(timeRange.timeFormat);
+  //     if (bin.hasOwnProperty(timeBin)) return bin[timeBin].push(datapoint);
+  //     bin[timeBin] = [datapoint];
+  //   });
+
+  //   let chartData = Object.keys(bin).map((key) => {
+  //     return {
+  //       unixTime: moment(
+  //         moment.unix(bin[key][0].unixTime).format(timeRange.timeConversion)
+  //       ).unix(),
+  //       latency: +(
+  //         bin[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /
+  //         bin[key].length
+  //       ).toFixed(3),
+  //       count: bin[key].filter((datapoint) => !datapoint.hasOwnProperty("fake"))
+  //         .length,
+  //     };
+  //   });
+
+  //   return chartData.sort((a, b) => a.unixTime - b.unixTime);
+  // };
+
   return (
     <>
       <Title>{`Requests & Latency`}</Title>
