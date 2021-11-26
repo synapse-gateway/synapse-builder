@@ -1,9 +1,30 @@
 sources:
-  - name: BookService
+  - name: GraphQLService
+    handler:
+      graphql:
+        endpoint: www.graphqlexample.com
+  - name: OpenAPIService
     handler:
       openapi:
-        source: ./oas_books.yaml
-  - name: AuthorService
+        source: ./openapi-schemas/OpenAPIService-schema.yaml
+  - name: JSONSchemaService
     handler:
-      openapi:
-        source: ./oas_authors.yaml
+      jsonSchema:
+        baseUrl: www.jsonschemaexample.com
+        operations:
+          - type: Query
+            field: users
+            path: /users
+            method: GET
+            responseSchema: ./json-schemas/JSONSchemaService-schemas/users.json
+  - name: PostgresService
+    handler:
+      postgraphile:
+        connectionString: postgres://example:example
+  - name: MongooseService
+    handler:
+      mongoose:
+        connectionString: www.mongooseexample.com
+        models:
+          - name: People
+            path: ./models/MongooseService-models/People
