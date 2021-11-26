@@ -38,8 +38,7 @@ export const binDataByTimestamp = (data, timeRange) => {
   let binnedData = Object.keys(bin).map((key) => {
     return {
       unixTime: moment(
-        moment.unix(bin[key][0].unixTime),
-        timeRange.timeConversion
+        moment.unix(bin[key][0].unixTime).format(timeRange.timeConversion)
       ).unix(),
       latency: +(
         bin[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /

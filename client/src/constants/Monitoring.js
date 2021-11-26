@@ -18,7 +18,7 @@ export const FORMATS = {
   },
   week: {
     timeFormat: "MMM D",
-    timeConversion: "MMM DD YYYY",
+    timeConversion: "MMM DD YYYY 12:00",
   },
   month: {
     timeFormat: "MMM D",
