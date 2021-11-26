@@ -1,11 +1,17 @@
-import React from 'react'
+import React from "react";
 import Divider from "@mui/material/Divider";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import List from "@mui/material/List";
 
-function NavBarLeft({Drawer, open, toggleDrawer, mainListItems, secondaryListItems}) {
+function NavBarLeft({
+  Drawer,
+  open,
+  toggleDrawer,
+  mainListItems,
+  secondaryListItems,
+}) {
   return (
     <>
       <Drawer variant="permanent" open={open}>
@@ -27,7 +33,7 @@ function NavBarLeft({Drawer, open, toggleDrawer, mainListItems, secondaryListIte
         <List>{secondaryListItems}</List>
       </Drawer>
     </>
-  )
+  );
 }
 
-export default NavBarLeft
+export default NavBarLeft;

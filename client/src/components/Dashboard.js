@@ -114,7 +114,7 @@ const Dashboard = () => {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position='absolute' open={!!loggedInUser && open}>
+        <AppBar position="absolute" open={!!loggedInUser && open}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -125,16 +125,16 @@ const Dashboard = () => {
             ) : null}
             {/* GUI Title */}
             <Typography
-              component='h1'
-              variant='h6'
-              color='inherit'
+              component="h1"
+              variant="h6"
+              color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
             >
               SYNAPSE
             </Typography>
             {/* Notifications */}
-            <IconButton color='inherit' onClick={toggleLoggedIn}>
+            <IconButton color="inherit" onClick={toggleLoggedIn}>
               {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge> */}
@@ -156,7 +156,7 @@ const Dashboard = () => {
         ) : null}
         {/* Main Content Area */}
         <Box
-          component='main'
+          component="main"
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
@@ -168,25 +168,25 @@ const Dashboard = () => {
           }}
         >
           <Toolbar />
-          <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Features */}
               <Routes>
                 <Route
-                  path='/'
+                  path="/"
                   element={<Home loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path='/monitoring'
+                  path="/monitoring"
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path='/datasources'
+                  path="/datasources"
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
 
                 <Route
-                  path='/createuser'
+                  path="/createuser"
                   element={
                     <SignUp
                       setLoggedInUser={setLoggedInUser}
@@ -196,7 +196,7 @@ const Dashboard = () => {
                   }
                 />
                 <Route
-                  path='/signin'
+                  path="/signin"
                   element={
                     <SignIn
                       setIsAdmin={setIsAdmin}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import ScaleToggler from "./ScaleToggler";
-import Dashboard from "./Dashboard";
+import DataView from "./DataView";
 import { Navigate } from "react-router-dom";
 
 const Monitoring = ({ loggedInUser }) => {
@@ -31,7 +31,7 @@ const Monitoring = ({ loggedInUser }) => {
           </Paper>
         </Grid>
 
-        <Dashboard currentView={currentView} token={loggedInUser} />
+        <DataView currentView={currentView} token={loggedInUser} />
       </>
     );
   } else {

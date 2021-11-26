@@ -14,7 +14,8 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect({ options, setFilterValue, labelName }) {
+export default function MultipleSelect({ filterProps }) {
+  //options, setFilterValue, labelName }) {
   const theme = useTheme();
   const [selections, setSelections] = React.useState([]);
 
@@ -33,24 +34,24 @@ export default function MultipleSelect({ options, setFilterValue, labelName }) {
     }
 
     setSelections(value);
-    setFilterValue(value);
+    filterProps.onClick(value);
   };
 
   return (
     <div>
       <FormControl fullWidth={true} sx={{ minHeight: 65 }}>
-        <InputLabel id={`multiple-name-label-${labelName}`}>
-          {labelName}
+        <InputLabel id={`multiple-name-label-${filterProps.label}`}>
+          {filterProps.label}
         </InputLabel>
         <Select
-          labelId={`multiple-name-label-${labelName}`}
-          id={`multiple-name-${labelName}`}
+          labelId={`multiple-name-label-${filterProps.label}`}
+          id={`multiple-name-${filterProps.label}`}
           multiple
           value={selections}
           onChange={handleChange}
-          label={labelName}
+          label={filterProps.label}
         >
-          {options.map((item) => (
+          {filterProps.options.map((item) => (
             <MenuItem
               key={item}
               value={item}

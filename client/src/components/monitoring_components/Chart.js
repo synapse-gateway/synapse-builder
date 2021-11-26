@@ -12,67 +12,27 @@ import {
   Tooltip,
 } from "recharts";
 import Title from "../Title";
+import { binDataByTimestamp } from "../../funcs/Monitoring";
 
-export default function Chart({ timeFormat, data, currentTime }) {
+export default function Chart({ timeScaleProps, data }) {
   const theme = useTheme();
 
-  const ticks = (() => {
+  const chartData = binDataByTimestamp(data, timeScaleProps);
+
+  const ticks = ((data) => {
     let tickArr = [...new Set(data.map((data) => data.unixTime))].slice(1);
     if (tickArr.length > 10) {
       tickArr = tickArr.filter((_, idx) => idx % 2 === 1);
     }
     return tickArr;
-  })();
-
-  // const binDataByTimestamp = (data, timeRange) => {
-  //   let bin = {};
-
-  //   for (
-  //     let idx = timeRange.unixStart;
-  //     idx <= currentTime;
-  //     idx += timeRange.divisionInterval
-  //   ) {
-  //     data.push({
-  //       unixTime: moment(
-  //         moment.unix(idx).format(timeRange.timeConversion)
-  //       ).unix(),
-  //       latency: 0,
-  //       count: 0,
-  //       fake: true,
-  //     });
-  //   }
-
-  //   data.forEach((datapoint) => {
-  //     let timeBin = moment
-  //       .unix(datapoint.unixTime)
-  //       .format(timeRange.timeFormat);
-  //     if (bin.hasOwnProperty(timeBin)) return bin[timeBin].push(datapoint);
-  //     bin[timeBin] = [datapoint];
-  //   });
-
-  //   let chartData = Object.keys(bin).map((key) => {
-  //     return {
-  //       unixTime: moment(
-  //         moment.unix(bin[key][0].unixTime).format(timeRange.timeConversion)
-  //       ).unix(),
-  //       latency: +(
-  //         bin[key].map((arr) => +arr.latency).reduce((a, b) => a + b) /
-  //         bin[key].length
-  //       ).toFixed(3),
-  //       count: bin[key].filter((datapoint) => !datapoint.hasOwnProperty("fake"))
-  //         .length,
-  //     };
-  //   });
-
-  //   return chartData.sort((a, b) => a.unixTime - b.unixTime);
-  // };
+  })(chartData);
 
   return (
     <>
       <Title>{`Requests & Latency`}</Title>
-      <ResponsiveContainer>
+      <ResponsiveContainer height={400} debounce={1}>
         <AreaChart
-          data={data}
+          data={chartData}
           margin={{
             top: 16,
             right: 16,
@@ -80,21 +40,24 @@ export default function Chart({ timeFormat, data, currentTime }) {
             left: 24,
           }}
         >
+          <Legend />
           <CartesianGrid strokeDasharray="4" />
           <XAxis
             dataKey="unixTime"
-            tickFormatter={(timeStr) => moment.unix(timeStr).format(timeFormat)}
+            tickFormatter={(timeStr) =>
+              moment.unix(timeStr).format(timeScaleProps.timeFormat)
+            }
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
             scale="time"
             type="number"
             domain={[
-              (dataMin) => data[0].unixTime,
-              (dataMax) => data[data.length - 1].unixTime,
+              (dataMin) => chartData[0].unixTime,
+              (dataMax) => chartData[chartData.length - 1].unixTime,
             ]}
             interval="preserveStart"
             ticks={ticks}
-            minTickGap={75}
+            minTickGap={50}
           />
           <YAxis
             yAxisId="left"
@@ -111,7 +74,7 @@ export default function Chart({ timeFormat, data, currentTime }) {
           />
           <Tooltip
             labelFormatter={(timeStr) =>
-              moment.unix(timeStr).format(timeFormat)
+              moment.unix(timeStr).format(timeScaleProps.timeFormat)
             }
             formatter={(value, name) => {
               if (name === "Average Latency") {
@@ -119,7 +82,6 @@ export default function Chart({ timeFormat, data, currentTime }) {
               } else return [`${value}`, name];
             }}
           />
-          <Legend />
           <Area
             yAxisId="left"
             isAnimationActive={true}

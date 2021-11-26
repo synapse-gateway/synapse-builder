@@ -1,30 +1,35 @@
-import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import React from "react";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
+import PeopleIcon from "@mui/icons-material/People";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import LayersIcon from "@mui/icons-material/Layers";
 // import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 const linkStyle = {
-  color: 'inherit',
-  textDecoration: 'none',
+  color: "inherit",
+  textDecoration: "none",
 };
+
+// const location = useLocation();
+
+// console.log(location);
 
 export const mainListItemsAdmin = (
   <div>
     <Link style={linkStyle} to="/">
-      <ListItem button>
+      <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
-      </ListItem>
+      </ListItemButton>
     </Link>
 
     <Link style={linkStyle} to="/datasources">
@@ -61,9 +66,7 @@ export const secondaryListItems = (
     <ListSubheader inset>Additional</ListSubheader>
     <Link style={linkStyle} to="/graphiql">
       <ListItem button>
-        <ListItemIcon>
-          {/* <AssignmentIcon /> REPLACE ICON */}
-        </ListItemIcon>
+        <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
         <ListItemText primary="GraphiQL" />
       </ListItem>
     </Link>
