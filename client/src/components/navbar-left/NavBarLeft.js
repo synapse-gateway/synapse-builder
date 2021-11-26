@@ -6,7 +6,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import List from "@mui/material/List";
 
 function NavBarLeft({
+  Test,
   Drawer,
+  MainList,
+  SecondaryList,
+  isAdmin,
   open,
   toggleDrawer,
   mainListItems,
@@ -28,9 +32,11 @@ function NavBarLeft({
           </IconButton>
         </Toolbar>
         <Divider />
-        <List>{mainListItems}</List>
+        <MainList isAdmin={isAdmin} />
+        {/* <List>{mainListItems}</List> */}
         <Divider />
-        <List>{secondaryListItems}</List>
+        <SecondaryList />
+        {/* <List>{secondaryListItems}</List> */}
       </Drawer>
     </>
   );

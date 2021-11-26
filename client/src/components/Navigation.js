@@ -17,89 +17,71 @@ const linkStyle = {
   textDecoration: "none",
 };
 
-// const location = useLocation();
+const paths = {
+  home: "",
+  datasources: "datasources",
+  monitoring: "monitoring",
+  createuser: "createuser",
+  graphiql: "graphiql",
+};
 
-// console.log(location);
+export const SidebarMainList = ({ isAdmin }) => {
+  const location = useLocation();
 
-export const mainListItemsAdmin = (
-  <div>
-    <Link style={linkStyle} to="/">
-      <ListItemButton>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
-    </Link>
+  return (
+    <div>
+      <Link style={linkStyle} to={`/${paths.home}`}>
+        <ListItemButton selected={location.pathname === `/${paths.home}`}>
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
+      </Link>
+      <Link style={linkStyle} to={`/${paths.datasources}`}>
+        <ListItemButton
+          selected={location.pathname === `/${paths.datasources}`}
+        >
+          <ListItemIcon>
+            <LayersIcon />
+          </ListItemIcon>
+          <ListItemText primary="Data Sources" />
+        </ListItemButton>
+      </Link>
+      <Link style={linkStyle} to={`/${paths.monitoring}`}>
+        <ListItemButton selected={location.pathname === `/${paths.monitoring}`}>
+          <ListItemIcon>
+            <BarChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Metrics & Logs" />
+        </ListItemButton>
+      </Link>
+      {isAdmin ? (
+        <Link style={linkStyle} to={`/${paths.createuser}`}>
+          <ListItemButton
+            selected={location.pathname === `/${paths.createuser}`}
+          >
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Users" />
+          </ListItemButton>
+        </Link>
+      ) : null}
+    </div>
+  );
+};
 
-    <Link style={linkStyle} to="/datasources">
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Data Sources" />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to="/monitoring">
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Metrics & Logs" />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to="/createuser">
-      <ListItem button>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Create Users" />
-      </ListItem>
-    </Link>
-  </div>
-);
-
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Additional</ListSubheader>
-    <Link style={linkStyle} to="/graphiql">
-      <ListItem button>
-        <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
-        <ListItemText primary="GraphiQL" />
-      </ListItem>
-    </Link>
-  </div>
-);
-
-export const mainListItems = (
-  <div>
-    <Link style={linkStyle} to="/">
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to="/datasources">
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Data Sources" />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to="/monitoring">
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Metrics & Logs" />
-      </ListItem>
-    </Link>
-  </div>
-);
+export const SidebarSecondaryList = () => {
+  return (
+    <div>
+      <ListSubheader inset>Additional</ListSubheader>
+      <Link style={linkStyle} to={`/${paths.graphiql}`}>
+        <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
+          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemText primary="GraphiQL" />
+        </ListItemButton>
+      </Link>
+    </div>
+  );
+};

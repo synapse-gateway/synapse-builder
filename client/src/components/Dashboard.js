@@ -19,11 +19,7 @@ import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import NotificationsIcon from '@mui/icons-material/Notifications';
-import {
-  mainListItems,
-  secondaryListItems,
-  mainListItemsAdmin,
-} from "./Navigation";
+import { SidebarMainList, SidebarSecondaryList } from "./Navigation";
 import Monitoring from "./monitoring_components/Monitoring";
 import DataSources from "./datasources_components/DataSources";
 import Home from "./Home";
@@ -147,10 +143,12 @@ const Dashboard = () => {
 
         {loggedInUser ? (
           <NavBarLeft
+            Test={SidebarMainList}
             Drawer={Drawer}
+            MainList={SidebarMainList}
+            SecondaryList={SidebarSecondaryList}
+            isAdmin={isAdmin}
             open={open}
-            mainListItems={isAdmin ? mainListItemsAdmin : mainListItems}
-            secondaryListItems={secondaryListItems}
             toggleDrawer={toggleDrawer}
           />
         ) : null}
