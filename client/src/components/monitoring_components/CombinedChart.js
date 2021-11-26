@@ -18,11 +18,10 @@ import {
   Tooltip,
 } from "recharts";
 
-export default function Chart({ token, timeScaleProps, data }) {
+export default function CombinedChart({ token }) {
   const theme = useTheme();
-  const falseDatum = { name: null, rootFields: null };
-  const [frontendData, setFrontendData] = useState([falseDatum]);
-  const [backendData, setBackendData] = useState([falseDatum]);
+  const [frontendData, setFrontendData] = useState([]);
+  const [backendData, setBackendData] = useState([]);
 
   const currentTime = Math.round(new Date().getTime() / 1000);
 
@@ -76,6 +75,7 @@ export default function Chart({ token, timeScaleProps, data }) {
     frontendData,
     timeRangeProps.week
   );
+
   const backendChartData = binDataByTimestamp(backendData, timeRangeProps.week);
 
   const chartData = frontendChartData.map((datum) => {
@@ -95,7 +95,10 @@ export default function Chart({ token, timeScaleProps, data }) {
   });
 
   const ticks = ((data) => {
-    let tickArr = [...new Set(data.map((data) => data.unixTime))].slice(1);
+    let tickArr = data
+      .filter((datum) => datum.tick)
+      .map((datum) => datum.unixTime)
+      .slice();
     if (tickArr.length > 10) {
       tickArr = tickArr.filter((_, idx) => idx % 2 === 1);
     }

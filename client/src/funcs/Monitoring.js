@@ -31,7 +31,10 @@ export const binDataByTimestamp = (data, timeRange) => {
 
   data.forEach((datapoint) => {
     let timeBin = moment.unix(datapoint.unixTime).format(timeRange.timeFormat);
-    if (bin.hasOwnProperty(timeBin)) return bin[timeBin].push(datapoint);
+    if (bin.hasOwnProperty(timeBin)) {
+      if (datapoint.fake) bin[timeBin].tick = true;
+      return bin[timeBin].push(datapoint);
+    }
     bin[timeBin] = [datapoint];
   });
 

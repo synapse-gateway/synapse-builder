@@ -20,7 +20,10 @@ export default function Chart({ timeScaleProps, data }) {
   const chartData = binDataByTimestamp(data, timeScaleProps);
 
   const ticks = ((data) => {
-    let tickArr = [...new Set(data.map((data) => data.unixTime))].slice(1);
+    let tickArr = data
+      .filter((datum) => datum.tick)
+      .map((datum) => datum.unixTime)
+      .slice();
     if (tickArr.length > 10) {
       tickArr = tickArr.filter((_, idx) => idx % 2 === 1);
     }
@@ -41,7 +44,7 @@ export default function Chart({ timeScaleProps, data }) {
           }}
         >
           <Legend />
-          <CartesianGrid strokeDasharray="4" />
+          <CartesianGrid strokeDasharray="4 4" />
           <XAxis
             dataKey="unixTime"
             tickFormatter={(timeStr) =>

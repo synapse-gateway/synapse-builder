@@ -16,6 +16,8 @@
   "dependencies": {
     "@bmatei/apollo-prometheus-exporter": "^2.1.1",
     "@envelop/core": "^1.6.1",
+    "@envelop/rate-limiter": "^1.2.1",
+    "@envelop/types": "^1.5.1",
     "@graphql-mesh/cli": "^0.42.6",
     "@graphql-mesh/openapi": "^0.19.3",
     "apollo-server": "^3.4.0",
@@ -28,6 +30,7 @@
     "express-jwt": "^6.1.0",
     "graphql": "^15.6.1",
     "graphql-compose": "^9.0.4",
+    "graphql-middleware": "^6.1.12",
     "js-yaml": "^4.1.0",
     "mongoose": "^6.0.12"
   },

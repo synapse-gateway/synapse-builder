@@ -62,7 +62,7 @@ async function main() {
       useTiming({
         skipIntrospection: true,
         onExecutionMeasurement: (args, timing) => {
-          console.log("WE TIMING BOY");
+          console.log("WE TIMING BOY", args);
           singleQueryObj = { rootFields: [] };
           let operation = args.document.definitions.find(
             (def) => def.kind === Kind.OPERATION_DEFINITION
@@ -131,7 +131,7 @@ async function main() {
         requestDidStart(a) {
           return {
             didEncounterErrors(reqCtx) {
-              // console.log(a.context.req)
+              console.log("reqCtx", reqCtx);
               QueryErrors.create({
                 ip: a.context.req.ip,
                 sourceQuery: reqCtx.source,
