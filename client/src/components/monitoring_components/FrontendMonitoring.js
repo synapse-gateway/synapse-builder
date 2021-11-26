@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Chart from "./Chart";
-import Logs from "./Logs";
-import MultipleSelector from "./MultipleSelector";
 import Dashboard from "./Dashboard";
-import TableContainer from "@mui/material/TableContainer";
 import { filterDataByDropdown } from "../../funcs/Monitoring";
 
 const FrontendMonitoring = ({ data, timeScaleProps }) => {

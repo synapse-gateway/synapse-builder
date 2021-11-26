@@ -50,7 +50,7 @@ export default function Logs({ data }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, idx) => (
+          {data.map((row) => (
             <TableRow key={row._id.toString()}>
               <TableCell>
                 {moment.unix(row.unixTime).format("MMM DD, 'YY @ HH:mm:ss")}
