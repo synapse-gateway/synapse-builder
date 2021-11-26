@@ -9,11 +9,13 @@ import TableContainer from "@mui/material/TableContainer";
 const Dashboard = ({ data, filter, subfilter, timeScaleProps }) => {
   return (
     <>
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 3 }}>
-          <MultipleSelector filterProps={filter} />
-        </Paper>
-      </Grid>
+      {filter ? (
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 3 }}>
+            <MultipleSelector filterProps={filter} />
+          </Paper>
+        </Grid>
+      ) : null}
 
       {subfilter ? (
         <Grid item xs={12}>
