@@ -8,25 +8,30 @@ const formatSource = (source) => {
       handlerInput = { "graphql": { endpoint: source.url } };
       break;
     case "openapi":
-      const schemaFileName = `${source.name}-schema.${source.schemaFileType}`;
-      fs.writeFile(`./openapi-schemas/${schemaFileName}`, source.schemaFileContent, (err) => {
+      const schemaFilePath = `./openapi-schemas/${source.name}-schema.${source.schemaFileType}`;
+      fs.writeFile(schemaFilePath, source.schemaFileContent, (err) => {
         if (err) throw err;
-        console.log(`Successfully created ${schemaFileName} file`);
+        console.log(`Successfully created ${schemaFilePath}`);
       });
 
-      handlerInput = { "openapi": { source: `./openapi-schemas/${schemaFileName}` } };
+      handlerInput = { "openapi": { source: schemaFilePath } };
       break;
     case "postgraphile":
       handlerInput = { "postgraphile": { connectionString: source.url } };
       break;
     case "mongoose":
+      const modelsDir = `./models/${source.name}-models`
+      if (!fs.existsSync(modelsDir)) {
+        fs.mkdirSync(modelsDir);
+      }
+
       const models = source.models.map(model => {
-        fs.writeFile(`./models/${model.name}.js`, model.content, (err) => {
+        fs.writeFile(`${modelsDir}/${model.name}.js`, model.content, (err) => {
           if (err) throw err;
-          console.log(`Successfully created ${model.name}.js file`);
+          console.log(`Successfully created ${modelsDir}/${model.name}.js`);
         });
 
-        return { name: model.name, path: `./models/${model.name}` };
+        return { name: model.name, path: `${modelsDir}/${model.name}` };
       });
 
       handlerInput = { "mongoose": { connectionString: source.url, models } };
@@ -40,7 +45,7 @@ const formatSource = (source) => {
       const operations = source.operations.map(op => {
         fs.writeFile(`${schemaDir}/${op.field}.json`, op.responseSchemaContent, (err) => {
           if (err) throw err;
-          console.log(`Successfully created ${op.field}.json file`);
+          console.log(`Successfully created ${schemaDir}/${op.field}.json`);
         });
 
         return { type: op.type, field: op.field, path: op.path, method: op.method, responseSchema: `./json-schemas/${source.name}-schemas/${op.field}.json`};
@@ -63,7 +68,7 @@ const createConfig = (req, res, next) => {
 
   fs.writeFile(".meshrc.yaml", yaml.dump(yamlContent), (err) => {
     if (err) throw err;
-    console.log("Successfully created .meshrc.yaml file");
+    console.log("Successfully created .meshrc.yaml");
   })
   res.status(200).send();
 }
