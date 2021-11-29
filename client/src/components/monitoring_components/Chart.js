@@ -12,24 +12,30 @@ import {
   Tooltip,
 } from "recharts";
 import Title from "../Title";
+import { binDataByTimestamp } from "../../funcs/Monitoring";
 
-export default function Chart({ timeFormat, data, currentTime }) {
+export default function Chart({ timeScaleProps, data }) {
   const theme = useTheme();
 
-  const ticks = (() => {
-    let tickArr = [...new Set(data.map((data) => data.unixTime))].slice(1);
+  const chartData = binDataByTimestamp(data, timeScaleProps);
+
+  const ticks = ((data) => {
+    let tickArr = data
+      .filter((datum) => datum.tick)
+      .map((datum) => datum.unixTime)
+      .slice();
     if (tickArr.length > 10) {
       tickArr = tickArr.filter((_, idx) => idx % 2 === 1);
     }
     return tickArr;
-  })();
+  })(chartData);
 
   return (
     <>
       <Title>{`Requests & Latency`}</Title>
-      <ResponsiveContainer>
+      <ResponsiveContainer height={400} debounce={1}>
         <AreaChart
-          data={data}
+          data={chartData}
           margin={{
             top: 16,
             right: 16,
@@ -37,21 +43,24 @@ export default function Chart({ timeFormat, data, currentTime }) {
             left: 24,
           }}
         >
-          <CartesianGrid strokeDasharray="4" />
+          <Legend />
+          <CartesianGrid strokeDasharray="4 4" />
           <XAxis
             dataKey="unixTime"
-            tickFormatter={(timeStr) => moment.unix(timeStr).format(timeFormat)}
+            tickFormatter={(timeStr) =>
+              moment.unix(timeStr).format(timeScaleProps.timeFormat)
+            }
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
             scale="time"
             type="number"
             domain={[
-              (dataMin) => data[0].unixTime,
-              (dataMax) => data[data.length - 1].unixTime,
+              (dataMin) => chartData[0].unixTime,
+              (dataMax) => chartData[chartData.length - 1].unixTime,
             ]}
             interval="preserveStart"
             ticks={ticks}
-            minTickGap={75}
+            minTickGap={50}
           />
           <YAxis
             yAxisId="left"
@@ -68,7 +77,7 @@ export default function Chart({ timeFormat, data, currentTime }) {
           />
           <Tooltip
             labelFormatter={(timeStr) =>
-              moment.unix(timeStr).format(timeFormat)
+              moment.unix(timeStr).format(timeScaleProps.timeFormat)
             }
             formatter={(value, name) => {
               if (name === "Average Latency") {
@@ -76,7 +85,6 @@ export default function Chart({ timeFormat, data, currentTime }) {
               } else return [`${value}`, name];
             }}
           />
-          <Legend />
           <Area
             yAxisId="left"
             isAnimationActive={true}

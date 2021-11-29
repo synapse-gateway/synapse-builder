@@ -15,14 +15,16 @@ const apiClient = {
       )
       .then((res) => console.log("Sources sent!"));
   },
-  async getTimeData(jwt, sinceUnixTime, minutesSince = 5) {
+  async getTimeData(token, view, sinceUnixTime, minutesSince = 5) {
     let queryString = sinceUnixTime
       ? `?since=${sinceUnixTime}`
       : `?minutes=${minutesSince}`;
 
-    let response = await axios.get(`api/monitor/queries${queryString}`, {
+    let dataLookup = view === "frontend" ? "queries" : "resolvers";
+
+    let response = await axios.get(`api/monitor/${dataLookup}${queryString}`, {
       headers: {
-        authorization: `bearer ${jwt}`,
+        authorization: `bearer ${token}`,
       },
     });
     return response;
@@ -43,22 +45,6 @@ const apiClient = {
       return {
         error: "Username/password combination failed. Please try again.",
       };
-    }
-  },
-  async getAllUsers() {
-    try {
-      let response = await axios.get("api/users");
-      return response.data;
-    } catch (err) {
-      return { error: "All fields are required and must use unique username" };
-    }
-  },
-  async deleteUser(username) {
-    try {
-      let response = await axios.delete("api/users", { data: username });
-      return response;
-    } catch (err) {
-      return { error: "All fields are required and must use unique username" };
     }
   },
 };
