@@ -47,6 +47,22 @@ const apiClient = {
       };
     }
   },
+  async getAllUsers() {
+    try {
+      let response = await axios.get("api/users");
+      return response.data;
+    } catch (err) {
+      return { error: "All fields are required and must use unique username" };
+    }
+  },
+  async deleteUser(username) {
+    try {
+      let response = await axios.delete("api/users", { data: username });
+      return response;
+    } catch (err) {
+      return { error: "All fields are required and must use unique username" };
+    }
+  },
 };
 
 export default apiClient;
