@@ -1,5 +1,6 @@
 import React from "react";
 import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -9,101 +10,78 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 // import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const linkStyle = {
   color: "inherit",
   textDecoration: "none",
 };
 
-export const mainListItemsAdmin = (
-  <div>
-    <Link style={linkStyle} to='/'>
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary='Dashboard' />
-      </ListItem>
-    </Link>
+const paths = {
+  home: "",
+  datasources: "datasources",
+  monitoring: "monitoring",
+  manageusers: "manageusers",
+  graphiql: "graphiql",
+};
 
-    <Link style={linkStyle} to='/datasources'>
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary='Data Sources' />
-      </ListItem>
-    </Link>
+export const SidebarMainList = ({ isAdmin }) => {
+  const location = useLocation();
 
-    <Link style={linkStyle} to='/monitoring'>
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary='Metrics & Logs' />
-      </ListItem>
-    </Link>
+  return (
+    <div>
+      <Link style={linkStyle} to={`/${paths.home}`}>
+        <ListItemButton selected={location.pathname === `/${paths.home}`}>
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
+      </Link>
+      <Link style={linkStyle} to={`/${paths.datasources}`}>
+        <ListItemButton
+          selected={location.pathname === `/${paths.datasources}`}
+        >
+          <ListItemIcon>
+            <LayersIcon />
+          </ListItemIcon>
+          <ListItemText primary="Data Sources" />
+        </ListItemButton>
+      </Link>
+      {/* <Link style={linkStyle} to={`/${paths.monitoring}`}>
+        <ListItemButton selected={location.pathname === `/${paths.monitoring}`}>
+          <ListItemIcon>
+            <BarChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Metrics & Logs" />
+        </ListItemButton>
+      </Link> */}
+      {isAdmin ? (
+        <Link style={linkStyle} to={`/${paths.manageusers}`}>
+          <ListItemButton
+            selected={location.pathname === `/${paths.manageusers}`}
+          >
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Users" />
+          </ListItemButton>
+        </Link>
+      ) : null}
+    </div>
+  );
+};
 
-    <Link style={linkStyle} to='/manageusers'>
-      <ListItem button>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary='Manage Users' />
-      </ListItem>
-    </Link>
-
-    {/* <Link style={linkStyle} to='/createuser'>
-      <ListItem button>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary='Create Users' />
-      </ListItem>
-    </Link> */}
-  </div>
-);
-
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Additional</ListSubheader>
-    <Link style={linkStyle} to='/graphiql'>
-      <ListItem button>
-        <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
-        <ListItemText primary='GraphiQL' />
-      </ListItem>
-    </Link>
-  </div>
-);
-
-export const mainListItems = (
-  <div>
-    <Link style={linkStyle} to='/'>
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary='Dashboard' />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to='/datasources'>
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary='Data Sources' />
-      </ListItem>
-    </Link>
-
-    <Link style={linkStyle} to='/monitoring'>
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary='Metrics & Logs' />
-      </ListItem>
-    </Link>
-  </div>
-);
+export const SidebarSecondaryList = () => {
+  return (
+    <div>
+      <ListSubheader inset>Additional</ListSubheader>
+      <Link style={linkStyle} to={`/${paths.graphiql}`}>
+        <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
+          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemText primary="GraphiQL" />
+        </ListItemButton>
+      </Link>
+    </div>
+  );
+};

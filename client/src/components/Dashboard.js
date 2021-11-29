@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
+// import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+// import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 // import Badge from '@mui/material/Badge';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 // import Paper from '@mui/material/Paper';
 // import Link from '@mui/material/Link';
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
   mainListItems,
   secondaryListItems,
   mainListItemsAdmin,
 } from "./Navigation";
+import { SidebarMainList, SidebarSecondaryList } from "./Navigation";
 import Monitoring from "./monitoring_components/Monitoring";
 import DataSources from "./datasources_components/DataSources";
 import Home from "./Home";
@@ -114,7 +115,7 @@ const Dashboard = () => {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position='absolute' open={!!loggedInUser && open}>
+        <AppBar position="absolute" open={!!loggedInUser && open}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -125,16 +126,16 @@ const Dashboard = () => {
             ) : null}
             {/* GUI Title */}
             <Typography
-              component='h1'
-              variant='h6'
-              color='inherit'
+              component="h1"
+              variant="h6"
+              color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
             >
               SYNAPSE
             </Typography>
             {/* Notifications */}
-            <IconButton color='inherit' onClick={toggleLoggedIn}>
+            <IconButton color="inherit" onClick={toggleLoggedIn}>
               {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge> */}
@@ -151,16 +152,23 @@ const Dashboard = () => {
 
         {loggedInUser ? (
           <NavBarLeft
+            Test={SidebarMainList}
             Drawer={Drawer}
+            MainList={SidebarMainList}
+            SecondaryList={SidebarSecondaryList}
+            isAdmin={isAdmin}
             open={open}
-            mainListItems={isAdmin ? mainListItemsAdmin : mainListItems}
-            secondaryListItems={secondaryListItems}
             toggleDrawer={toggleDrawer}
+            // Drawer={Drawer}
+            // open={open}
+            // mainListItems={isAdmin ? mainListItemsAdmin : mainListItems}
+            // secondaryListItems={secondaryListItems}
+            // toggleDrawer={toggleDrawer}
           />
         ) : null}
         {/* Main Content Area */}
         <Box
-          component='main'
+          component="main"
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
@@ -172,24 +180,24 @@ const Dashboard = () => {
           }}
         >
           <Toolbar />
-          <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Features */}
               <Routes>
-                <Route
-                  path='/'
+                {/* <Route
+                  path="/"
                   element={<Home loggedInUser={loggedInUser} />}
-                />
+                /> */}
                 <Route
-                  path='/monitoring'
+                  path="/"
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path='/datasources'
+                  path="/datasources"
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path='/manageusers'
+                  path="/manageusers"
                   element={
                     <ManageUsers
                       setLoggedInUser={setLoggedInUser}
@@ -199,7 +207,7 @@ const Dashboard = () => {
                   }
                 />
                 <Route
-                  path='/createuser'
+                  path="/createuser"
                   element={
                     <SignUp
                       setLoggedInUser={setLoggedInUser}
@@ -209,7 +217,7 @@ const Dashboard = () => {
                   }
                 />
                 <Route
-                  path='/signin'
+                  path="/signin"
                   element={
                     <SignIn
                       setUsername={setUsername}
