@@ -1,5 +1,16 @@
 const yaml = require("js-yaml");
 const fs = require("fs");
+const { execSync } = require("child_process");
+
+const runCommand = command => {
+  try {
+    execSync(`${command}`, {stdio: "inherit"});
+  } catch (e) {
+    console.error(`Failed to execute ${command}`, e);
+    return false;
+  }
+  return true;
+}
 
 const formatSource = (source) => {
   let handlerInput;
@@ -9,10 +20,7 @@ const formatSource = (source) => {
       break;
     case "openapi":
       const schemaFilePath = `./openapi-schemas/${source.name}-schema.${source.schemaFileType}`;
-      fs.writeFile(schemaFilePath, source.schemaFileContent, (err) => {
-        if (err) throw err;
-        console.log(`Successfully created ${schemaFilePath}`);
-      });
+      fs.writeFileSync(schemaFilePath, source.schemaFileContent);
 
       handlerInput = { "openapi": { source: schemaFilePath } };
       break;
@@ -26,10 +34,7 @@ const formatSource = (source) => {
       }
 
       const models = source.models.map(model => {
-        fs.writeFile(`${modelsDir}/${model.name}.js`, model.content, (err) => {
-          if (err) throw err;
-          console.log(`Successfully created ${modelsDir}/${model.name}.js`);
-        });
+        fs.writeFileSync(`${modelsDir}/${model.name}.js`, model.content);
 
         return { name: model.name, path: `${modelsDir}/${model.name}` };
       });
@@ -43,10 +48,7 @@ const formatSource = (source) => {
       }
 
       const operations = source.operations.map(op => {
-        fs.writeFile(`${schemaDir}/${op.field}.json`, op.responseSchemaContent, (err) => {
-          if (err) throw err;
-          console.log(`Successfully created ${schemaDir}/${op.field}.json`);
-        });
+        fs.writeFileSync(`${schemaDir}/${op.field}.json`, op.responseSchemaContent);
 
         return { type: op.type, field: op.field, path: op.path, method: op.method, responseSchema: `./json-schemas/${source.name}-schemas/${op.field}.json`};
       });
@@ -66,10 +68,11 @@ const createConfig = (req, res, next) => {
     yamlContent.sources.push(formatSource(source));
   })
 
-  fs.writeFile(".meshrc.yaml", yaml.dump(yamlContent), (err) => {
-    if (err) throw err;
-    console.log("Successfully created .meshrc.yaml");
-  })
+  fs.writeFileSync(".meshrc.yaml", yaml.dump(yamlContent));
+
+  runCommand(`yarn mesh build`);
+  console.log("✓ Succesfully created .mesh directory");
+
   res.status(200).send();
 }
 
