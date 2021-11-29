@@ -4,20 +4,17 @@ import { join, relative, isAbsolute, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ExternalModule_0 from '@graphql-mesh/cache-inmemory-lru';
 import ExternalModule_1 from '@graphql-mesh/openapi';
-import ExternalModule_2 from '@graphql-mesh/merger-stitching';
-import ExternalModule_3 from './sources/BookService/oas-schema.js';
-import ExternalModule_4 from './sources/AuthorService/oas-schema.js';
+import ExternalModule_2 from '@graphql-mesh/merger-bare';
+import ExternalModule_3 from './sources/AuthorService/oas-schema.js';
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: ExternalModule_0,
     // @ts-ignore
     ["@graphql-mesh/openapi"]: ExternalModule_1,
     // @ts-ignore
-    ["@graphql-mesh/merger-stitching"]: ExternalModule_2,
+    ["@graphql-mesh/merger-bare"]: ExternalModule_2,
     // @ts-ignore
-    [".mesh/sources/BookService/oas-schema.js"]: ExternalModule_3,
-    // @ts-ignore
-    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_4
+    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_3
 };
 const baseDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const syncImportFn = (moduleId) => {
@@ -40,9 +37,9 @@ import { PubSub } from 'graphql-subscriptions';
 import { EventEmitter } from 'events';
 import { DefaultLogger } from '@graphql-mesh/utils';
 import OpenapiHandler from '@graphql-mesh/openapi';
-import StitchingMerger from '@graphql-mesh/merger-stitching';
+import BareMerger from '@graphql-mesh/merger-bare';
 import { resolveAdditionalResolvers } from '@graphql-mesh/utils';
-export const rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./oas_books.yaml" } } }, { "name": "AuthorService", "handler": { "openapi": { "source": "./oas_authors.yaml" } } }] };
+export const rawConfig = { "sources": [{ "name": "AuthorService", "handler": { "openapi": { "source": "./openapi-schemas/AuthorService-schema.yaml" } } }] };
 export async function getMeshOptions() {
     const cache = new MeshCache({
         ...(rawConfig.cache || {}),
@@ -55,10 +52,9 @@ export async function getMeshOptions() {
     const logger = new DefaultLogger('🕸️');
     const sources = [];
     const transforms = [];
-    const bookServiceTransforms = [];
     const authorServiceTransforms = [];
     const additionalTypeDefs = [];
-    const bookServiceHandler = new OpenapiHandler({
+    const authorServiceHandler = new OpenapiHandler({
         name: rawConfig.sources[0].name,
         config: rawConfig.sources[0].handler["openapi"],
         baseDir,
@@ -68,31 +64,16 @@ export async function getMeshOptions() {
         logger: logger.child(rawConfig.sources[0].name),
         importFn
     });
-    const authorServiceHandler = new OpenapiHandler({
-        name: rawConfig.sources[1].name,
-        config: rawConfig.sources[1].handler["openapi"],
-        baseDir,
-        cache,
-        pubsub,
-        store: sourcesStore.child(rawConfig.sources[1].name),
-        logger: logger.child(rawConfig.sources[1].name),
-        importFn
-    });
-    sources.push({
-        name: 'BookService',
-        handler: bookServiceHandler,
-        transforms: bookServiceTransforms
-    });
     sources.push({
         name: 'AuthorService',
         handler: authorServiceHandler,
         transforms: authorServiceTransforms
     });
-    const merger = new StitchingMerger({
+    const merger = new BareMerger({
         cache,
         pubsub,
-        logger: logger.child('StitchingMerger'),
-        store: rootStore.child('stitchingMerger')
+        logger: logger.child('BareMerger'),
+        store: rootStore.child('bareMerger')
     });
     const additionalResolversRawConfig = [];
     const additionalResolvers = await resolveAdditionalResolvers(baseDir, additionalResolversRawConfig, importFn, pubsub);
