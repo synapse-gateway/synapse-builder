@@ -1,5 +1,5 @@
 sources:
-  - name: AuthorService
+  - name: FakeEvents
     handler:
-      openapi:
-        source: ./openapi-schemas/AuthorService-schema.yaml
+      graphql:
+        endpoint: https://fakeql.com/graphql/561f8d552cecdaf7fe08c07ae1a01fa6

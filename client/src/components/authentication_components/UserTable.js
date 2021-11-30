@@ -107,13 +107,9 @@ export default function UserTable({ allUsers, setUsers, setPopup }) {
               </StyledTableCell>
               <StyledTableCell align='center'>
                 <DeleteIcon
+                  sx={{ cursor: "pointer" }}
                   onClick={() => setPopup({ show: true, user: row.username })}
                 />
-                {/* <DeleteIcon
-                  onClick={() =>
-                    handleUserDelete(row.username, allUsers, setUsers, setPopup)
-                  }
-                /> */}
               </StyledTableCell>
             </StyledTableRow>
           ))}
