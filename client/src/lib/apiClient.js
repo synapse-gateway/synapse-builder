@@ -13,7 +13,11 @@ const apiClient = {
         //   },
         // }
       )
-      .then((res) => console.log("Sources sent!"));
+      .then((res) => {
+        console.log("Sources sent!");
+        console.log(res.status);
+        return res.status;
+      });
   },
   async getTimeData(token, view, sinceUnixTime, minutesSince = 5) {
     let queryString = sinceUnixTime

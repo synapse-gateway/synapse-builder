@@ -8,74 +8,91 @@ import TableRow from "@mui/material/TableRow";
 import Title from "../Title";
 import { Button } from "@mui/material";
 import apiClient from "../../lib/apiClient";
+import { useState } from "react";
+import { Alert } from "@mui/material";
 
-// // Generate Source Data
-// function createData(id, name, type, status, active, created, actions) {
-//   return { id, name, type, status, active, created, actions };
-// }
-
-// // Fake Data
-// const rows = [
-//   createData(
-//     0,
-//     "Author Service",
-//     "OpenAPI",
-//     "✓",
-//     <input type='checkbox' />,
-//     "16 Mar, 2019",
-//     "✎ 🗑"
-//   ),
-//   createData(
-//     1,
-//     "Book Service",
-//     "GraphQL",
-//     "✓",
-//     <input type='checkbox' />,
-//     "16 Mar, 2019",
-//     "✎ 🗑"
-//   ),
-// ];
-
-// const SubmitSourceButton = ({handleSubmitButton, sourceList})=>{
-//   return <Button sx={{ width: "40%", mt: 2 }} variant='contained' onClick={handleSubmitSources}>
-//         Create Your Synapse
-//       </Button>
-// }
-
-// const handleSubmitSources = (sources)=>{
-//   apiClient.createConfig(sources);
-//   console.log('sources submitted!')
-// }
-
-// function preventDefault(event) {
-//   event.preventDefault();
-// }
-const DeleteSourceButton = ({ sourceList, sourceName, setSourceList }) => {
+const DeleteSourceButton = ({
+  sourcelist,
+  sourcename,
+  setSourceList,
+  handleAlert,
+}) => {
   const handleSourceDelete = () => {
-    let filteredSourceList = sourceList.filter((source) => {
-      return source.name !== sourceName;
+    let filteredSourceList = sourcelist.filter((source) => {
+      return source.name !== sourcename;
     });
     setSourceList([...filteredSourceList]);
   };
   return (
-    <Button
-      sourceList={sourceList}
-      sourceName={sourceName}
-      onClick={handleSourceDelete}
-    >
-      🗑
-    </Button>
+    <>
+      <Button
+        sourceList={sourcelist}
+        sourceName={sourcename}
+        onClick={handleSourceDelete}
+      >
+        🗑
+      </Button>
+    </>
   );
 };
 
 const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const sources = sourceList;
-  const handleSubmit = () => {
-    apiClient.createConfig(loggedInUser, sources);
-    console.log("Sources submitted!");
+
+  const handleAlertTimeout = (messageType) => {
+    messageType === "success"
+      ? setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3500)
+      : setTimeout(() => {
+          setErrorMessage(null);
+        }, 3500);
+  };
+
+  const handleSubmit = async () => {
+    let response = await apiClient.createConfig(loggedInUser, sources);
+    if (response === 200) {
+      setSuccessMessage("Synapse-mesh has been successfully created!");
+      handleAlertTimeout("success");
+    } else {
+      setErrorMessage("Failed to create your Synapse-mesh");
+      handleAlertTimeout();
+    }
   };
   return (
     <>
+      {" "}
+      {successMessage ? (
+        <Alert
+          sx={{ mb: 2 }}
+          onClose={() => {
+            setSuccessMessage(null);
+          }}
+          severity='success'
+          variant='filled'
+        >
+          {successMessage}
+        </Alert>
+      ) : (
+        <></>
+      )}
+      {errorMessage ? (
+        <Alert
+          sx={{ mb: 2 }}
+          severity='error'
+          variant='filled'
+          onClose={() => {
+            setErrorMessage(null);
+          }}
+        >
+          {errorMessage}
+        </Alert>
+      ) : (
+        <></>
+      )}
       <Title>Your connected data sources</Title>
       <Table size='small'>
         <TableHead>
@@ -96,10 +113,9 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
               <TableCell>{source.created}</TableCell>
               <TableCell align='center'>
                 <DeleteSourceButton
-                  sourceList={sourceList}
-                  sourceName={source.name}
+                  sourcelist={sourceList}
                   setSourceList={setSourceList}
-                  align='center'
+                  sourcename={source.name}
                 />
               </TableCell>
             </TableRow>

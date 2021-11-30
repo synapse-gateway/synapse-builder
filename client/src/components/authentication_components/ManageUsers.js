@@ -27,9 +27,12 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
       setUsers([...updatedUsers]);
       setPopup({
         show: false,
-        id: null,
+        user: null,
       });
       setSuccessMessage("Successfully deleted user!");
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3500);
     }
   };
 
