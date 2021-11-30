@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { Resolver } = require("../models/Resolver");
 const { SingleQuery } = require("../models/SingleQuery");
+const { QueryErrors } = require("../models/QueryErrors");
 
 const getIndividualQueryDataForLast = async (minutes) => {
   let mongoResponse = await SingleQuery.find({
@@ -46,6 +47,25 @@ const getResolverDataForLast = async (minutes) => {
   return mongoResponse;
 };
 
+const getErrorDataForLast = async (hours) => {
+  let mongoResponse = await QueryErrors.find({
+    createdAt: { $gte: new Date(Date.now() - hours * 60 * 60 * 1000) }
+  })
+  return mongoResponse
+}
+
+const getErrorData = async (req, res, next) => {
+  let errorData;
+  if (req.query.hours) {
+    errorData = await getErrorDataForLast(
+      parseInt(req.query.hours, 10)
+    )
+  } else {
+    errorData = await getErrorDataForLast(24);
+  }
+  res.status(200).json(errorData);
+}
+
 const getResolverData = async (req, res, next) => {
   let resolverData;
   if (req.query.minutes) {
@@ -64,3 +84,4 @@ const getResolverData = async (req, res, next) => {
 
 exports.getResolverData = getResolverData;
 exports.getIndividualQueryData = getIndividualQueryData;
+exports.getErrorData = getErrorData

@@ -43,6 +43,12 @@ router.get(
   monitoringController.getIndividualQueryData
 );
 
+router.get(
+  "/monitor/errors",
+  authenticateToken,
+  monitoringController.getErrorData
+)
+
 // router.get("/testjwt", authenticateToken, testJWT)
 
 // Create new user
