@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import FilledInput from '@mui/material/FilledInput';
 import Box from '@mui/material/Box';
+import { Navigate } from "react-router-dom";
 import {
   useTable,
   useResizeColumns,
@@ -144,18 +145,23 @@ const ErrorTable = ({loggedInUser}) => {
   //   { field: 'errStrings', headerName: 'List Of Errors', width: 600 },
   //   { field: 'sourceQuery', headerName: 'Original Query', width: 400 }
   // ]
-  return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', margin: '20px' }}>
-      <FormControl>
-        <FilledInput name={'hours'} margin='dense' value={hours} onChange={(e) => setHours(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} endAdornment={<InputAdornment position='end'>hours ago</InputAdornment>}/>
-        <FormHelperText id="hours-since-helper-text">Filter Errors By Hours Since</FormHelperText>
-      </FormControl>
-      <Button variant='contained' onClick={filterByHours}>Filter by hour range</Button>
-      <Styles>
-        <Table columns={columns} data={errorData} />
-      </Styles>
-    </Box>
-  )
+  if (loggedInUser) {
+    return (
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', margin: '20px' }}>
+        <FormControl>
+          <FilledInput name={'hours'} margin='dense' value={hours} onChange={(e) => setHours(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} endAdornment={<InputAdornment position='end'>hours ago</InputAdornment>}/>
+          <FormHelperText id="hours-since-helper-text">Filter Errors By Hours Since</FormHelperText>
+        </FormControl>
+        <Button variant='contained' onClick={filterByHours}>Filter by hour range</Button>
+        <Styles>
+          <Table columns={columns} data={errorData} />
+        </Styles>
+      </Box>
+    )
+  } else {
+    return <Navigate to="/signin" />
+  }
+  
 }
 
 export default ErrorTable

@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bmatei/apollo-prometheus-exporter": "^2.1.1",
     "@envelop/core": "^1.6.1",
     "@graphql-mesh/cli": "^0.42.6",
     "@graphql-mesh/openapi": "^0.19.3",
