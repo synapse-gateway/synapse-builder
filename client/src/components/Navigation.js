@@ -23,6 +23,7 @@ const paths = {
   monitoring: "monitoring",
   manageusers: "manageusers",
   graphiql: "graphiql",
+  documentation: "documentation",
   errors: "errors",
 };
 
@@ -81,6 +82,12 @@ export const SidebarSecondaryList = () => {
         <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
           <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
           <ListItemText primary="GraphiQL" />
+        </ListItemButton>
+      </Link>
+      <Link style={linkStyle} to={`/${paths.documentation}`}>
+        <ListItemButton selected={location.pathname === `/${paths.documentation}`}>
+          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemText primary="Documentation" />
         </ListItemButton>
       </Link>
     </div>

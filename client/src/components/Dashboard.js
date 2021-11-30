@@ -34,6 +34,7 @@ import SignIn from "./authentication_components/Signin";
 import NavBarLeft from "./navbar-left/NavBarLeft";
 import MenuButton from "./navbar-left/MenuButton";
 import ManageUsers from "./authentication_components/ManageUsers";
+import Documentation from "./documentation_components/Documentation";
 
 // function Copyright(props) {
 //   return (
@@ -226,6 +227,12 @@ const Dashboard = () => {
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
                     />
+                  }
+                />
+                <Route
+                  path="/documentation"
+                  element={
+                    <Documentation />
                   }
                 />
                 <Route

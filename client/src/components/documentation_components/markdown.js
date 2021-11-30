@@ -1,3 +1,4 @@
+export default `
 # [![Synapse-branding-logo](<INSERT IMAGE URL>)][github]
 
 ## The Team
@@ -51,27 +52,27 @@ Please install the following if you do not already have each one installed:
 
 ## Installation
 
-1. To clone the Synapse repository and set up the Gateway Manager run the following command: `<INSERT COMMAND>`
+1. To clone the Synapse repository and set up the Gateway Manager run the following command: \`<INSERT COMMAND>\`
 2. After running the above command, you will be prompted to input information for establishing a root user for the Gateway Manager
     - By default, the root user will have admin privileges and be able to create and manage users when your gateway is deployed (via AWS Copilot)
     - In development, only the root account can be used for configuring and monitoring your GraphQL gateway
-3. Once the repository has been set up on your local environment, from within the `server` directory, start up MongoDB with following command: `<INSERT COMMAND>`
+3. Once the repository has been set up on your local environment, from within the \`server\` directory, start up MongoDB with following command: \`<INSERT COMMAND>\`
     - This will run MongoDB on your local environment (via Docker container) and be used during development
-4. After MongoDB is successfully up and running, launch the Gateway Manager with the following command: `<INSERT COMMAND>`
+4. After MongoDB is successfully up and running, launch the Gateway Manager with the following command: \`<INSERT COMMAND>\`
     - You can read more about the Gateway Manager in the Gateway Manager section below
 
 ## Basic Usage
 
-1. Once the Gateway Manager is successfully up and running, visit `localhost:4005` to login and start configuring your GraphQL gateway
+1. Once the Gateway Manager is successfully up and running, visit \`localhost:4005\` to login and start configuring your GraphQL gateway
     - Log in with the root account created during the installation process
 2. Within the Data Sources tab, you can select, configure, and add all required data sources to be combined within your gateway
     - For more information on how to add specific sources and what sources are available please see the Adding Data Sources section on the docs
 3. After you have added all your required data sources, configure and generate your GraphQL gateway by clicking on the “Create Your Synapse” button
-    - Synapse will generate a default GraphQL schema for all your added data sources which can be customized by altering the `.meshrc` file located in the `server` directory. Once altered, run the following command: `<INSERT COMMAND>`. Synapse is powered by GraphQL Mesh under the hood, for more information on customizing your gateway, please visit the [GraphQL Mesh Docs](https://www.graphql-mesh.com/docs/getting-started/introduction).
-4. To launch and test your gateway run the following command: `<INSERT COMMAND>`
-5. Once the gateway server is running, you can visit `localhost:5000` to interact with a GraphiQL playground to test out your GraphQL API Gateway
+    - Synapse will generate a default GraphQL schema for all your added data sources which can be customized by altering the \`.meshrc\` file located in the \`server\` directory. Once altered, run the following command: \`<INSERT COMMAND>\`. Synapse is powered by GraphQL Mesh under the hood, for more information on customizing your gateway, please visit the [GraphQL Mesh Docs](https://www.graphql-mesh.com/docs/getting-started/introduction).
+4. To launch and test your gateway run the following command: \`<INSERT COMMAND>\`
+5. Once the gateway server is running, you can visit \`localhost:5000\` to interact with a GraphiQL playground to test out your GraphQL API Gateway
     - All queries and mutations made to the server will be recorded in your local MongoDB and can be viewed on the Gateway Manager. Note, this data will be reset once you’ve deployed your server to AWS
-6. Deploy your Synapse GraphQL Gateway to AWS by running the following command: `<INSERT COMMAND>`
+6. Deploy your Synapse GraphQL Gateway to AWS by running the following command: \`<INSERT COMMAND>\`
     - Amazon CLI must be downloaded and configured
     - For more information about deployment, read the Deployment section below
 
@@ -118,18 +119,19 @@ After the user has added all their data sources, Synapse uses GraphQL Mesh to cr
 
 ## Development Flow
 
-After the repository has been set up locally, the user will have a development Gateway Manager server, as well as a `docker-compose` file for starting MongoDB locally within the `server` directory.
+After the repository has been set up locally, the user will have a development Gateway Manager server, as well as a \`docker-compose\` file for starting MongoDB locally within the \`server\` directory.
 
-First the user can start running MongoDB locally by running the command `docker-compose up` while in the `server` directory. After MongoDB is up and running, the user can start the Gateway Manager server by running the command `npm run start-gui`. The Gateway Manager will be running on port 4005 by default. 
+First the user can start running MongoDB locally by running the command \`docker-compose up\` while in the \`server\` directory. After MongoDB is up and running, the user can start the Gateway Manager server by running the command \`npm run start-gui\`. The Gateway Manager will be running on port 4005 by default. 
 
-The user can then visit `http://localhost:4005` and login with the root account they created upon downloading and setting up the Synapse repository. Once logged in, the user can click on the Data Sources tab, add all their data sources and then create their Synapse gateway. The user is now ready to test out the gateway server. 
+The user can then visit \`http://localhost:4005\` and login with the root account they created upon downloading and setting up the Synapse repository. Once logged in, the user can click on the Data Sources tab, add all their data sources and then create their Synapse gateway. The user is now ready to test out the gateway server. 
 
-The gateway server can be run locally by running the command `npm run start-apollo`. The gateway server will run on port 5000 by default. Navigating to `http://localhost:5000` will direct the user to a GraphiQL playground where they are able to test out their server with different queries and mutations. If the user wants to make any changes to the gateway or add further customization at this point, they can stop the gateway server on port 5000 and make the necessary changes, either through the Gateway Manager or manually in the repository. The user can then relaunch the server by running the same command, `npm run start-apollo` for further testing. Once the user is satisfied with their gateway, they can deploy their gateway and a production Gateway Manager easily. 
+The gateway server can be run locally by running the command \`npm run start-apollo\`. The gateway server will run on port 5000 by default. Navigating to \`http://localhost:5000\` will direct the user to a GraphiQL playground where they are able to test out their server with different queries and mutations. If the user wants to make any changes to the gateway or add further customization at this point, they can stop the gateway server on port 5000 and make the necessary changes, either through the Gateway Manager or manually in the repository. The user can then relaunch the server by running the same command, \`npm run start-apollo\` for further testing. Once the user is satisfied with their gateway, they can deploy their gateway and a production Gateway Manager easily. 
 
 ## Deployment
 
-To start, stop both the Gateway server running on port 5000 and the Gateway Manager server running on port 4005. Then, stop the MongoDB container by running the command `docker-compose down`. It is important at this point to make sure the user has the AWS CLI installed and configured on their local machine. Afterwards, the user can run the command (INSERT DEPLOYMENT COMMAND) and a production Gateway Manager server and the Synapse GraphQL Gateway will be spun up on AWS and connected to MongoDB. 
+To start, stop both the Gateway server running on port 5000 and the Gateway Manager server running on port 4005. Then, stop the MongoDB container by running the command \`docker-compose down\`. It is important at this point to make sure the user has the AWS CLI installed and configured on their local machine. Afterwards, the user can run the command (INSERT DEPLOYMENT COMMAND) and a production Gateway Manager server and the Synapse GraphQL Gateway will be spun up on AWS and connected to MongoDB. 
 
 The deployment happens through the use of AWS CoPilot, which will create and register containers for MongoDB, the production Gateway Manager, and the Synapse GraphQL Gateway onto AWS ECR and then spin them up on AWS ECS. 
 
 ---
+`;
