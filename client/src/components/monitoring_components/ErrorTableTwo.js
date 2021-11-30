@@ -3,11 +3,19 @@ import { useEffect, useState } from 'react'
 import apiClient from '../../lib/apiClient'
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import styled from 'styled-components'
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import FilledInput from '@mui/material/FilledInput';
+import Box from '@mui/material/Box';
 import {
   useTable,
   useResizeColumns,
   useGridLayout
 } from 'react-table'
+
 
 const Styles = styled.div`
   padding: 1rem;
@@ -89,24 +97,39 @@ function Table({ columns, data }) {
 
 const ErrorTable = ({loggedInUser}) => {
   const [errorData, setErrorData] = useState([])
+  const [hours, setHours] = useState(24)
   useEffect(async () => {
     let errors = await apiClient.getQueryErrorData(loggedInUser, 24)
     let errorDataPulled = errors.data.map((err) => {
       return {
         id: err._id,
-        timeOfError: err.createdAt,
+        timeOfError: `${new Date(err.createdAt).toDateString()} ${new Date(err.createdAt).toLocaleTimeString()}`,
         ip: err.ip,
         errStrings: err.errs.map((e) => e.message).join(', '),
         sourceQuery: err.sourceQuery
       }
-    })
+    }).reverse()
     setErrorData(errorDataPulled)
-    console.log(errorDataPulled, 'ERRORS BOY ===========')
   }, [])
+
+  const filterByHours = async (e) => {
+    e.preventDefault()
+    let filteredErrors = await apiClient.getQueryErrorData(loggedInUser, hours)
+    let filteredErrorsPulled = filteredErrors.data.map((err) => {
+      return {
+        id: err._id,
+        timeOfError: `${new Date(err.createdAt).toDateString()} ${new Date(err.createdAt).toLocaleTimeString()}`,
+        ip: err.ip,
+        errStrings: err.errs.map((e) => e.message).join(', '),
+        sourceQuery: err.sourceQuery
+      }
+    }).reverse()
+    setErrorData(filteredErrorsPulled)
+  }
 
   const columns = React.useMemo(
     () => [
-      { accessor: 'timeOfError', Header: 'Datetime of Error', width: 200},
+      { accessor: 'timeOfError', Header: 'Datetime of Error', width: 250},
       { accessor: 'ip', Header: 'Origin', width: 150 },
       { accessor: 'errStrings', Header: 'List Of Errors' },
       { accessor: 'sourceQuery', Header: 'Original Query' }
@@ -122,9 +145,16 @@ const ErrorTable = ({loggedInUser}) => {
   //   { field: 'sourceQuery', headerName: 'Original Query', width: 400 }
   // ]
   return (
-    <Styles>
-      <Table columns={columns} data={errorData} />
-    </Styles>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', margin: '20px' }}>
+      <FormControl>
+        <FilledInput name={'hours'} margin='dense' value={hours} onChange={(e) => setHours(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} endAdornment={<InputAdornment position='end'>hours ago</InputAdornment>}/>
+        <FormHelperText id="hours-since-helper-text">Filter Errors By Hours Since</FormHelperText>
+      </FormControl>
+      <Button variant='contained' onClick={filterByHours}>Filter by hour range</Button>
+      <Styles>
+        <Table columns={columns} data={errorData} />
+      </Styles>
+    </Box>
   )
 }
 
