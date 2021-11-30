@@ -43,7 +43,7 @@ async function main() {
     errs: [Object],
     sourceQuery: String,
     metrics: Object,
-  })
+  }, {timestamps: true})
 
   const QueryErrors = queryConn.model('queryErrors', QueryErrorsSchema)
 

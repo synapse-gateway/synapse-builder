@@ -23,6 +23,7 @@ const paths = {
   monitoring: "monitoring",
   manageusers: "manageusers",
   graphiql: "graphiql",
+  errors: "errors",
 };
 
 export const SidebarMainList = ({ isAdmin }) => {
@@ -48,14 +49,14 @@ export const SidebarMainList = ({ isAdmin }) => {
           <ListItemText primary="Data Sources" />
         </ListItemButton>
       </Link>
-      {/* <Link style={linkStyle} to={`/${paths.monitoring}`}>
-        <ListItemButton selected={location.pathname === `/${paths.monitoring}`}>
+      <Link style={linkStyle} to={`/${paths.errors}`}>
+        <ListItemButton selected={location.pathname === `/${paths.errors}`}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
-          <ListItemText primary="Metrics & Logs" />
+          <ListItemText primary="Errors" />
         </ListItemButton>
-      </Link> */}
+      </Link>
       {isAdmin ? (
         <Link style={linkStyle} to={`/${paths.manageusers}`}>
           <ListItemButton

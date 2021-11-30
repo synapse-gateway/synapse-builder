@@ -29,6 +29,15 @@ const apiClient = {
     });
     return response;
   },
+  async getQueryErrorData(token, hours=24) {
+    let queryString = `?hours=${hours}`
+    let response = await axios.get(`api/monitor/errors${queryString}`, {
+      headers: {
+        authorization: `bearer ${token}`,
+      }
+    });
+    return response
+  },
   async signupUser(user) {
     try {
       let response = await axios.post("api/users", user);
