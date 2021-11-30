@@ -22,6 +22,7 @@
     "react-chartjs-2": "^3.3.0",
     "react-dom": "latest",
     "react-drag-drop-files": "^2.1.16",
+    "react-markdown": "^7.1.1",
     "react-router-dom": "^6.0.2",
     "react-scripts": "latest",
     "recharts": "^2.1.6"

@@ -1,17 +1,4 @@
-### GUI Config Demo
-
-```
-cd client
-npm install
-
-cd ../server
-yarn install
-npm run build:ui
-npm run start-gui
-npm run build:mesh
-npm run start-apollo
-```
-
+export default `
 # [![Synapse-branding-logo](<INSERT IMAGE URL>)][github]
 
 ## Table of Contents
@@ -35,14 +22,14 @@ Synapse allows a developer to easily and quickly spin up a GraphQL gateway for m
 
 Synapse does not replace your existing APIs/data sources with GraphQL, but rather creates a GraphQL schema that utilizes and stitches your existing sources together. You can think of the Synapse GraphQL Gateway as a separate server sitting in front of all your APIs and requesting the necessary information from them to fulfill different queries. This means that from the client’s perspective the gateway is just a single GraphQL endpoint, but from a backend perspective, the gateway is still making requests to get information from all your existing APIs and data sources. This allows you to use your existing APIs while providing a better client experience. To read more about how Synapse works under the hood and the problems it solves please view our Case Study (INSERT LINK HERE).
 
----
-
 ## Prerequisites:
 
 - NPM
 - AWS Account
 - AWS CLI configured locally
 - Docker
+
+---
 
 ## Installation:
 
@@ -105,4 +92,4 @@ The deployment happens through the use of AWS CoPilot, which will create and reg
 
 **[Aneesh Patel](https://www.linkedin.com/in/aneesh/)** _Software Engineer_ Narnia, Narnia
 
-**[Dylan Jones](https://www.linkedin.com/in/dylan/)** _Software Engineer_ Narnia, Narnia
+**[Dylan Jones](https://www.linkedin.com/in/dylan/)** _Software Engineer_ Narnia, Narnia`;
