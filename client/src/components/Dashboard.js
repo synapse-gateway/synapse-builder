@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 // import Badge from '@mui/material/Badge';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import ErrorTable from './monitoring_components/ErrorTable'
+import ErrorTableTwo from './monitoring_components/ErrorTableTwo'
 // import Paper from '@mui/material/Paper';
 // import Link from '@mui/material/Link';
 // import MenuIcon from "@mui/icons-material/Menu";
@@ -230,7 +230,7 @@ const Dashboard = () => {
                 />
                 <Route
                   path="/errors"
-                  element={<ErrorTable loggedInUser={loggedInUser} />}
+                  element={<ErrorTableTwo loggedInUser={loggedInUser} />}
                 />
 
                 {/* <Route path="/permissions" element={<Permissions />} /> */}
