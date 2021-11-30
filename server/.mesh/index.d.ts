@@ -27,18 +27,37 @@ export declare type Scalars = {
 };
 export declare type Query = {
     /**
-     * get all them authors
+     * retrieves all books
      *
-     * Equivalent to GET /authors
+     * Equivalent to GET /books
      */
-    getAuthors?: Maybe<Array<Maybe<AuthorsListItem>>>;
+    getBooks?: Maybe<Array<Maybe<BooksListItem>>>;
+    /**
+     * retrieve individual Book
+     *
+     * Equivalent to GET /books/{id}
+     */
+    getBooksId?: Maybe<Book>;
 };
-export declare type QuerygetAuthorsArgs = {
+export declare type QuerygetBooksArgs = {
     limit?: Maybe<Scalars['Int']>;
 };
-export declare type AuthorsListItem = {
-    author?: Maybe<Scalars['String']>;
+export declare type QuerygetBooksIdArgs = {
+    id: Scalars['String'];
+};
+export declare type BooksListItem = {
+    authorId?: Maybe<Scalars['Float']>;
+    genre?: Maybe<Scalars['String']>;
     id?: Maybe<Scalars['Float']>;
+    name?: Maybe<Scalars['String']>;
+    yearPublished?: Maybe<Scalars['Float']>;
+};
+export declare type Book = {
+    authorId?: Maybe<Scalars['Float']>;
+    genre?: Maybe<Scalars['String']>;
+    id?: Maybe<Scalars['Float']>;
+    name?: Maybe<Scalars['String']>;
+    yearPublished?: Maybe<Scalars['Float']>;
 };
 export declare type WithIndex<TObject> = TObject & Record<string, any>;
 export declare type ResolversObject<TObject> = WithIndex<TObject>;
@@ -71,48 +90,64 @@ export declare type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {
 /** Mapping between all available schema types and the resolvers types */
 export declare type ResolversTypes = ResolversObject<{
     Query: ResolverTypeWrapper<{}>;
-    AuthorsListItem: ResolverTypeWrapper<AuthorsListItem>;
-    String: ResolverTypeWrapper<Scalars['String']>;
+    BooksListItem: ResolverTypeWrapper<BooksListItem>;
     Float: ResolverTypeWrapper<Scalars['Float']>;
+    String: ResolverTypeWrapper<Scalars['String']>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
+    Book: ResolverTypeWrapper<Book>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 /** Mapping between all available schema types and the resolvers parents */
 export declare type ResolversParentTypes = ResolversObject<{
     Query: {};
-    AuthorsListItem: AuthorsListItem;
-    String: Scalars['String'];
+    BooksListItem: BooksListItem;
     Float: Scalars['Float'];
+    String: Scalars['String'];
     Int: Scalars['Int'];
+    Book: Book;
     Boolean: Scalars['Boolean'];
 }>;
 export declare type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-    getAuthors?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuthorsListItem']>>>, ParentType, ContextType, RequireFields<QuerygetAuthorsArgs, never>>;
+    getBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['BooksListItem']>>>, ParentType, ContextType, RequireFields<QuerygetBooksArgs, never>>;
+    getBooksId?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QuerygetBooksIdArgs, 'id'>>;
 }>;
-export declare type AuthorsListItemResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['AuthorsListItem'] = ResolversParentTypes['AuthorsListItem']> = ResolversObject<{
-    author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export declare type BooksListItemResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['BooksListItem'] = ResolversParentTypes['BooksListItem']> = ResolversObject<{
+    authorId?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    genre?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
     id?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    yearPublished?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+export declare type BookResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
+    authorId?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    genre?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    id?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    yearPublished?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 export declare type Resolvers<ContextType = MeshContext> = ResolversObject<{
     Query?: QueryResolvers<ContextType>;
-    AuthorsListItem?: AuthorsListItemResolvers<ContextType>;
+    BooksListItem?: BooksListItemResolvers<ContextType>;
+    Book?: BookResolvers<ContextType>;
 }>;
 import { MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { InContextSdkMethod } from '@graphql-mesh/types';
-export declare type QueryAuthorServiceSdk = {
-    getAuthors: InContextSdkMethod<Query['getAuthors'], QuerygetAuthorsArgs, MeshContext>;
+export declare type QueryBookServiceSdk = {
+    getBooks: InContextSdkMethod<Query['getBooks'], QuerygetBooksArgs, MeshContext>;
+    getBooksId: InContextSdkMethod<Query['getBooksId'], QuerygetBooksIdArgs, MeshContext>;
 };
-export declare type MutationAuthorServiceSdk = {};
-export declare type SubscriptionAuthorServiceSdk = {};
-export declare type AuthorServiceContext = {
-    ["AuthorService"]: {
-        Query: QueryAuthorServiceSdk;
-        Mutation: MutationAuthorServiceSdk;
-        Subscription: SubscriptionAuthorServiceSdk;
+export declare type MutationBookServiceSdk = {};
+export declare type SubscriptionBookServiceSdk = {};
+export declare type BookServiceContext = {
+    ["BookService"]: {
+        Query: QueryBookServiceSdk;
+        Mutation: MutationBookServiceSdk;
+        Subscription: SubscriptionBookServiceSdk;
     };
 };
-export declare type MeshContext = AuthorServiceContext & BaseMeshContext;
+export declare type MeshContext = BookServiceContext & BaseMeshContext;
 import { GetMeshOptions } from '@graphql-mesh/runtime';
 import { YamlConfig } from '@graphql-mesh/types';
 export declare const rawConfig: YamlConfig.Config;

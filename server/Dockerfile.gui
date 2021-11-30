@@ -8,6 +8,11 @@ RUN yarn install
 
 COPY ./ ./
 
+ENV PRODUCTION=true
+ENV SERVICE_NAME=mongo
+ENV ENV_NAME=prod
+ENV APP_NAME=synapse
+
 EXPOSE 4005
 
 CMD ["npm", "run", "start-gui"]
