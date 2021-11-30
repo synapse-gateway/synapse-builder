@@ -1,5 +1,5 @@
 sources:
-  - name: FakeEvents
+  - name: BookService
     handler:
-      graphql:
-        endpoint: https://fakeql.com/graphql/561f8d552cecdaf7fe08c07ae1a01fa6
+      openapi:
+        source: ./oas_books.yaml

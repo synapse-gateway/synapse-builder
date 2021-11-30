@@ -8,6 +8,11 @@ RUN yarn install
 
 COPY ./ ./
 
+ENV PRODUCTION=true
+ENV SERVICE_NAME=mongo
+ENV ENV_NAME=prod
+ENV APP_NAME=synapse
+
 RUN npm run build:mesh
 
 EXPOSE 6868

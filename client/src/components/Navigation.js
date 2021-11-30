@@ -22,7 +22,7 @@ const paths = {
   datasources: "datasources",
   monitoring: "monitoring",
   manageusers: "manageusers",
-  graphiql: "graphiql",
+  graphiql: "apollo",
   documentation: "documentation",
   errors: "errors",
 };
@@ -78,14 +78,22 @@ export const SidebarSecondaryList = () => {
   return (
     <div>
       <ListSubheader inset>Additional</ListSubheader>
-      <Link style={linkStyle} to={`/${paths.graphiql}`}>
+      <a style={linkStyle} href={`/${paths.graphiql}`} target="_blank">
         <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
           <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
-          <ListItemText primary="GraphiQL" />
+          <ListItemText primary="GraphiQL (prod)" />
         </ListItemButton>
-      </Link>
+      </a>
+      <a style={linkStyle} href={`http://localhost:6868`} target="_blank">
+        <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
+          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemText primary="GraphiQL (local)" />
+        </ListItemButton>
+      </a>
       <Link style={linkStyle} to={`/${paths.documentation}`}>
-        <ListItemButton selected={location.pathname === `/${paths.documentation}`}>
+        <ListItemButton
+          selected={location.pathname === `/${paths.documentation}`}
+        >
           <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
           <ListItemText primary="Documentation" />
         </ListItemButton>

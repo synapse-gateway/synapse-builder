@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import ExternalModule_0 from '@graphql-mesh/cache-inmemory-lru';
 import ExternalModule_1 from '@graphql-mesh/openapi';
 import ExternalModule_2 from '@graphql-mesh/merger-bare';
-import ExternalModule_3 from './sources/AuthorService/oas-schema.js';
+import ExternalModule_3 from './sources/BookService/oas-schema.js';
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: ExternalModule_0,
@@ -14,7 +14,7 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-bare"]: ExternalModule_2,
     // @ts-ignore
-    [".mesh/sources/AuthorService/oas-schema.js"]: ExternalModule_3
+    [".mesh/sources/BookService/oas-schema.js"]: ExternalModule_3
 };
 const baseDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const syncImportFn = (moduleId) => {
@@ -39,7 +39,7 @@ import { DefaultLogger } from '@graphql-mesh/utils';
 import OpenapiHandler from '@graphql-mesh/openapi';
 import BareMerger from '@graphql-mesh/merger-bare';
 import { resolveAdditionalResolvers } from '@graphql-mesh/utils';
-export const rawConfig = { "sources": [{ "name": "AuthorService", "handler": { "openapi": { "source": "./openapi-schemas/AuthorService-schema.yaml" } } }] };
+export const rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./oas_books.yaml" } } }] };
 export async function getMeshOptions() {
     const cache = new MeshCache({
         ...(rawConfig.cache || {}),
@@ -52,9 +52,9 @@ export async function getMeshOptions() {
     const logger = new DefaultLogger('🕸️');
     const sources = [];
     const transforms = [];
-    const authorServiceTransforms = [];
+    const bookServiceTransforms = [];
     const additionalTypeDefs = [];
-    const authorServiceHandler = new OpenapiHandler({
+    const bookServiceHandler = new OpenapiHandler({
         name: rawConfig.sources[0].name,
         config: rawConfig.sources[0].handler["openapi"],
         baseDir,
@@ -65,9 +65,9 @@ export async function getMeshOptions() {
         importFn
     });
     sources.push({
-        name: 'AuthorService',
-        handler: authorServiceHandler,
-        transforms: authorServiceTransforms
+        name: 'BookService',
+        handler: bookServiceHandler,
+        transforms: bookServiceTransforms
     });
     const merger = new BareMerger({
         cache,

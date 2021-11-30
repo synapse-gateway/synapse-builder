@@ -9,12 +9,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon gui-server.js",
     "build:mesh": "yarn mesh build",
-    "build:ui": "rm -rf build && cd ../client/ && npm run build --prod && cp -r build ../server"
+    "build:ui": "rm -rf build && cd ../client/ && npm run build --prod && cp -r build ../server",
+    "deploy": "node ../deploy/deploy.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bmatei/apollo-prometheus-exporter": "^2.1.1",
     "@envelop/core": "^1.6.1",
     "@graphql-mesh/cli": "^0.42.6",
     "@graphql-mesh/openapi": "^0.19.3",
