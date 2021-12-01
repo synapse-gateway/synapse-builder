@@ -1,4 +1,6 @@
 import { Container } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import React from "react";
 import { useState, useEffect } from "react";
 import Title from "../Title";
@@ -37,7 +39,7 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
   };
 
   if (!loggedInUser && !isAdmin) {
-    return <Navigate to='/' />;
+    return <Navigate to="/" />;
   } else {
     useEffect(() => {
       apiClient.getAllUsers().then((response) => setUsers(response));
@@ -46,38 +48,45 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
     }, []);
 
     return (
-      <Container component='main'>
-        <Title component='h1' variant='h5'>
-          Manage Users
-        </Title>
-        <AddUserModal
-          loggedInUser={loggedInUser}
-          isAdmin={isAdmin}
-          setUsers={setUsers}
-          users={users}
-        />
-        {popup.show && (
-          <DeleteConfirmationModal
-            popup={popup}
-            setPopup={setPopup}
-            deleteUser={handleDeleteUser}
+      <Grid item xs={12}>
+        <Paper
+          sx={{
+            p: 3,
+            py: 3,
+          }}
+        >
+          <Title component="h1" variant="h5">
+            Manage Users
+          </Title>
+          <AddUserModal
+            loggedInUser={loggedInUser}
+            isAdmin={isAdmin}
+            setUsers={setUsers}
+            users={users}
           />
-        )}
-        {successMessage ? (
-          <Alert
-            onClose={() => {
-              setSuccessMessage(null);
-            }}
-            severity='success'
-            variant='filled'
-          >
-            {successMessage}
-          </Alert>
-        ) : (
-          <></>
-        )}
-        <UserTable allUsers={users} setUsers={setUsers} setPopup={setPopup} />
-      </Container>
+          {popup.show && (
+            <DeleteConfirmationModal
+              popup={popup}
+              setPopup={setPopup}
+              deleteUser={handleDeleteUser}
+            />
+          )}
+          {successMessage ? (
+            <Alert
+              onClose={() => {
+                setSuccessMessage(null);
+              }}
+              severity="success"
+              variant="filled"
+            >
+              {successMessage}
+            </Alert>
+          ) : (
+            <></>
+          )}
+          <UserTable allUsers={users} setUsers={setUsers} setPopup={setPopup} />
+        </Paper>
+      </Grid>
     );
   }
 };
