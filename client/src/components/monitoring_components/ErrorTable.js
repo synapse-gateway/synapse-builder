@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import apiClient from '../../lib/apiClient'
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { Navigate } from "react-router-dom";
 
 const ErrorTable = ({loggedInUser}) => {
   const [errorData, setErrorData] = useState([])
@@ -25,11 +26,18 @@ const ErrorTable = ({loggedInUser}) => {
     { field: 'errStrings', headerName: 'List Of Errors', width: 600 },
     { field: 'sourceQuery', headerName: 'Original Query', width: 400 }
   ]
-  return (
-    <div style={{ height: 500, width: '100%' }}>
-      <DataGrid rows={errorData} columns={columns} />
-    </div>
-  )
+  if (loggedInUser) {
+    return (
+      <div style={{ height: 500, width: '100%' }}>
+        <DataGrid rows={errorData} columns={columns} />
+      </div>
+    )
+  } else {
+    return (
+      <Navigate to="/signin" />
+    )
+  }
+  
 }
 
 export default ErrorTable

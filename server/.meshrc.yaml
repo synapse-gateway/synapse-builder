@@ -2,4 +2,4 @@ sources:
   - name: BookService
     handler:
       openapi:
-        source: ./oas_books.yaml
+        source: ./openapi-schemas/BookService-schema.yaml

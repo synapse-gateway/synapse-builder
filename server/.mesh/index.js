@@ -42,7 +42,7 @@ const utils_1 = require("@graphql-mesh/utils");
 const openapi_2 = (0, tslib_1.__importDefault)(require("@graphql-mesh/openapi"));
 const merger_bare_2 = (0, tslib_1.__importDefault)(require("@graphql-mesh/merger-bare"));
 const utils_2 = require("@graphql-mesh/utils");
-exports.rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./oas_books.yaml" } } }] };
+exports.rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./openapi-schemas/BookService-schema.yaml" } } }] };
 async function getMeshOptions() {
     const cache = new cache_inmemory_lru_2.default({
         ...(exports.rawConfig.cache || {}),

@@ -39,7 +39,7 @@ import { DefaultLogger } from '@graphql-mesh/utils';
 import OpenapiHandler from '@graphql-mesh/openapi';
 import BareMerger from '@graphql-mesh/merger-bare';
 import { resolveAdditionalResolvers } from '@graphql-mesh/utils';
-export const rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./oas_books.yaml" } } }] };
+export const rawConfig = { "sources": [{ "name": "BookService", "handler": { "openapi": { "source": "./openapi-schemas/BookService-schema.yaml" } } }] };
 export async function getMeshOptions() {
     const cache = new MeshCache({
         ...(rawConfig.cache || {}),
