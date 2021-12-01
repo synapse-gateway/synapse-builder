@@ -10,6 +10,9 @@ const myEmitter = new events.EventEmitter();
 
 let appName;
 let synapseURL;
+let loadBalancedWebService = '"Load Balanced Web Service"';
+let backendService = '"Backend Service"';
+
 const cwd = process.cwd().split("/").slice(0, -1).join("/");
 
 const completedTasks = [];
@@ -158,39 +161,53 @@ const run = async () => {
   });
 
   // Initialize Mongo
-  myEmitter.on("COPILOT_INITIALIZED", () => {
+  myEmitter.on("COPILOT_INITIALIZED", async () => {
     console.log("Initializing mongodb service...");
-    const mongoInit = spawn(
-      "copilot",
-      [
-        "svc",
-        "init",
-        "--name",
-        "mongo",
-        // "--svc-type",
-        // "'Backend Service'",
-        // "--dockerfile",
-        // "./mongo/Dockerfile.mongo",
-      ],
-      { cwd }
-    );
-
-    mongoInit.on("exit", (code) => {
-      if (parseInt(code) !== 0)
-        console.error(
-          `Error Code ${code}: Failed to initialize mongo service.`
-        );
+    try {
+      let { stdout, stderr } = await promisifiedExec(
+        `copilot svc init --name mongo --svc-type "Backend Service" --dockerfile ./mongo/Dockerfile.mongo`,
+        {
+          cwd,
+        }
+      );
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
       myEmitter.emit("END_TASK", `Mongo service successfully initialized`);
       myEmitter.emit("MONGO_INITIALIZED");
-    });
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+    // const mongoInit = spawn(
+    //   "copilot",
+    //   [
+    //     "svc init",
+    //     "--name",
+    //     "mongo",
+    //     // "--svc-type",
+    //     // backendService,
+    //     // "--dockerfile",
+    //     // "./mongo/Dockerfile.mongo",
+    //   ],
+    //   { cwd }
+    // );
 
-    mongoInit.stdout.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // mongoInit.on("exit", (code) => {
+    //   if (parseInt(code) !== 0)
+    //     console.error(
+    //       `Error Code ${code}: Failed to initialize mongo service.`
+    //     );
+    //   myEmitter.emit("END_TASK", `Mongo service successfully initialized`);
+    //   myEmitter.emit("MONGO_INITIALIZED");
+    // });
 
-    mongoInit.stderr.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // mongoInit.stdout.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
+
+    // mongoInit.stderr.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
   });
 
   // Deploy mongodb container
@@ -219,26 +236,55 @@ const run = async () => {
   });
 
   // Initialize GUI
-  myEmitter.on("MONGO_DEPLOYED", () => {
+  myEmitter.on("MONGO_DEPLOYED", async () => {
     console.log("Initializing GUI service...");
-    const initGUI = spawn("copilot", ["svc", "init", "--name", "gui"], { cwd });
+    try {
+      let { stdout, stderr } = await promisifiedExec(
+        `copilot svc init --name gui --svc-type "Load Balanced Web Service" --dockerfile ./server/Dockerfile.gui`,
+        {
+          cwd,
+        }
+      );
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      myEmitter.emit("END_TASK", `GUI service successfully initialized`);
+      myEmitter.emit("GUI_INITIALIZED");
+    } catch (e) {
+      console.error(e);
+      return;
+    }
 
-    initGUI.on("exit", (code) => {
-      if (parseInt(code) !== 0) {
-        console.error(`Error Code ${code}: Failed to initialize GUI service.`);
-      } else {
-        myEmitter.emit("END_TASK", `GUI service successfully initialized`);
-        myEmitter.emit("GUI_INITIALIZED");
-      }
-    });
+    // const initGUI = spawn(
+    //   "copilot",
+    //   [
+    //     "svc",
+    //     "init",
+    //     "--name",
+    //     "gui",
+    //     // "--svc-type",
+    //     // loadBalancedWebService,
+    //     // "--dockerfile",
+    //     // "./server/Dockerfile.gui",
+    //   ],
+    //   { cwd }
+    // );
 
-    initGUI.stdout.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // initGUI.on("exit", (code) => {
+    //   if (parseInt(code) !== 0) {
+    //     console.error(`Error Code ${code}: Failed to initialize GUI service.`);
+    //   } else {
+    //     myEmitter.emit("END_TASK", `GUI service successfully initialized`);
+    //     myEmitter.emit("GUI_INITIALIZED");
+    //   }
+    // });
 
-    initGUI.stderr.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // initGUI.stdout.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
+
+    // initGUI.stderr.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
   });
 
   // Deploy GUI
@@ -276,30 +322,61 @@ const run = async () => {
   });
 
   // Initialize Apollo
-  myEmitter.on("GUI_DEPLOYED", () => {
+
+  myEmitter.on("GUI_DEPLOYED", async () => {
     console.log("Initializing GraphQL service...");
-    const initApollo = spawn("copilot", ["svc", "init", "--name", "apollo"], {
-      cwd,
-    });
 
-    initApollo.on("exit", (code) => {
-      if (parseInt(code) !== 0) {
-        console.error(
-          `Error Code ${code}: Failed to initialize GraphQL service.`
-        );
-      } else {
-        myEmitter.emit("END_TASK", `GraphQL service successfully initialized`);
-        myEmitter.emit("APOLLO_INITIALIZED");
-      }
-    });
+    try {
+      let { stdout, stderr } = await promisifiedExec(
+        `copilot svc init --name apollo --svc-type "Load Balanced Web Service" --dockerfile ./server/Dockerfile.apollo`,
+        {
+          cwd,
+        }
+      );
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      myEmitter.emit("END_TASK", `GraphQL service successfully initialized`);
+      myEmitter.emit("APOLLO_INITIALIZED");
+    } catch (e) {
+      console.error(e);
+      return;
+    }
 
-    initApollo.stdout.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // const initApollo = spawn(
+    //   "copilot",
+    //   [
+    //     "svc",
+    //     "init",
+    //     "--name",
+    //     "apollo",
+    //     // "--svc-type",
+    //     // loadBalancedWebService,
+    //     // "--dockerfile",
+    //     // "./server/Dockerfile.apollo",
+    //   ],
+    //   {
+    //     cwd,
+    //   }
+    // );
 
-    initApollo.stderr.on("data", (s) => {
-      process.stdout.write(s);
-    });
+    // initApollo.on("exit", (code) => {
+    //   if (parseInt(code) !== 0) {
+    //     console.error(
+    //       `Error Code ${code}: Failed to initialize GraphQL service.`
+    //     );
+    //   } else {
+    //     myEmitter.emit("END_TASK", `GraphQL service successfully initialized`);
+    //     myEmitter.emit("APOLLO_INITIALIZED");
+    //   }
+    // });
+
+    // initApollo.stdout.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
+
+    // initApollo.stderr.on("data", (s) => {
+    //   process.stdout.write(s);
+    // });
   });
 
   // Deploy Apollo

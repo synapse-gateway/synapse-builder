@@ -11,7 +11,7 @@ type: Backend Service
 # Configuration for your containers and service.
 image:
   # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/backend-service/#image-build
-  build: mongo/Dockerfile.mongo
+  build: ./mongo/Dockerfile.mongo
   # Port exposed through your container to route traffic to it.
   port: 27017
 

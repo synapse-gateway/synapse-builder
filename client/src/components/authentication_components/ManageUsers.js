@@ -37,7 +37,7 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
   };
 
   if (!loggedInUser && !isAdmin) {
-    return <Navigate to='/' />;
+    return <Navigate to='/signin' />;
   } else {
     useEffect(() => {
       apiClient.getAllUsers().then((response) => setUsers(response));

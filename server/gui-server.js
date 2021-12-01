@@ -28,7 +28,7 @@ app.use(cors());
 
 const path = __dirname + "/build/";
 app.use(express.static(path));
-app.get('/monitoring', (req, res) => {
+app.get('/errors', (req, res) => {
   res.sendFile(path + 'index.html');
 })
 
