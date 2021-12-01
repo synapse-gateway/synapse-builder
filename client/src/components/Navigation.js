@@ -1,10 +1,13 @@
 import React from "react";
-import ListItem from "@mui/material/ListItem";
+// import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
+import ErrorIcon from "@mui/icons-material/Error";
+import GraphIcon from "@mui/icons-material/AccountTree";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import DocumentationIcon from "@mui/icons-material/Description";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -53,7 +56,7 @@ export const SidebarMainList = ({ isAdmin }) => {
       <Link style={linkStyle} to={`/${paths.errors}`}>
         <ListItemButton selected={location.pathname === `/${paths.errors}`}>
           <ListItemIcon>
-            <BarChartIcon />
+            <ErrorIcon />
           </ListItemIcon>
           <ListItemText primary="Errors" />
         </ListItemButton>
@@ -70,31 +73,29 @@ export const SidebarMainList = ({ isAdmin }) => {
           </ListItemButton>
         </Link>
       ) : null}
-    </div>
-  );
-};
-
-export const SidebarSecondaryList = () => {
-  return (
-    <div>
-      <ListSubheader inset>Additional</ListSubheader>
-      <a style={linkStyle} href={`/${paths.graphiql}`} target="_blank">
-        <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
-          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
-          <ListItemText primary="GraphiQL (prod)" />
-        </ListItemButton>
-      </a>
       <a style={linkStyle} href={`http://localhost:6868`} target="_blank">
         <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
-          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemIcon>
+            <GraphIcon />
+          </ListItemIcon>
           <ListItemText primary="GraphiQL (local)" />
+        </ListItemButton>
+      </a>
+      <a style={linkStyle} href={`/${paths.graphiql}`} target="_blank">
+        <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
+          <ListItemIcon>
+            <GraphIcon />
+          </ListItemIcon>
+          <ListItemText primary="GraphiQL (prod)" />
         </ListItemButton>
       </a>
       <Link style={linkStyle} to={`/${paths.documentation}`}>
         <ListItemButton
           selected={location.pathname === `/${paths.documentation}`}
         >
-          <ListItemIcon>{/* <AssignmentIcon /> REPLACE ICON */}</ListItemIcon>
+          <ListItemIcon>
+            <DocumentationIcon />
+          </ListItemIcon>
           <ListItemText primary="Documentation" />
         </ListItemButton>
       </Link>

@@ -3,19 +3,8 @@ import Divider from "@mui/material/Divider";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import List from "@mui/material/List";
 
-function NavBarLeft({
-  Test,
-  Drawer,
-  MainList,
-  SecondaryList,
-  isAdmin,
-  open,
-  toggleDrawer,
-  mainListItems,
-  secondaryListItems,
-}) {
+function NavBarLeft({ Drawer, MainList, isAdmin, open, toggleDrawer }) {
   return (
     <>
       <Drawer variant="permanent" open={open}>
@@ -33,10 +22,6 @@ function NavBarLeft({
         </Toolbar>
         <Divider />
         <MainList isAdmin={isAdmin} />
-        {/* <List>{mainListItems}</List> */}
-        <Divider />
-        <SecondaryList />
-        {/* <List>{secondaryListItems}</List> */}
       </Drawer>
     </>
   );

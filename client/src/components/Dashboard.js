@@ -1,53 +1,25 @@
 import React, { useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
-// import Link from "@mui/material/Link";
+import { Route, Routes } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-// import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-// import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-// import Badge from '@mui/material/Badge';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import ErrorTableTwo from './monitoring_components/ErrorTableTwo'
-// import Paper from '@mui/material/Paper';
-// import Link from '@mui/material/Link';
-// import MenuIcon from "@mui/icons-material/Menu";
-// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-// import NotificationsIcon from '@mui/icons-material/Notifications';
-import {
-  mainListItems,
-  secondaryListItems,
-  mainListItemsAdmin,
-} from "./Navigation";
-import { SidebarMainList, SidebarSecondaryList } from "./Navigation";
+import ErrorTableTwo from "./monitoring_components/ErrorTableTwo";
+import { SidebarMainList } from "./Navigation";
 import Monitoring from "./monitoring_components/Monitoring";
 import DataSources from "./datasources_components/DataSources";
-import Home from "./Home";
 import SignUp from "./authentication_components/Signup";
 import SignIn from "./authentication_components/Signin";
 import NavBarLeft from "./navbar-left/NavBarLeft";
 import MenuButton from "./navbar-left/MenuButton";
 import ManageUsers from "./authentication_components/ManageUsers";
 import Documentation from "./documentation_components/Documentation";
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Team 5 - GraphQL-is-Okay
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
 
 const drawerWidth = 240;
 
@@ -126,6 +98,7 @@ const Dashboard = () => {
             {loggedInUser ? (
               <MenuButton toggleDrawer={toggleDrawer} open={open} />
             ) : null}
+
             {/* GUI Title */}
             <Typography
               component="h1"
@@ -134,13 +107,11 @@ const Dashboard = () => {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              SYNAPSE
+              synapse
             </Typography>
+
             {/* Notifications */}
             <IconButton color="inherit" onClick={toggleLoggedIn}>
-              {/* <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge> */}
               {loggedInUser ? (
                 <Typography>Hi {username} | Logout</Typography>
               ) : (
@@ -151,23 +122,17 @@ const Dashboard = () => {
         </AppBar>
 
         {/* Nav Bar */}
-
         {loggedInUser ? (
           <NavBarLeft
             Test={SidebarMainList}
             Drawer={Drawer}
             MainList={SidebarMainList}
-            SecondaryList={SidebarSecondaryList}
             isAdmin={isAdmin}
             open={open}
             toggleDrawer={toggleDrawer}
-            // Drawer={Drawer}
-            // open={open}
-            // mainListItems={isAdmin ? mainListItemsAdmin : mainListItems}
-            // secondaryListItems={secondaryListItems}
-            // toggleDrawer={toggleDrawer}
           />
         ) : null}
+
         {/* Main Content Area */}
         <Box
           component="main"
@@ -186,10 +151,6 @@ const Dashboard = () => {
             <Grid container spacing={3}>
               {/* Features */}
               <Routes>
-                {/* <Route
-                  path="/"
-                  element={<Home loggedInUser={loggedInUser} />}
-                /> */}
                 <Route
                   path="/"
                   element={<Monitoring loggedInUser={loggedInUser} />}
@@ -229,19 +190,11 @@ const Dashboard = () => {
                     />
                   }
                 />
-                <Route
-                  path="/documentation"
-                  element={
-                    <Documentation />
-                  }
-                />
+                <Route path="/documentation" element={<Documentation />} />
                 <Route
                   path="/errors"
                   element={<ErrorTableTwo loggedInUser={loggedInUser} />}
                 />
-
-                {/* <Route path="/permissions" element={<Permissions />} /> */}
-                {/* <Route path="/graphiql" element={<GraphiQL />} /> */}
               </Routes>
             </Grid>
           </Container>
