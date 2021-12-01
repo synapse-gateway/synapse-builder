@@ -5,6 +5,9 @@
 node_modules/
 build
 
+oas_authors.yaml
+oas_books.yaml
+
 /.pnp
 .pnp.js
 
@@ -35,3 +38,5 @@ yarn-error.log*
 
 package-lock.json
 yarn.lock
+
+test.http

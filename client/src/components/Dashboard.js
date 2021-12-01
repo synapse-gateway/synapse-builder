@@ -20,6 +20,7 @@ import NavBarLeft from "./navbar-left/NavBarLeft";
 import MenuButton from "./navbar-left/MenuButton";
 import ManageUsers from "./authentication_components/ManageUsers";
 import Documentation from "./documentation_components/Documentation";
+import { Navigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -107,7 +108,7 @@ const Dashboard = () => {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              synapse
+              Synapse Gateway Manager
             </Typography>
 
             {/* Notifications */}
@@ -155,10 +156,10 @@ const Dashboard = () => {
                   path="/"
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
-                <Route
+                {/* <Route
                   path="/datasources"
                   element={<DataSources loggedInUser={loggedInUser} />}
-                />
+                /> */}
                 <Route
                   path="/manageusers"
                   element={
@@ -194,6 +195,10 @@ const Dashboard = () => {
                 <Route
                   path="/errors"
                   element={<ErrorTableTwo loggedInUser={loggedInUser} />}
+                />
+                <Route
+                  path="*"
+                  element={<Navigate to="/signin" />}
                 />
               </Routes>
             </Grid>

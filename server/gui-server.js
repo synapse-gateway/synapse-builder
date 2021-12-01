@@ -22,7 +22,14 @@ mongoose
 app.use(express.json());
 app.use(cors());
 
-const path = __dirname + "/build/";
+let path
+if (process.env.PRODUCTION === "false") {
+  path = __dirname + "/build-local/";
+} else {
+  console.log("here")
+  path = __dirname + "/build-prod/";
+}
+
 app.use(express.static(path));
 app.get("/errors", (req, res) => {
   res.sendFile(path + "index.html");

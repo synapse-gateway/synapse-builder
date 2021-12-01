@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+client/
+
 # dependencies
 /node_modules
 */node_modules/
@@ -20,6 +22,8 @@ build
 .env.development.local
 .env.test.local
 .env.production.local
+*/.env
+*/yarn.lock
 /.env
 
 npm-debug.log*
