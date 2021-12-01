@@ -16,8 +16,8 @@ if (process.env.PRODUCTION === "false") {
 
 mongoose
   .connect(mongourl)
-  .then((res) => console.log("MONGO DB CONNECTED :)"))
-  .catch((err) => console.log(err));
+  .then((res) => console.log("Connected to MongoDB"))
+  .catch((err) => console.error(err));
 
 app.use(express.json());
 app.use(cors());
@@ -59,9 +59,9 @@ app.listen(PORT, async () => {
         password: hashedPassword,
         admin: true,
       });
-      console.log("Admin user successfully initiated");
+      console.log("Root user successfully created");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   console.log(`server is listening on port: ${4005}`);
