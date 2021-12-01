@@ -26,31 +26,30 @@ export default function DeleteConfirmationModal({
 }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setPopup({ show: false, user: null });
-  console.log(popup);
   return (
     <div>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           {" "}
           <Typography
-            id='modal-modal-title'
-            variant='h6'
-            color='primary'
-            component='h2'
+            id="modal-modal-title"
+            variant="h6"
+            color="primary"
+            component="h2"
             sx={{ mb: 2 }}
           >
             Are you sure you want to delete {popup.user}?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-            <Button color='success' onClick={deleteUser} variant='contained'>
+            <Button color="success" onClick={deleteUser} variant="contained">
               Yes
             </Button>
-            <Button color='error' onClick={handleClose} variant='contained'>
+            <Button color="error" onClick={handleClose} variant="contained">
               Cancel
             </Button>
           </Box>

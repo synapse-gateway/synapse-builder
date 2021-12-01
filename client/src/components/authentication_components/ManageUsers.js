@@ -24,7 +24,6 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
   const handleDeleteUser = async () => {
     let responseData = await apiClient.deleteUser({ username: popup.user });
     if (responseData.status === 204) {
-      console.log(users);
       let updatedUsers = users.filter((user) => user.username !== popup.user);
       setUsers([...updatedUsers]);
       setPopup({
@@ -43,8 +42,6 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
   } else {
     useEffect(() => {
       apiClient.getAllUsers().then((response) => setUsers(response));
-      // console.log(allUsers);
-      // setUsers(allUsers);
     }, []);
 
     return (

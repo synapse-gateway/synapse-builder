@@ -16,11 +16,8 @@ function authenticateToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
 
   jsonwebtoken.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(err);
-    console.log(token);
     if (err) return res.sendStatus(403);
     req.user = user;
-    console.log("made it here HOMIE");
     next();
   });
 }
@@ -47,7 +44,7 @@ router.get(
   "/monitor/errors",
   authenticateToken,
   monitoringController.getErrorData
-)
+);
 
 // router.get("/testjwt", authenticateToken, testJWT)
 
@@ -65,8 +62,7 @@ router.post("/users", async (req, res) => {
     await User.create(user); // push to "real" database
     res.send(user);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: `${err}: Something went wrong` });
   }
 });
 
@@ -77,8 +73,7 @@ router.get("/users", async (req, res) => {
     let allUsers = await User.find();
     res.send(allUsers).status(200);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: `${err}: Something went wrong` });
   }
 });
 
@@ -89,7 +84,7 @@ router.delete("/users", async (req, res) => {
     res.status(204).json({ deleted });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: `${err}: Something went wrong` });
   }
 });
 
@@ -99,8 +94,7 @@ router.delete("/users", async (req, res) => {
     let deleted = await User.deleteOne(req.body);
     res.status(204).json({ deleted });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: `${err}: Something went wrong` });
   }
 });
 
@@ -112,9 +106,6 @@ router.post("/users/login", async (req, res) => {
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      // Give back JWT
-      console.log(user._id);
-
       res.status(201).json({
         admin: user.admin,
         username: user.username,
@@ -128,8 +119,7 @@ router.post("/users/login", async (req, res) => {
       res.status(401).json({ error: "Login Failed" });
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: `${err}: Something went wrong` });
   }
 });
 

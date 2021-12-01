@@ -6,16 +6,16 @@ import { FileUploader } from "react-drag-drop-files";
 function DragDrop({ setFile, fileTypes }) {
   // const [file, setFile] = useState(null);
 
-  const handleChange = file => {
+  const handleChange = (file) => {
     setFile(file);
   };
 
   return (
     <FileUploader
-        onTypeError={(err) => console.log(err)}
-        handleChange={handleChange} 
-        name="file" 
-        types={fileTypes} 
+      onTypeError={(err) => console.error(err)}
+      handleChange={handleChange}
+      name="file"
+      types={fileTypes}
     />
   );
 }

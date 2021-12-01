@@ -53,9 +53,9 @@ const rows = [
   { lastName: "Unts", firstName: "George", admin: false, username: "Lollipop" },
 ];
 
-const handleUserEdit = (username) => {
-  console.log(username);
-};
+// const handleUserEdit = (username) => {
+//   console.log(username);
+// };
 
 const handleUserDelete = async (username, allUsers, setUsers) => {
   let responseData = await apiClient.deleteUser({ username: username });
@@ -71,18 +71,18 @@ export default function UserTable({ allUsers, setUsers }) {
   const [showConfirm, setShowConfirm] = React.useState(false);
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label='customized table'>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <TableCell
               colSpan={6}
-              align='center'
+              align="center"
               sx={{ bgcolor: "#2976D2", color: "white" }}
             >
               {" "}
               <Typography
-                component='h1'
-                variant='h5'
+                component="h1"
+                variant="h5"
                 sx={{ fontWeight: "bold" }}
               >
                 User List
@@ -91,28 +91,28 @@ export default function UserTable({ allUsers, setUsers }) {
           </TableRow>
           <TableRow>
             <StyledTableCell>User Name</StyledTableCell>
-            <StyledTableCell align='center'>First Name</StyledTableCell>
-            <StyledTableCell align='center'>Last Name</StyledTableCell>
-            <StyledTableCell align='center'>Role</StyledTableCell>
-            <StyledTableCell align='center'>Edit</StyledTableCell>
-            <StyledTableCell align='center'>Delete</StyledTableCell>
+            <StyledTableCell align="center">First Name</StyledTableCell>
+            <StyledTableCell align="center">Last Name</StyledTableCell>
+            <StyledTableCell align="center">Role</StyledTableCell>
+            <StyledTableCell align="center">Edit</StyledTableCell>
+            <StyledTableCell align="center">Delete</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {allUsers.map((row) => (
             <StyledTableRow key={row.username}>
-              <StyledTableCell component='th' scope='row'>
+              <StyledTableCell component="th" scope="row">
                 {row.username}
               </StyledTableCell>
-              <StyledTableCell align='center'>{row.firstName}</StyledTableCell>
-              <StyledTableCell align='center'>{row.lastName}</StyledTableCell>
-              <StyledTableCell align='center'>
+              <StyledTableCell align="center">{row.firstName}</StyledTableCell>
+              <StyledTableCell align="center">{row.lastName}</StyledTableCell>
+              <StyledTableCell align="center">
                 {row.admin ? "Sith Lord" : "Rebel Scum"}
               </StyledTableCell>
-              <StyledTableCell align='center'>
+              <StyledTableCell align="center">
                 <EditIcon onClick={() => handleUserEdit(row.username)} />
               </StyledTableCell>
-              <StyledTableCell align='center'>
+              <StyledTableCell align="center">
                 <DeleteIcon
                   onClick={() =>
                     handleUserDelete(row.username, allUsers, setUsers)
