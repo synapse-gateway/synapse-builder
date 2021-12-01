@@ -77,7 +77,7 @@ const DataView = ({ currentView, token }) => {
           />
         </Paper>
       </Grid>
-      {currentView === "frontend" ? (
+      {currentView === "Client Requests" ? (
         <FrontendMonitoring
           data={dataFilteredByTimescale}
           timeScaleProps={timeRangeProps[timeScale]}

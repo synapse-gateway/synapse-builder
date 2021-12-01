@@ -6,7 +6,7 @@ import DataView from "./DataView";
 import { Navigate } from "react-router-dom";
 
 const Monitoring = ({ loggedInUser }) => {
-  const [currentView, setCurrentView] = useState("frontend");
+  const [currentView, setCurrentView] = useState("Client Requests");
 
   const handleViewToggle = (e, newView) => {
     setCurrentView(newView);
@@ -26,7 +26,7 @@ const Monitoring = ({ loggedInUser }) => {
               groupName={"View toggle"}
               selection={currentView}
               onChange={handleViewToggle}
-              options={["frontend", "backend"]}
+              options={["Client Requests", "API Resolvers"]}
             />
           </Paper>
         </Grid>
