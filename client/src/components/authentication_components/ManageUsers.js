@@ -20,6 +20,11 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
     show: false, // initial values set to false and null
     user: null,
   });
+  useEffect(() => {
+    if (loggedInUser && isAdmin) {
+      apiClient.getAllUsers().then((response) => setUsers(response));
+    }
+  }, []);
 
   const handleDeleteUser = async () => {
     let responseData = await apiClient.deleteUser({ username: popup.user });
@@ -37,55 +42,52 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
     }
   };
 
-  if (!loggedInUser && !isAdmin) {
-    return <Navigate to="/" />;
-  } else {
-    useEffect(() => {
-      apiClient.getAllUsers().then((response) => setUsers(response));
-    }, []);
+  
 
-    return (
-      <Grid item xs={12}>
-        <Paper
-          sx={{
-            p: 3,
-            py: 3,
-          }}
-        >
-          <Title component="h1" variant="h5">
-            Manage Users
-          </Title>
-          <AddUserModal
-            loggedInUser={loggedInUser}
-            isAdmin={isAdmin}
-            setUsers={setUsers}
-            users={users}
-          />
-          {popup.show && (
-            <DeleteConfirmationModal
-              popup={popup}
-              setPopup={setPopup}
-              deleteUser={handleDeleteUser}
-            />
-          )}
-          {successMessage ? (
-            <Alert
-              onClose={() => {
-                setSuccessMessage(null);
-              }}
-              severity="success"
-              variant="filled"
-            >
-              {successMessage}
-            </Alert>
-          ) : (
-            <></>
-          )}
-          <UserTable allUsers={users} setUsers={setUsers} setPopup={setPopup} />
-        </Paper>
-      </Grid>
-    );
+  if (!loggedInUser && !isAdmin) {
+    return <Navigate to="/signin" />;
   }
-};
+  return (
+    <Grid item xs={12}>
+      <Paper
+        sx={{
+          p: 3,
+          py: 3,
+        }}
+      >
+        <Title component="h1" variant="h5">
+          Manage Users
+        </Title>
+        <AddUserModal
+          loggedInUser={loggedInUser}
+          isAdmin={isAdmin}
+          setUsers={setUsers}
+          users={users}
+        />
+        {popup.show && (
+          <DeleteConfirmationModal
+            popup={popup}
+            setPopup={setPopup}
+            deleteUser={handleDeleteUser}
+          />
+        )}
+        {successMessage ? (
+          <Alert
+            onClose={() => {
+              setSuccessMessage(null);
+            }}
+            severity="success"
+            variant="filled"
+          >
+            {successMessage}
+          </Alert>
+        ) : (
+          <></>
+        )}
+        <UserTable allUsers={users} setUsers={setUsers} setPopup={setPopup} />
+      </Paper>
+    </Grid>
+  );
+}
 
 export default ManageUsers;

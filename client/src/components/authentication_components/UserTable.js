@@ -84,7 +84,7 @@ export default function UserTable({ allUsers, setUsers, setPopup }) {
               <StyledTableCell align="center">{row.firstName}</StyledTableCell>
               <StyledTableCell align="center">{row.lastName}</StyledTableCell>
               <StyledTableCell align="center">
-                {row.admin ? "Sith Lord" : "Rebel Scum"}
+                {row.admin ? "Admin" : "Non-Admin"}
               </StyledTableCell>
               {/* <StyledTableCell align='center'>
                 <EditIcon onClick={() => handleUserEdit(row.username)} />
