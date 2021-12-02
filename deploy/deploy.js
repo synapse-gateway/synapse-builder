@@ -44,12 +44,12 @@ const getInstallationCommand = () => {
 };
 
 const isCopilotInstalled = async () => {
-  console.log("Checking if Copilot is installed...");
+  console.log("  Checking if Copilot is installed...");
   try {
     let { stdout } = await promisifiedExec("copilot -v");
     myEmitter.emit(
       "END_TASK",
-      `Copilot ${stdout.trim().split(": ")[1]} detected`
+      `  Copilot ${stdout.trim().split(": ")[1]} detected`
     );
     return true;
   } catch (e) {
@@ -61,11 +61,11 @@ const installCopilot = async () => {
   let installCmd = getInstallationCommand();
 
   if (!installCmd) {
-    console.log("Operating system not supported.  Aborting...");
+    console.log("  Operating system not supported.  Aborting...");
     return;
   }
 
-  console.log(`Installing AWS Copilot...`);
+  console.log(`  Installing AWS Copilot...`);
 
   try {
     await promisifiedExec(installCmd);
@@ -73,18 +73,39 @@ const installCopilot = async () => {
     console.error(`error: ${e.message}`);
     return;
   }
-  myEmitter.emit("END_TASK", "AWS Copilot installation complete");
+  myEmitter.emit("END_TASK", "  AWS Copilot installation complete");
 };
+
+const nameAndLogo = `
+                .(&&&&&%.               
+            .%&&%.      (&&&,           
+        *%&&/               ,&&&(       
+    *&&%*       ./&&&&&#.       .#&&#   
+  .%%.      .#%%#.     ./%%%,       #%, 
+  .%#    *%%/               *%%%/   *%* 
+  .%#   .%#      *%%%%%(.       .#%%#%*   .d8888b  888  888 88888b.   8888b.  88888b.  .d8888b   .d88b.
+  .##    ,##/(##(.     ./###,       *#,   88K      888  888 888 "88b     "88b 888 "88b 88K      d8P  Y8b
+  .#(       .(##(.     .*##(/##(    *#,   "Y8888b. 888  888 888  888 .d888888 888  888 "Y8888b. 88888888
+  .#####,        *#####(.     ,#*   *#,        X88 Y88b 888 888  888 888  888 888 d88P      X88 Y8b.
+  .#(   ,(##*               ,(#/    *#,    88888P'  "Y88888 888  888 "Y888888 88888P"   88888P'  "Y8888
+  .((       .((((.      *(((.       /(,                 888                   888
+    ,(((,       .*(((((/.       ./((/              Y8b d88P                   888
+        ,(((,               .(((*                   "Y88P"                    888
+            ./((/       *(((.           
+                .*(((((/.               `;
+
+const banner2 = `${" ".repeat(2)}${"=".repeat(102)}
+${" ".repeat(33)}Welcome to Synapse's AWS Deployent Tool!
+${" ".repeat(2)}${"=".repeat(102)}`;
 
 const display = () => {
   clear();
-  console.log(
-    chalk.magenta(
-      figlet.textSync("synapse", { horizontalLayout: "full", font: "Doom" })
-    ) + "\n"
+  console.log(chalk.magenta(nameAndLogo) + "\n");
+  console.log(chalk.magenta(banner2) + "\n");
+  completedTasks.forEach((task) =>
+    console.log(`${chalk.greenBright("  ✔")} ${task}`)
   );
-  completedTasks.forEach((task) => console.log(`${chalk.green("✔")} ${task}`));
-  console.log("");
+  if (completedTasks.length) console.log("");
 };
 
 const run = async () => {
@@ -122,11 +143,11 @@ const run = async () => {
   }
 
   try {
-    console.log(`Initializing Copilot app '${appName}'...`);
+    console.log(`  Initializing Copilot app '${appName}'...`);
     await promisifiedExec(`copilot app init ${appName}`, {
       cwd,
     });
-    myEmitter.emit("END_TASK", `${appName} stack created on AWS`);
+    myEmitter.emit("END_TASK", `  ${appName} stack created on AWS`);
   } catch (e) {
     console.error(e);
     return;
@@ -144,9 +165,9 @@ const run = async () => {
   initCopilot.on("exit", (code) => {
     if (parseInt(code) !== 0)
       console.error(
-        `Error Code ${code}: Failed to initialize copilot environment.`
+        `  Error Code ${code}: Failed to initialize copilot environment.`
       );
-    myEmitter.emit("END_TASK", `Environment successfully initialized`);
+    myEmitter.emit("END_TASK", `  Environment successfully initialized`);
     myEmitter.emit("COPILOT_INITIALIZED");
   });
 
@@ -160,7 +181,7 @@ const run = async () => {
 
   // Initialize Mongo
   myEmitter.on("COPILOT_INITIALIZED", async () => {
-    console.log("Initializing mongodb service...");
+    console.log("  Initializing mongodb service...");
     try {
       let { stdout, stderr } = await promisifiedExec(
         `copilot svc init --name mongo --svc-type "Backend Service" --dockerfile ./mongo/Dockerfile.mongo`,
@@ -170,7 +191,7 @@ const run = async () => {
       );
       console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
-      myEmitter.emit("END_TASK", `Mongo service successfully initialized`);
+      myEmitter.emit("END_TASK", `  Mongo service successfully initialized`);
       myEmitter.emit("MONGO_INITIALIZED");
     } catch (e) {
       console.error(e);
@@ -180,7 +201,7 @@ const run = async () => {
 
   // Deploy mongodb container
   myEmitter.on("MONGO_INITIALIZED", () => {
-    console.log("Deploying mongodb container...");
+    console.log("  Deploying mongodb container...");
     const mongoDeploy = spawn(
       "copilot",
       ["svc", "deploy", "--name", "mongo", "--env", "prod", "--force"],
@@ -189,8 +210,10 @@ const run = async () => {
 
     mongoDeploy.on("exit", (code) => {
       if (parseInt(code) !== 0)
-        console.error(`Error Code ${code}: Failed to deploy mongo container.`);
-      myEmitter.emit("END_TASK", `Mongo container successfully deployed`);
+        console.error(
+          `  Error Code ${code}: Failed to deploy mongo container.`
+        );
+      myEmitter.emit("END_TASK", `  Mongo container successfully deployed`);
       myEmitter.emit("MONGO_DEPLOYED");
     });
 
@@ -205,7 +228,7 @@ const run = async () => {
 
   // Initialize GUI
   myEmitter.on("MONGO_DEPLOYED", async () => {
-    console.log("Initializing GUI service...");
+    console.log("  Initializing GUI service...");
     try {
       let { stdout, stderr } = await promisifiedExec(
         `copilot svc init --name gui --svc-type "Load Balanced Web Service" --dockerfile ./server/Dockerfile.gui`,
@@ -215,7 +238,7 @@ const run = async () => {
       );
       console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
-      myEmitter.emit("END_TASK", `GUI service successfully initialized`);
+      myEmitter.emit("END_TASK", `  GUI service successfully initialized`);
       myEmitter.emit("GUI_INITIALIZED");
     } catch (e) {
       console.error(e);
@@ -226,7 +249,7 @@ const run = async () => {
   // Deploy GUI
   // TODO: Gonna have to get GraphQL URL Endpoint
   myEmitter.on("GUI_INITIALIZED", () => {
-    console.log("Deploying GUI container...");
+    console.log("  Deploying GUI container...");
     const deployGUI = spawn(
       "copilot",
       ["svc", "deploy", "--name", "gui", "--env", "prod", "--force"],
@@ -235,37 +258,25 @@ const run = async () => {
 
     deployGUI.on("exit", (code) => {
       if (parseInt(code) !== 0) {
-        console.error(`Error Code ${code}: Failed to deploy GUI container.`);
+        console.error(`  Error Code ${code}: Failed to deploy GUI container.`);
       } else {
-        myEmitter.emit("END_TASK", `GUI container successfully deployed`);
+        myEmitter.emit("END_TASK", `  GUI container successfully deployed`);
         myEmitter.emit("GUI_DEPLOYED");
       }
     });
 
     deployGUI.stdout.on("data", (s) => {
-      if (s.toString().includes("- You can access your service at ")) {
-        synapseURL = s
-          .toString()
-          .split("- You can access your service at ")[1]
-          .split(" over the internet.")[0];
-      }
       process.stdout.write(s);
     });
 
     deployGUI.stderr.on("data", (s) => {
-      if (s.toString().includes("- You can access your service at ")) {
-        synapseURL = s
-          .toString()
-          .split("- You can access your service at ")[1]
-          .split(" over the internet.")[0];
-      }
       process.stdout.write(s);
     });
   });
 
   // Initialize Apollo
   myEmitter.on("GUI_DEPLOYED", async () => {
-    console.log("Initializing GraphQL service...");
+    console.log("  Initializing GraphQL service...");
 
     try {
       let { stdout, stderr } = await promisifiedExec(
@@ -276,7 +287,7 @@ const run = async () => {
       );
       console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
-      myEmitter.emit("END_TASK", `GraphQL service successfully initialized`);
+      myEmitter.emit("END_TASK", `  GraphQL service successfully initialized`);
       myEmitter.emit("APOLLO_INITIALIZED");
     } catch (e) {
       console.error(e);
@@ -286,7 +297,7 @@ const run = async () => {
 
   // Deploy Apollo
   myEmitter.on("APOLLO_INITIALIZED", () => {
-    console.log("Deploying GraphQL container...");
+    console.log("  Deploying GraphQL container...");
     const deployApollo = spawn(
       "copilot",
       ["svc", "deploy", "--name", "apollo", "--env", "prod", "--force"],
@@ -296,10 +307,10 @@ const run = async () => {
     deployApollo.on("exit", (code) => {
       if (parseInt(code) !== 0) {
         console.error(
-          `Error Code ${code}: Failed to deploy GraphQL container.`
+          `  Error Code ${code}: Failed to deploy GraphQL container.`
         );
       } else {
-        myEmitter.emit("END_TASK", `GraphQL container successfully deployed`);
+        myEmitter.emit("END_TASK", `  GraphQL container successfully deployed`);
         myEmitter.emit("APOLLO_DEPLOYED");
       }
     });
@@ -313,11 +324,30 @@ const run = async () => {
     });
   });
 
-  myEmitter.on("APOLLO_DEPLOYED", () =>
-    console.log(
-      chalk.green(`Your Synapse Dashboard is available at: ${synapseURL}`)
-    )
-  );
+  myEmitter.on("APOLLO_DEPLOYED", async () => {
+    try {
+      let { stdout, stderr } = await promisifiedExec(
+        `copilot svc show --name gui`,
+        {
+          cwd,
+        }
+      );
+
+      let synapseURL;
+      let stdoutLookup = stdout.match(/http\:\/\/.+\.com/);
+      let stderrLookup = stderr.match(/http\:\/\/.+\.com/);
+
+      if (stdoutLookup) synapseURL = stdoutLookup[0];
+      if (stderrLookup) synapseURL = stderrLookup[0];
+
+      console.log(synapseURL);
+
+      myEmitter.emit("END_TASK");
+    } catch (e) {
+      console.error(`  Your Synapse Dashboard is available at: ${synapseURL}`);
+      return;
+    }
+  });
 };
 
 run();
