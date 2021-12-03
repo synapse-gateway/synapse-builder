@@ -55,7 +55,7 @@ app.use("/api", routes);
 
 const PORT = 4005;
 app.listen(PORT, async () => {
-  let hasAdmin = await User.exists({ admin: true });
+  let hasAdmin = await User.exists({ root: true });
   if (!hasAdmin) {
     const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
     try {
@@ -65,6 +65,7 @@ app.listen(PORT, async () => {
         username: process.env.ADMIN_USERNAME,
         password: hashedPassword,
         admin: true,
+        root: true
       });
       console.log("Root user successfully created");
     } catch (err) {

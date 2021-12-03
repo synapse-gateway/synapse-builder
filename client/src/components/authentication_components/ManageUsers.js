@@ -12,7 +12,7 @@ import { Alert } from "@mui/material";
 
 import DeleteConfirmationModal from "./DeleteConfirmatonModal";
 
-const ManageUsers = ({ loggedInUser, isAdmin }) => {
+const ManageUsers = ({ loggedInUser, isAdmin, username }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ const ManageUsers = ({ loggedInUser, isAdmin }) => {
   });
   useEffect(() => {
     if (loggedInUser && isAdmin) {
-      apiClient.getAllUsers().then((response) => setUsers(response));
+      apiClient.getAllUsers().then((response) => setUsers(response.filter(u => u.root !== true && u.username !== username)));
     }
   }, []);
 

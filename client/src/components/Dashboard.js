@@ -75,6 +75,7 @@ const Dashboard = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState("");
+  const [isRoot, setIsRoot] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -84,6 +85,7 @@ const Dashboard = () => {
     if (loggedInUser) {
       setLoggedInUser(null);
       setIsAdmin(false);
+      setIsRoot(false);
     }
   };
   return (
@@ -114,7 +116,7 @@ const Dashboard = () => {
             {/* Notifications */}
             <IconButton color="inherit" onClick={toggleLoggedIn}>
               {loggedInUser ? (
-                <Typography>Hi {username} | Logout</Typography>
+                <Typography>Hi {username} {isRoot ? "(Root User)" : ""} | Logout</Typography>
               ) : (
                 ""
               )}
@@ -160,16 +162,17 @@ const Dashboard = () => {
                   path="/datasources"
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
-                {/* <Route
+                <Route
                   path="/manageusers"
                   element={
                     <ManageUsers
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
                       isAdmin={isAdmin}
+                      username={username}
                     />
                   }
-                /> */}
+                />
                 <Route
                   path="/createuser"
                   element={
@@ -188,6 +191,7 @@ const Dashboard = () => {
                       setIsAdmin={setIsAdmin}
                       setLoggedInUser={setLoggedInUser}
                       loggedInUser={loggedInUser}
+                      setIsRoot={setIsRoot}
                     />
                   }
                 />

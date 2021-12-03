@@ -42,6 +42,7 @@ export default function SignIn({
   setLoggedInUser,
   setIsAdmin,
   setUsername,
+  setIsRoot
 }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -60,6 +61,7 @@ export default function SignIn({
     } else {
       setLoggedInUser(responseData.token);
       setIsAdmin(responseData.admin);
+      setIsRoot(responseData.root);
       setUsername(responseData.username);
     }
   };

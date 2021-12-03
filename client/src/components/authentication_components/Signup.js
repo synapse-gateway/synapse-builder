@@ -15,7 +15,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import apiClient from "../../lib/apiClient";
 import { Navigate } from "react-router-dom";
-import { Alert } from "@mui/material";
+import { Alert, Tooltip } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -180,27 +180,31 @@ export default function SignUp({
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        value={makeAdmin}
-                        checked={makeAdmin}
-                        onChange={() => setMakeAdmin(!makeAdmin)}
-                        color='primary'
-                      />
-                    }
-                    label='Make user an admin'
-                  />
+                  <Tooltip disableFocusListener disableTouchListener title="Admin users are able to manage/delete other users">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          value={makeAdmin}
+                          checked={makeAdmin}
+                          onChange={() => setMakeAdmin(!makeAdmin)}
+                          color='primary'
+                        />
+                      }
+                      label='Make user an admin'
+                    />
+                  </Tooltip>
                 </Grid>
               </Grid>
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign Up
-              </Button>
+              <Tooltip disableFocusListener disableTouchListener title="Create user">
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+              </Tooltip>
             </Box>
           </Box>
           <Copyright sx={{ mt: 5 }} />

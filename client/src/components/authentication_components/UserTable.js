@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import apiClient from "../../lib/apiClient";
 import { useEffect, useState } from "react";
+import { Tooltip } from "@mui/material"
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -90,10 +91,12 @@ export default function UserTable({ allUsers, setUsers, setPopup }) {
                 <EditIcon onClick={() => handleUserEdit(row.username)} />
               </StyledTableCell> */}
               <StyledTableCell align="center">
+              <Tooltip disableFocusListener disableTouchListener title="Delete user">
                 <DeleteIcon
                   sx={{ cursor: "pointer" }}
                   onClick={() => setPopup({ show: true, user: row.username })}
                 />
+              </Tooltip>
               </StyledTableCell>
             </StyledTableRow>
           ))}

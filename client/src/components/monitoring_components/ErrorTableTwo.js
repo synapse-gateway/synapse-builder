@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import FilledInput from '@mui/material/FilledInput';
 import Box from '@mui/material/Box';
 import { Navigate } from "react-router-dom";
+import { Grid, Paper, Typography, Tooltip } from '@mui/material'
+import Title from '../Title'
 import {
   useTable,
   useResizeColumns,
@@ -109,7 +111,7 @@ const ErrorTable = ({loggedInUser}) => {
         errStrings: err.errs.map((e) => e.message).join(', '),
         sourceQuery: err.sourceQuery
       }
-    }).reverse()
+    })
     setErrorData(errorDataPulled)
   }, [])
 
@@ -124,7 +126,7 @@ const ErrorTable = ({loggedInUser}) => {
         errStrings: err.errs.map((e) => e.message).join(', '),
         sourceQuery: err.sourceQuery
       }
-    }).reverse()
+    })
     setErrorData(filteredErrorsPulled)
   }
 
@@ -147,16 +149,53 @@ const ErrorTable = ({loggedInUser}) => {
   // ]
   if (loggedInUser) {
     return (
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', margin: '20px' }}>
-        <FormControl>
-          <FilledInput name={'hours'} margin='dense' value={hours} onChange={(e) => setHours(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} endAdornment={<InputAdornment position='end'>hours ago</InputAdornment>}/>
-          <FormHelperText id="hours-since-helper-text">Filter Errors By Hours Since</FormHelperText>
-        </FormControl>
-        <Button variant='contained' onClick={filterByHours}>Filter by hour range</Button>
-        <Styles>
-          <Table columns={columns} data={errorData} />
-        </Styles>
-      </Box>
+      <Grid item xs={12}>
+        <Paper
+          sx={{
+            p: 3,
+            py: 3,
+          }}
+        >
+          <Title>Error Data</Title>
+          <Typography component="h4" variant="h9" color="black" gutterBottom>
+            You can adjust the column size by moving the blue sliders on the table.
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', margin: '20px' }}>
+            <Styles>
+              <Table columns={columns} data={errorData} />
+            </Styles>
+            <Title>Filter your error data by hour range:</Title>
+            <Typography component="h4" variant="h9" color="black" gutterBottom>
+              Type in the amount of hours back you would like to see error data from and press submit. The default is 24 hours.
+            </Typography>
+            <Box
+              component="form"
+              sx={{
+                p: 1,
+                py: 1,
+                margin: 'auto'
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <FormControl>
+                <FilledInput fullWidth={false} name={'hours'} margin='dense' value={hours} onChange={(e) => setHours(e.target.value)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} endAdornment={<InputAdornment position='end'>hours ago</InputAdornment>}/>
+                {/* <FormHelperText id="hours-since-helper-text"> </FormHelperText> */}
+              </FormControl>
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                margin: 'auto'
+              }}
+            > 
+              <Tooltip disableFocusListener disableTouchListener title="Filter error data to include data in specified time range">
+                <Button variant='contained' onClick={filterByHours}>Submit</Button>
+              </Tooltip>
+            </Box>
+          </Box>
+        </Paper>
+      </Grid>
     )
   } else {
     return <Navigate to="/signin" />

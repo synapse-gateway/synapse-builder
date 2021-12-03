@@ -15,6 +15,10 @@ const UserSchema = new Schema({
   firstName: String,
   lastName: String,
   admin: Boolean,
+  root: {
+    type: Boolean,
+    default: false
+  }
 }, {timestamps: true})
 
 const User = mongoose.model("user", UserSchema)

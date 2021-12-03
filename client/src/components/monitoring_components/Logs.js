@@ -45,8 +45,8 @@ export default function Logs({ data }) {
             <TableCell>Date</TableCell>
             <TableCell>Root Fields</TableCell>
             <TableCell>Latency</TableCell>
-            <TableCell>IP Address</TableCell>
-            <TableCell>Status</TableCell>
+            {/* <TableCell>IP Address</TableCell>
+            <TableCell>Status</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -64,8 +64,8 @@ export default function Logs({ data }) {
                   latency={row.latency}
                 />
               </TableCell>
-              <TableCell>{"placeholder"}</TableCell>
-              <TableCell>{"placeholder"}</TableCell>
+              {/* <TableCell>{"placeholder"}</TableCell>
+              <TableCell>{"placeholder"}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>

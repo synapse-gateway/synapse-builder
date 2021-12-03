@@ -108,6 +108,7 @@ router.post("/users/login", async (req, res) => {
     if (await bcrypt.compare(req.body.password, user.password)) {
       res.status(201).json({
         admin: user.admin,
+        root: user.root || false,
         username: user.username,
         token: jsonwebtoken.sign(
           { user: user._id },
