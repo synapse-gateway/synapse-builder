@@ -8,6 +8,7 @@ import OpenAPI from "./handler_form_components/OpenAPI";
 import Postgres from "./handler_form_components/Postgres";
 import Mongoose from "./handler_form_components/Mongoose";
 import JSONSchema from "./handler_form_components/JSONSchema";
+import ToolTip from "@mui/material/Tooltip"
 
 const style = {
   position: "absolute",
@@ -76,9 +77,11 @@ export default function BasicModal({ handlerName, sourceList, setSourceList }) {
 
   return (
     <div>
-      <Button onClick={handleOpen} variant='contained'>
-        Add
-      </Button>
+      <ToolTip disableFocusListener disableTouchListener title="Once clicked you will be prompted to input some information about your data source.">
+        <Button onClick={handleOpen} variant='contained'>
+          Add
+        </Button>
+      </ToolTip>
       <Modal
         open={open}
         onClose={handleClose}

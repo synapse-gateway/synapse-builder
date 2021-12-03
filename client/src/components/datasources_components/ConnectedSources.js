@@ -11,6 +11,7 @@ import apiClient from "../../lib/apiClient";
 import { useState } from "react";
 import { Alert } from "@mui/material";
 import { CircularProgress } from '@mui/material';
+import ToolTip from '@mui/material/Tooltip'
 
 
 const DeleteSourceButton = ({
@@ -27,13 +28,17 @@ const DeleteSourceButton = ({
   };
   return (
     <>
-      <Button
-        sourceList={sourcelist}
-        sourceName={sourcename}
-        onClick={handleSourceDelete}
-      >
-        🗑
-      </Button>
+      <ToolTip disableFocusListener disableTouchListener title="Delete a source">
+        <Button
+          sourceList={sourcelist}
+          sourceName={sourcename}
+          onClick={handleSourceDelete}
+        >
+
+          🗑
+          
+        </Button>
+      </ToolTip>
     </>
   );
 };
@@ -146,13 +151,15 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
           ))}
         </TableBody>
       </Table>
-      <Button
-        sx={{ width: "40%", mt: 2 }}
-        variant='contained'
-        onClick={handleSubmit}
-      >
-        Create Your Synapse
-      </Button>
+      <ToolTip disableFocusListener disableTouchListener title="Configures and build your GraphQL Gateway">
+        <Button
+          sx={{ width: "40%", mt: 2 }}
+          variant='contained'
+          onClick={handleSubmit}
+        >
+          Create Your Synapse
+        </Button>
+      </ToolTip>
       {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         See more...
       </Link> */}
