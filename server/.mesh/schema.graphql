@@ -4,34 +4,17 @@ schema {
 
 type Query {
   """
-  retrieves all books
+  get all them authors
   
-  Equivalent to GET /books
+  Equivalent to GET /authors
   """
-  getBooks(
+  getAuthors(
     """Auto-generated argument that limits the size of returned list of objects/list, selecting the first `n` elements of the list"""
     limit: Int
-  ): [BooksListItem]
-  """
-  retrieve individual Book
-  
-  Equivalent to GET /books/{id}
-  """
-  getBooksId(id: String!): Book
+  ): [AuthorsListItem]
 }
 
-type BooksListItem {
-  authorId: Float
-  genre: String
+type AuthorsListItem {
+  author: String
   id: Float
-  name: String
-  yearPublished: Float
-}
-
-type Book {
-  authorId: Float
-  genre: String
-  id: Float
-  name: String
-  yearPublished: Float
 }

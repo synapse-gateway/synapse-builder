@@ -10,6 +10,8 @@ import { Button } from "@mui/material";
 import apiClient from "../../lib/apiClient";
 import { useState } from "react";
 import { Alert } from "@mui/material";
+import { CircularProgress } from '@mui/material';
+
 
 const DeleteSourceButton = ({
   sourcelist,
@@ -39,6 +41,8 @@ const DeleteSourceButton = ({
 const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [creatingSynapse, setCreatingSynapse] = useState(null);
+  
 
   const sources = sourceList;
 
@@ -53,11 +57,14 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
   };
 
   const handleSubmit = async () => {
+    setCreatingSynapse('Creating your Synapse.... This may take some time...')
     let response = await apiClient.createConfig(loggedInUser, sources);
     if (response === 200) {
+      setCreatingSynapse(null)
       setSuccessMessage("Synapse-mesh has been successfully created!");
       handleAlertTimeout("success");
     } else {
+      setCreatingSynapse(null)
       setErrorMessage("Failed to create your Synapse-mesh");
       handleAlertTimeout();
     }
@@ -90,6 +97,23 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
         >
           {errorMessage}
         </Alert>
+      ) : (
+        <></>
+      )}
+      {creatingSynapse ? (
+        <Alert
+        sx={{ mb: 2 }}
+        severity='info'
+        variant='filled'
+        onClose={() => {
+          setCreatingSynapse(null);
+        }}
+      >
+        
+        {creatingSynapse}
+        <CircularProgress size={15}/>
+        
+      </Alert>
       ) : (
         <></>
       )}

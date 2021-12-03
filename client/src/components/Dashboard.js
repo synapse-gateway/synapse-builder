@@ -156,11 +156,11 @@ const Dashboard = () => {
                   path="/"
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
-                {/* <Route
+                <Route
                   path="/datasources"
                   element={<DataSources loggedInUser={loggedInUser} />}
-                /> */}
-                <Route
+                />
+                {/* <Route
                   path="/manageusers"
                   element={
                     <ManageUsers
@@ -169,7 +169,7 @@ const Dashboard = () => {
                       isAdmin={isAdmin}
                     />
                   }
-                />
+                /> */}
                 <Route
                   path="/createuser"
                   element={

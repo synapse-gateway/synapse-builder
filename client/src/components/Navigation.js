@@ -38,7 +38,7 @@ export const SidebarMainList = ({ isAdmin }) => {
           <ListItemText primary="Dashboard" />
         </ListItemButton>
       </Link>
-      {/* <Link style={linkStyle} to={`/${paths.datasources}`}>
+      <Link style={linkStyle} to={`/${paths.datasources}`}>
         <ListItemButton
           selected={location.pathname === `/${paths.datasources}`}
         >
@@ -47,7 +47,7 @@ export const SidebarMainList = ({ isAdmin }) => {
           </ListItemIcon>
           <ListItemText primary="Data Sources" />
         </ListItemButton>
-      </Link> */}
+      </Link>
       <Link style={linkStyle} to={`/${paths.errors}`}>
         <ListItemButton selected={location.pathname === `/${paths.errors}`}>
           <ListItemIcon>
@@ -56,7 +56,7 @@ export const SidebarMainList = ({ isAdmin }) => {
           <ListItemText primary="Errors" />
         </ListItemButton>
       </Link>
-      {isAdmin ? (
+      {/* {isAdmin ? (
         <Link style={linkStyle} to={`/${paths.manageusers}`}>
           <ListItemButton
             selected={location.pathname === `/${paths.manageusers}`}
@@ -67,7 +67,7 @@ export const SidebarMainList = ({ isAdmin }) => {
             <ListItemText primary="Manage Users" />
           </ListItemButton>
         </Link>
-      ) : null}
+      ) : null} */}
       {/* <a style={linkStyle} href={`http://localhost:6868`} target="_blank">
         <ListItemButton selected={location.pathname === `/${paths.graphiql}`}>
           <ListItemIcon>
