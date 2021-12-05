@@ -22,7 +22,7 @@ import ManageUsers from "./authentication_components/ManageUsers";
 import Documentation from "./documentation_components/Documentation";
 import { Navigate } from "react-router-dom";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -116,7 +116,9 @@ const Dashboard = () => {
             {/* Notifications */}
             <IconButton color="inherit" onClick={toggleLoggedIn}>
               {loggedInUser ? (
-                <Typography>Hi {username} {isRoot ? "(Root User)" : ""} | Logout</Typography>
+                <Typography>
+                  Hi {username} {isRoot ? "(Root User)" : ""} | Logout
+                </Typography>
               ) : (
                 ""
               )}
@@ -200,10 +202,7 @@ const Dashboard = () => {
                   path="/errors"
                   element={<ErrorTableTwo loggedInUser={loggedInUser} />}
                 />
-                <Route
-                  path="*"
-                  element={<Navigate to="/signin" />}
-                />
+                <Route path="*" element={<Navigate to="/signin" />} />
               </Routes>
             </Grid>
           </Container>

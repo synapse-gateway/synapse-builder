@@ -6,13 +6,13 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../Title";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Button } from "@mui/material";
 import apiClient from "../../lib/apiClient";
 import { useState } from "react";
 import { Alert } from "@mui/material";
-import { CircularProgress } from '@mui/material';
-import ToolTip from '@mui/material/Tooltip'
-
+import { CircularProgress } from "@mui/material";
+import ToolTip from "@mui/material/Tooltip";
 
 const DeleteSourceButton = ({
   sourcelist,
@@ -28,16 +28,17 @@ const DeleteSourceButton = ({
   };
   return (
     <>
-      <ToolTip disableFocusListener disableTouchListener title="Delete a source">
-        <Button
+      <ToolTip
+        disableFocusListener
+        disableTouchListener
+        title="Delete a source"
+      >
+        <DeleteIcon
+          sx={{ cursor: "pointer" }}
           sourceList={sourcelist}
           sourceName={sourcename}
           onClick={handleSourceDelete}
-        >
-
-          🗑
-          
-        </Button>
+        />
       </ToolTip>
     </>
   );
@@ -47,7 +48,6 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [creatingSynapse, setCreatingSynapse] = useState(null);
-  
 
   const sources = sourceList;
 
@@ -62,14 +62,14 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
   };
 
   const handleSubmit = async () => {
-    setCreatingSynapse('Creating your Synapse.... This may take some time...')
+    setCreatingSynapse("Creating your Synapse.... This may take some time...");
     let response = await apiClient.createConfig(loggedInUser, sources);
     if (response === 200) {
-      setCreatingSynapse(null)
+      setCreatingSynapse(null);
       setSuccessMessage("Synapse-mesh has been successfully created!");
       handleAlertTimeout("success");
     } else {
-      setCreatingSynapse(null)
+      setCreatingSynapse(null);
       setErrorMessage("Failed to create your Synapse-mesh");
       handleAlertTimeout();
     }
@@ -83,8 +83,8 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
           onClose={() => {
             setSuccessMessage(null);
           }}
-          severity='success'
-          variant='filled'
+          severity="success"
+          variant="filled"
         >
           {successMessage}
         </Alert>
@@ -94,8 +94,8 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
       {errorMessage ? (
         <Alert
           sx={{ mb: 2 }}
-          severity='error'
-          variant='filled'
+          severity="error"
+          variant="filled"
           onClose={() => {
             setErrorMessage(null);
           }}
@@ -107,30 +107,28 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
       )}
       {creatingSynapse ? (
         <Alert
-        sx={{ mb: 2 }}
-        severity='info'
-        variant='filled'
-        onClose={() => {
-          setCreatingSynapse(null);
-        }}
-      >
-        
-        {creatingSynapse}
-        <CircularProgress size={15}/>
-        
-      </Alert>
+          sx={{ mb: 2 }}
+          severity="info"
+          variant="filled"
+          onClose={() => {
+            setCreatingSynapse(null);
+          }}
+        >
+          {creatingSynapse}
+          <CircularProgress size={15} />
+        </Alert>
       ) : (
         <></>
       )}
       <Title>Your connected data sources</Title>
-      <Table size='small'>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Source Name</TableCell>
             <TableCell>Connector Type</TableCell>
-            <TableCell align='center'>Status</TableCell>
+            <TableCell align="center">Status</TableCell>
             <TableCell>Created date</TableCell>
-            <TableCell align='center'>Actions</TableCell>
+            <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -138,9 +136,9 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
             <TableRow key={source.id}>
               <TableCell>{source.name}</TableCell>
               <TableCell>{source.handler}</TableCell>
-              <TableCell align='center'>✓</TableCell>
+              <TableCell align="center">✓</TableCell>
               <TableCell>{source.created}</TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <DeleteSourceButton
                   sourcelist={sourceList}
                   setSourceList={setSourceList}
@@ -151,10 +149,14 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
           ))}
         </TableBody>
       </Table>
-      <ToolTip disableFocusListener disableTouchListener title="Configures and build your GraphQL Gateway">
+      <ToolTip
+        disableFocusListener
+        disableTouchListener
+        title="Configures and build your GraphQL Gateway"
+      >
         <Button
-          sx={{ width: "40%", mt: 2 }}
-          variant='contained'
+          sx={{ width: "40%", mt: 2, margin: "auto" }}
+          variant="contained"
           onClick={handleSubmit}
         >
           Create Your Synapse
