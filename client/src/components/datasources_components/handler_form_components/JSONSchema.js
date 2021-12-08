@@ -18,6 +18,7 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
 
   const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
   const [urlBtnDisabled, setUrlBtnDisabled] = useState(true);
+  const [fileBtnDisabled, setFileBtnDisabled] = useState(true);
 
   const createTimeStamp = () => {
     var options = {
@@ -68,6 +69,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
     setOperationResponseSchemaFile(null);
   };
 
+  const nameError = name === "";
+  const sourceError = url === "";
+
   return (
     <div>
       <div>
@@ -79,9 +83,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-name'
           name='json-schema-name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={nameError ? "You must provide a Source name." : null}
         />
 
         <TextField
@@ -92,9 +100,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-url'
           name='url'
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            setUrlBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={sourceError ? "You must provide a Source URL." : null}
         />
       </div>
 
@@ -120,6 +132,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setOperationType(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={
+            !operationType ? "You must provide an operation type." : null
+          }
         />
 
         <TextField
@@ -133,6 +148,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setOperationField(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={
+            !operationField ? "You must provide an operation field." : null
+          }
         />
 
         <TextField
@@ -146,6 +164,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setOperationPath(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={
+            !operationPath ? "You must provide an operation path." : null
+          }
         />
 
         <TextField
@@ -159,6 +180,9 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           onChange={(e) => setOperationMethod(e.target.value)}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={
+            !operationMethod ? "You must provide an operation method." : null
+          }
         />
 
         {/* <TextField
@@ -177,6 +201,7 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
         <DragDrop
           setFile={setOperationResponseSchemaFile}
           fileTypes={fileTypes}
+          setFileBtnDisabled={setFileBtnDisabled}
         />
 
         <Button
@@ -188,7 +213,12 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
+      <Button
+        variant='contained'
+        disabled={nameBtnDisabled || urlBtnDisabled || fileBtnDisabled}
+        onClick={handleCreateClick}
+        sx={{ mb: 2 }}
+      >
         Create
       </Button>
     </div>

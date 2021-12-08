@@ -1,5 +1,5 @@
 sources:
-  - name: AuthorService
+  - name: hoth
     handler:
-      openapi:
-        source: ./openapi-schemas/AuthorService-schema.yaml
+      graphql:
+        endpoint: http://uuu
