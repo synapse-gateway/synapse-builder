@@ -1,0 +1,51 @@
+{
+  "name": "synapse",
+  "description": "synapse command alias",
+  "version": "0.0.0",
+  "author": " @gudsson",
+  "bin": {
+    "synapse": "./bin/run"
+  },
+  "bugs": "https://github.com/gudsson/synapse/issues",
+  "dependencies": {
+    "@oclif/command": "^1.8.9",
+    "@oclif/config": "^1.18.2",
+    "@oclif/plugin-help": "^3.2.14"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.26.8",
+    "eslint": "^7.32.0",
+    "eslint-config-oclif": "^3.1.2",
+    "globby": "^10.0.2"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "files": [
+    "/bin",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json",
+    "/src"
+  ],
+  "homepage": "https://github.com/gudsson/synapse",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "oclif": {
+    "commands": "./src/commands",
+    "bin": "synapse",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "gudsson/synapse",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "eslint .",
+    "prepack": "oclif-dev manifest && oclif-dev readme && oclif-dev manifest && oclif-dev readme",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
+  }
+}
