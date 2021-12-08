@@ -16,7 +16,7 @@ async function main() {
   let queryConn;
   try {
     if (process.env.PRODUCTION === "false") {
-      mongourl = "mongodb://localhost:27017/synapse";
+      mongourl = "mongodb://mongodb:27017/synapse";
     }
     queryConn = await mongoose.createConnection(mongourl);
   } catch (err) {
