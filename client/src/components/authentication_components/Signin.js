@@ -17,7 +17,7 @@ import { Navigate } from "react-router-dom";
 import apiClient from "../../lib/apiClient";
 import { Alert } from "@mui/material";
 import theme from "../theme";
-
+import Logo from "../../images/synapse_logo_primary.svg";
 function Copyright(props) {
   return (
     <Typography
@@ -87,12 +87,14 @@ export default function SignIn({
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <img src={Logo} />
+
+            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component='h1' variant='h5'>
               Sign in
-            </Typography>
+            </Typography> */}
             <Box
               component='form'
               onSubmit={handleSubmit}
