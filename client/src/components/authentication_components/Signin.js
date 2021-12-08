@@ -16,17 +16,18 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Navigate } from "react-router-dom";
 import apiClient from "../../lib/apiClient";
 import { Alert } from "@mui/material";
+import theme from "../theme";
 
 function Copyright(props) {
   return (
     <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
+      variant='body2'
+      color='text.secondary'
+      align='center'
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color='inherit' href='https://mui.com/'>
         Synapse
       </Link>{" "}
       {new Date().getFullYear()}
@@ -35,14 +36,12 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
-
 export default function SignIn({
   loggedInUser,
   setLoggedInUser,
   setIsAdmin,
   setUsername,
-  setIsRoot
+  setIsRoot,
 }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -67,14 +66,14 @@ export default function SignIn({
   };
 
   if (loggedInUser) {
-    return <Navigate to="/" />;
+    return <Navigate to='/' />;
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
+        <Container component='main' maxWidth='xs'>
           <CssBaseline />
           {errorMessage ? (
-            <Alert severity="error" variant="filled">
+            <Alert severity='error' variant='filled'>
               {errorMessage}
             </Alert>
           ) : (
@@ -91,43 +90,43 @@ export default function SignIn({
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component='h1' variant='h5'>
               Sign in
             </Typography>
             <Box
-              component="form"
+              component='form'
               onSubmit={handleSubmit}
               noValidate
               sx={{ mt: 1 }}
             >
               <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
+                id='username'
+                label='Username'
+                name='username'
+                autoComplete='username'
                 autoFocus
               />
               <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='current-password'
               />
               {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
               <Button
-                type="submit"
+                type='submit'
                 fullWidth
-                variant="contained"
+                variant='contained'
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In

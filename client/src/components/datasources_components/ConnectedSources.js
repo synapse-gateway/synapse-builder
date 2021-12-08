@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Alert } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import ToolTip from "@mui/material/Tooltip";
+import CheckIcon from "@mui/icons-material/Check";
 
 const DeleteSourceButton = ({
   sourcelist,
@@ -31,10 +32,10 @@ const DeleteSourceButton = ({
       <ToolTip
         disableFocusListener
         disableTouchListener
-        title="Delete a source"
+        title='Delete a source'
       >
         <DeleteIcon
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer", color: "#E4017D" }}
           sourceList={sourcelist}
           sourceName={sourcename}
           onClick={handleSourceDelete}
@@ -83,8 +84,8 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
           onClose={() => {
             setSuccessMessage(null);
           }}
-          severity="success"
-          variant="filled"
+          severity='success'
+          variant='filled'
         >
           {successMessage}
         </Alert>
@@ -94,8 +95,8 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
       {errorMessage ? (
         <Alert
           sx={{ mb: 2 }}
-          severity="error"
-          variant="filled"
+          severity='error'
+          variant='filled'
           onClose={() => {
             setErrorMessage(null);
           }}
@@ -108,8 +109,8 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
       {creatingSynapse ? (
         <Alert
           sx={{ mb: 2 }}
-          severity="info"
-          variant="filled"
+          severity='secondary'
+          variant='filled'
           onClose={() => {
             setCreatingSynapse(null);
           }}
@@ -121,14 +122,14 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
         <></>
       )}
       <Title>Your connected data sources</Title>
-      <Table size="small">
+      <Table size='small' sx={{ mb: 2 }}>
         <TableHead>
           <TableRow>
             <TableCell>Source Name</TableCell>
             <TableCell>Connector Type</TableCell>
-            <TableCell align="center">Status</TableCell>
+            <TableCell align='center'>Status</TableCell>
             <TableCell>Created date</TableCell>
-            <TableCell align="center">Actions</TableCell>
+            <TableCell align='center'>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -136,9 +137,11 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
             <TableRow key={source.id}>
               <TableCell>{source.name}</TableCell>
               <TableCell>{source.handler}</TableCell>
-              <TableCell align="center">✓</TableCell>
+              <TableCell align='center'>
+                <CheckIcon sx={{ color: "#0A0188" }} />
+              </TableCell>
               <TableCell>{source.created}</TableCell>
-              <TableCell align="center">
+              <TableCell align='center'>
                 <DeleteSourceButton
                   sourcelist={sourceList}
                   setSourceList={setSourceList}
@@ -152,11 +155,16 @@ const ConnectedSources = ({ loggedInUser, sourceList, setSourceList }) => {
       <ToolTip
         disableFocusListener
         disableTouchListener
-        title="Configures and build your GraphQL Gateway"
+        title='Configures and build your GraphQL Gateway'
       >
         <Button
-          sx={{ width: "40%", mt: 2, margin: "auto" }}
-          variant="contained"
+          sx={{
+            width: "40%",
+            margin: "auto",
+            // backgroundColor: "#FFBD3A",
+            // color: "#0A0188",
+          }}
+          variant='contained'
           onClick={handleSubmit}
         >
           Create Your Synapse

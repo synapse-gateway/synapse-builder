@@ -21,6 +21,15 @@ import MenuButton from "./navbar-left/MenuButton";
 import ManageUsers from "./authentication_components/ManageUsers";
 import Documentation from "./documentation_components/Documentation";
 import { Navigate } from "react-router-dom";
+import theme from "../components/theme";
+import Logo from "../images/synapselogosmall.svg";
+import { autocompleteClasses } from "@mui/material";
+
+const imageStyle = {
+  height: "70px",
+  paddingTop: "12px",
+  // alignSelf: "center",
+};
 
 const drawerWidth = 280;
 
@@ -89,32 +98,33 @@ const Dashboard = () => {
     }
   };
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={!!loggedInUser && open}>
+        <AppBar position='absolute' open={!!loggedInUser && open}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
+              alignItems: "center",
             }}
           >
             {loggedInUser ? (
               <MenuButton toggleDrawer={toggleDrawer} open={open} />
             ) : null}
-
+            <img src={Logo} style={imageStyle} />
             {/* GUI Title */}
             <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
+              component='h1'
+              variant='h6'
+              color='inherit'
               noWrap
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, pl: 2 }}
             >
               Synapse Gateway Manager
             </Typography>
 
             {/* Notifications */}
-            <IconButton color="inherit" onClick={toggleLoggedIn}>
+            <IconButton color='inherit' onClick={toggleLoggedIn}>
               {loggedInUser ? (
                 <Typography>
                   Hi {username} {isRoot ? "(Root User)" : ""} | Logout
@@ -140,7 +150,7 @@ const Dashboard = () => {
 
         {/* Main Content Area */}
         <Box
-          component="main"
+          component='main'
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
@@ -152,20 +162,20 @@ const Dashboard = () => {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Features */}
               <Routes>
                 <Route
-                  path="/"
+                  path='/'
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path="/datasources"
+                  path='/datasources'
                   element={<DataSources loggedInUser={loggedInUser} />}
                 />
                 <Route
-                  path="/manageusers"
+                  path='/manageusers'
                   element={
                     <ManageUsers
                       setLoggedInUser={setLoggedInUser}
@@ -176,7 +186,7 @@ const Dashboard = () => {
                   }
                 />
                 <Route
-                  path="/createuser"
+                  path='/createuser'
                   element={
                     <SignUp
                       setLoggedInUser={setLoggedInUser}
@@ -186,7 +196,7 @@ const Dashboard = () => {
                   }
                 />
                 <Route
-                  path="/signin"
+                  path='/signin'
                   element={
                     <SignIn
                       setUsername={setUsername}
@@ -197,12 +207,12 @@ const Dashboard = () => {
                     />
                   }
                 />
-                <Route path="/documentation" element={<Documentation />} />
+                <Route path='/documentation' element={<Documentation />} />
                 <Route
-                  path="/errors"
+                  path='/errors'
                   element={<ErrorTableTwo loggedInUser={loggedInUser} />}
                 />
-                <Route path="*" element={<Navigate to="/signin" />} />
+                <Route path='*' element={<Navigate to='/signin' />} />
               </Routes>
             </Grid>
           </Container>

@@ -5,6 +5,8 @@ import { Button, TextField } from "@mui/material";
 const Postgres = ({ sourceList, setSourceList, setOpen }) => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
+  const [connBtnDisabled, setConnBtnDisabled] = useState(true);
 
   const createTimeStamp = () => {
     var options = {
@@ -27,6 +29,9 @@ const Postgres = ({ sourceList, setSourceList, setOpen }) => {
     setOpen(false);
   };
 
+  const nameError = name === "";
+  const connError = url === "";
+
   return (
     <div>
       <div>
@@ -38,9 +43,13 @@ const Postgres = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='postgres-name'
           name='postgres-name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={nameError ? "You must provide a Database name." : null}
         />
 
         <TextField
@@ -51,12 +60,22 @@ const Postgres = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='postgres-connection'
           name='url'
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            setConnBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={
+            connError ? "You must provide a Connection String." : null
+          }
         />
       </div>
-      <Button variant='contained' onClick={handleCreateClick}>
+      <Button
+        variant='contained'
+        disabled={nameBtnDisabled || connBtnDisabled}
+        onClick={handleCreateClick}
+      >
         Create
       </Button>
     </div>

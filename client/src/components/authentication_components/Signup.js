@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import apiClient from "../../lib/apiClient";
 import { Navigate } from "react-router-dom";
 import { Alert, Tooltip } from "@mui/material";
+import theme from "../theme";
 
 function Copyright(props) {
   return (
@@ -35,7 +36,7 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export default function SignUp({
   setLoggedInUser,
@@ -180,7 +181,11 @@ export default function SignUp({
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Tooltip disableFocusListener disableTouchListener title="Admin users are able to manage/delete other users">
+                  <Tooltip
+                    disableFocusListener
+                    disableTouchListener
+                    title='Admin users are able to manage/delete other users'
+                  >
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -195,7 +200,11 @@ export default function SignUp({
                   </Tooltip>
                 </Grid>
               </Grid>
-              <Tooltip disableFocusListener disableTouchListener title="Create user">
+              <Tooltip
+                disableFocusListener
+                disableTouchListener
+                title='Create user'
+              >
                 <Button
                   type='submit'
                   fullWidth

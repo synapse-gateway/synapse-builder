@@ -12,12 +12,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import apiClient from "../../lib/apiClient";
 import { useEffect, useState } from "react";
-import { Tooltip } from "@mui/material"
+import { Tooltip } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    backgroundColor: "#0A0188",
+    color: "#FCFCFC",
+    fontWeight: 600,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -49,18 +50,18 @@ const handleUserDelete = async (username, allUsers, setUsers) => {
 export default function UserTable({ allUsers, setUsers, setPopup }) {
   return (
     <TableContainer component={Paper} sx={{ mt: 2 }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <Table sx={{ minWidth: 700 }} aria-label='customized table'>
         <TableHead>
           <TableRow>
             <TableCell
               colSpan={6}
-              align="center"
-              sx={{ bgcolor: "#2976D2", color: "white" }}
+              align='center'
+              sx={{ bgcolor: "#D3D3D3", color: "#0A0188" }}
             >
               {" "}
               <Typography
-                component="h1"
-                variant="h5"
+                component='h1'
+                variant='h5'
                 sx={{ fontWeight: "bold" }}
               >
                 User List
@@ -69,34 +70,38 @@ export default function UserTable({ allUsers, setUsers, setPopup }) {
           </TableRow>
           <TableRow>
             <StyledTableCell>User Name</StyledTableCell>
-            <StyledTableCell align="center">First Name</StyledTableCell>
-            <StyledTableCell align="center">Last Name</StyledTableCell>
-            <StyledTableCell align="center">Role</StyledTableCell>
+            <StyledTableCell align='center'>First Name</StyledTableCell>
+            <StyledTableCell align='center'>Last Name</StyledTableCell>
+            <StyledTableCell align='center'>Role</StyledTableCell>
             {/* <StyledTableCell align='center'>Edit</StyledTableCell> */}
-            <StyledTableCell align="center">Delete</StyledTableCell>
+            <StyledTableCell align='center'>Delete</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {allUsers.map((row) => (
             <StyledTableRow key={row.username}>
-              <StyledTableCell component="th" scope="row">
+              <StyledTableCell component='th' scope='row'>
                 {row.username}
               </StyledTableCell>
-              <StyledTableCell align="center">{row.firstName}</StyledTableCell>
-              <StyledTableCell align="center">{row.lastName}</StyledTableCell>
-              <StyledTableCell align="center">
+              <StyledTableCell align='center'>{row.firstName}</StyledTableCell>
+              <StyledTableCell align='center'>{row.lastName}</StyledTableCell>
+              <StyledTableCell align='center'>
                 {row.admin ? "Admin" : "Non-Admin"}
               </StyledTableCell>
               {/* <StyledTableCell align='center'>
                 <EditIcon onClick={() => handleUserEdit(row.username)} />
               </StyledTableCell> */}
-              <StyledTableCell align="center">
-              <Tooltip disableFocusListener disableTouchListener title="Delete user">
-                <DeleteIcon
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => setPopup({ show: true, user: row.username })}
-                />
-              </Tooltip>
+              <StyledTableCell align='center'>
+                <Tooltip
+                  disableFocusListener
+                  disableTouchListener
+                  title='Delete user'
+                >
+                  <DeleteIcon
+                    sx={{ cursor: "pointer", color: "#E4017D" }}
+                    onClick={() => setPopup({ show: true, user: row.username })}
+                  />
+                </Tooltip>
               </StyledTableCell>
             </StyledTableRow>
           ))}

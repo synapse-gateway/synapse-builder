@@ -12,8 +12,12 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
   const [operationPath, setOperationPath] = useState("");
   const [operationMethod, setOperationMethod] = useState("");
   // const [operationResponseSchema, setOperationResponseSchema] = useState("");
-  const [operationResponseSchemaFile, setOperationResponseSchemaFile] = useState(null);
+  const [operationResponseSchemaFile, setOperationResponseSchemaFile] =
+    useState(null);
   const fileTypes = ["json"];
+
+  const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
+  const [urlBtnDisabled, setUrlBtnDisabled] = useState(true);
 
   const createTimeStamp = () => {
     var options = {
@@ -48,7 +52,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
     const content = await operationResponseSchemaFile.text();
     setOperations([
       ...operations,
-      { type: operationType, field: operationField, path: operationPath, method: operationMethod, responseSchemaContent: content }
+      {
+        type: operationType,
+        field: operationField,
+        path: operationPath,
+        method: operationMethod,
+        responseSchemaContent: content,
+      },
     ]);
     setOperationType("");
     setOperationField("");
@@ -164,9 +174,16 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         /> */}
 
-        <DragDrop setFile={setOperationResponseSchemaFile} fileTypes={fileTypes} />
+        <DragDrop
+          setFile={setOperationResponseSchemaFile}
+          fileTypes={fileTypes}
+        />
 
-        <Button sx={{ mb: 2, mt: 2 }} variant='contained' onClick={handleAddOperationClick}>
+        <Button
+          sx={{ mb: 2, mt: 2 }}
+          variant='contained'
+          onClick={handleAddOperationClick}
+        >
           Add Operation
         </Button>
       </div>

@@ -8,7 +8,7 @@ import OpenAPI from "./handler_form_components/OpenAPI";
 import Postgres from "./handler_form_components/Postgres";
 import Mongoose from "./handler_form_components/Mongoose";
 import JSONSchema from "./handler_form_components/JSONSchema";
-import ToolTip from "@mui/material/Tooltip"
+import ToolTip from "@mui/material/Tooltip";
 
 const style = {
   position: "absolute",
@@ -17,7 +17,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "5px solid #1976d2",
+  border: "5px solid #0A0188",
   borderRadius: "5px",
   boxShadow: 24,
   p: 4,
@@ -64,7 +64,7 @@ const selectMeshHandler = (handlerName, sourceList, setSourceList, setOpen) => {
           setSourceList={setSourceList}
           setOpen={setOpen}
         />
-      )
+      );
     default:
       return "No Handler Selected";
   }
@@ -77,8 +77,16 @@ export default function BasicModal({ handlerName, sourceList, setSourceList }) {
 
   return (
     <div>
-      <ToolTip disableFocusListener disableTouchListener title="Once clicked you will be prompted to input some information about your data source.">
-        <Button onClick={handleOpen} variant='contained'>
+      <ToolTip
+        disableFocusListener
+        disableTouchListener
+        title='Once clicked you will be prompted to input some information about your data source.'
+      >
+        <Button
+          onClick={handleOpen}
+          variant='contained'
+          // sx={{ backgroundColor: "#FFBD3A", color: "#0A0188" }}
+        >
           Add
         </Button>
       </ToolTip>
