@@ -8,6 +8,8 @@ class UpCommand extends Command {
       .slice(0, -3)
       .join("/")}/server`;
 
+    let synapseGUI;
+
     const synapseInstance = spawn("sudo", ["docker-compose", "up", "-d"], {
       cwd: rootDirectory,
     });
@@ -21,7 +23,7 @@ class UpCommand extends Command {
     });
 
     synapseInstance.on("exit", (s) => {
-      const synapseGUI = spawn("node", ["gui-server.js"], {
+      synapseGUI = spawn("node", ["gui-server.js"], {
         cwd: rootDirectory,
       });
 
@@ -39,7 +41,7 @@ class UpCommand extends Command {
     const killWorker = () => {
       console.log("\nExiting Synapse...");
       synapseInstance.kill();
-      synapseGUI.kill();
+      if (synapseGUI) synapseGUI.kill();
       spawn("sudo", ["docker-compose", "down"], {
         cwd: rootDirectory,
       });
