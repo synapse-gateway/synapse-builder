@@ -1,17 +1,20 @@
 import chalk from "chalk";
 import clear from "clear";
-import figlet from "figlet";
 import util from "util";
 import { exec } from "child_process";
 import { spawn } from "child_process";
 import events from "events";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const myEmitter = new events.EventEmitter();
 
-let appName;
-let synapseURL;
+let appName = "synapse";
 
-const cwd = process.cwd().split("/").slice(0, -1).join("/");
+const cwd = __dirname.split("/").slice(0, -1).join("/");
 
 const completedTasks = [];
 
@@ -74,38 +77,40 @@ const installCopilot = async () => {
     return;
   }
   myEmitter.emit("END_TASK", "  AWS Copilot installation complete");
+  myEmitter.emit("COPILOT_INSTALLED");
 };
 
 const nameAndLogo = `
-                .(&&&&&%.               
-            .%&&%.      (&&&,           
-        *%&&/               ,&&&(       
-    *&&%*       ./&&&&&#.       .#&&#   
-  .%%.      .#%%#.     ./%%%,       #%, 
-  .%#    *%%/               *%%%/   *%* 
-  .%#   .%#      *%%%%%(.       .#%%#%*   .d8888b  888  888 88888b.   8888b.  88888b.  .d8888b   .d88b.
-  .##    ,##/(##(.     ./###,       *#,   88K      888  888 888 "88b     "88b 888 "88b 88K      d8P  Y8b
-  .#(       .(##(.     .*##(/##(    *#,   "Y8888b. 888  888 888  888 .d888888 888  888 "Y8888b. 88888888
-  .#####,        *#####(.     ,#*   *#,        X88 Y88b 888 888  888 888  888 888 d88P      X88 Y8b.
-  .#(   ,(##*               ,(#/    *#,    88888P'  "Y88888 888  888 "Y888888 88888P"   88888P'  "Y8888
-  .((       .((((.      *(((.       /(,                 888                   888
-    ,(((,       .*(((((/.       ./((/              Y8b d88P                   888
-        ,(((,               .(((*                   "Y88P"                    888
-            ./((/       *(((.           
-                .*(((((/.               `;
-
-const banner2 = `${" ".repeat(2)}${"=".repeat(102)}
-${" ".repeat(33)}Welcome to Synapse's AWS Deployent Tool!
-${" ".repeat(2)}${"=".repeat(102)}`;
+                 ;+**=;
+             :=+++- .-+#*-.
+         .-+#+-..-*#+-  :=*#=:
+      :=##=:  :--:  :=#*=.  -+#+:
+   :+#*-. .=*#+--+%*-. .-*#+:  =%:==
+  -%-  :+#*=. .-+#+==*#=:  =%: .%-.*#
+  :=-*#+-  :=##=:      -+#*=%= .%- -%.
+  :#+.  -+#%-.            :*%= .%- -%.
+  +#  -%+:%+                %= .%- -%.   .d8888b  888  888 88888b.   8888b.  88888b.  .d8888b   .d88b.
+  +#  **  %+                %= .%- -%.   88K      888  888 888 "88b     "88b 888 "88b 88K      d8P  Y8b
+  +#  #*  %+                %= .%: -%.   "Y8888b. 888  888 888  888 .d888888 888  888 "Y8888b. 88888888
+  +#  #*  %+                %= .%- -%.        X88 Y88b 888 888  888 888  888 888 d88P      X88 Y8b.
+  +#  #*  %%-.            :+#. .%- -%.    88888P'  "Y88888 888  888 "Y888888 88888P"   88888P'  "Y8888
+  +#  #*  %*=##=:      -+#*-  .*#. -%.                 888                   888
+  -%- #*  +#: .-*#+==*#=:  :+#*=   **             Y8b d88P                   888
+   :+:+#.  -*#+:  '''' .-*#+-  :=*#=               "Y88P"                    888
+       =##=:  -+#*-::=#*=.  -+#*-.
+         .-+#+-  .=*%#-.:=*#=:           ==============================================================
+             :=#*=: .++++-.                        Welcome to Synapse's AWS Deployment Tool!
+                .-+*+=                   ==============================================================
+`;
 
 const display = () => {
   clear();
   console.log(chalk.magenta(nameAndLogo) + "\n");
-  console.log(chalk.magenta(banner2) + "\n");
   completedTasks.forEach((task) =>
     console.log(`${chalk.greenBright("  ✔")} ${task}`)
   );
   if (completedTasks.length) console.log("");
+  // console.log(cwd);
 };
 
 const run = async () => {
@@ -116,67 +121,51 @@ const run = async () => {
     display();
   });
 
+  myEmitter.on("COPILOT_INSTALLED", async () => {
+    try {
+      console.log(`  Initializing Copilot app '${appName}'...`);
+      await promisifiedExec(`copilot app init ${appName}`, {
+        cwd,
+      });
+      myEmitter.emit("END_TASK", `  '${appName}' stack created on AWS`);
+      myEmitter.emit("APP_INITIALIZED");
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  });
+
   // Install copilot (if necessary)
   if (!(await isCopilotInstalled())) {
     installCopilot();
-  }
-
-  // get used names for copilot apps
-  // TODO: account for redeployment
-  // NOTE: can't re-register space
-  try {
-    let { stdout } = await promisifiedExec("copilot app ls", { cwd });
-
-    let lastVersion = Math.max(
-      ...stdout
-        .trim()
-        .split("\n")
-        .map((val) => +val.replace(/[^\d]/gi, ""))
-    );
-
-    // NOTE: appName must start with a letter, contain only lower-case letters, numbers, and hyphens, and have no consecutive or trailing hyphen
-    // appName = lastVersion === 0 ? "synapse" : `synapse${++lastVersion}`;
-    appName = "synapse";
-  } catch (e) {
-    console.error(`error: ${e.message}`);
-    return;
-  }
-
-  try {
-    console.log(`  Initializing Copilot app '${appName}'...`);
-    await promisifiedExec(`copilot app init ${appName}`, {
-      cwd,
-    });
-    myEmitter.emit("END_TASK", `  ${appName} stack created on AWS`);
-  } catch (e) {
-    console.error(e);
-    return;
-  }
+  } else myEmitter.emit("COPILOT_INSTALLED");
 
   // // Init copilot environment
   // // TODO: AWS CLI profile configuration
-  console.log("Initializing copilot environemnt...");
-  const initCopilot = spawn(
-    "copilot",
-    ["env", "init", "-n", "prod", "--profile", "default", "--default-config"],
-    { cwd }
-  );
+  myEmitter.on("APP_INITIALIZED", () => {
+    console.log("Initializing copilot environemnt...");
+    const initCopilot = spawn(
+      "copilot",
+      ["env", "init", "-n", "prod", "--profile", "default", "--default-config"],
+      { cwd }
+    );
 
-  initCopilot.on("exit", (code) => {
-    if (parseInt(code) !== 0)
-      console.error(
-        `  Error Code ${code}: Failed to initialize copilot environment.`
-      );
-    myEmitter.emit("END_TASK", `  Environment successfully initialized`);
-    myEmitter.emit("COPILOT_INITIALIZED");
-  });
+    initCopilot.on("exit", (code) => {
+      if (parseInt(code) !== 0)
+        console.error(
+          `  Error Code ${code}: Failed to initialize copilot environment.`
+        );
+      myEmitter.emit("END_TASK", `  Environment successfully initialized`);
+      myEmitter.emit("COPILOT_INITIALIZED");
+    });
 
-  initCopilot.stdout.on("data", (s) => {
-    process.stdout.write(s);
-  });
+    initCopilot.stdout.on("data", (s) => {
+      process.stdout.write(s);
+    });
 
-  initCopilot.stderr.on("data", (s) => {
-    process.stdout.write(s);
+    initCopilot.stderr.on("data", (s) => {
+      process.stdout.write(s);
+    });
   });
 
   // Initialize Mongo

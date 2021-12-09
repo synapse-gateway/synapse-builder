@@ -2,17 +2,10 @@ const { Command } = require("@oclif/command");
 
 class DeployCommand extends Command {
   async run() {
-    await import("../../../deploy/falseDeploy.js");
+    await import("../../../deploy/deploy.js");
   }
 }
 
-// HelloCommand.description = `Describe the command here
-// ...
-// Extra documentation goes here
-// `
-
-// HelloCommand.flags = {
-//   name: flags.string({char: 'n', description: 'name to print'}),
-// }
+DeployCommand.description = `Deploy your Synapse Gateway onto AWS`;
 
 module.exports = DeployCommand;

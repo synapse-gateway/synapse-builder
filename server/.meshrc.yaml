@@ -1,5 +1,5 @@
 sources:
-  - name: AuthorService
+  - name: books
     handler:
       openapi:
-        source: ./openapi-schemas/AuthorService-schema.yaml
+        source: ./openapi-schemas/books-schema.yaml

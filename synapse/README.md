@@ -1,7 +1,7 @@
 synapse
 =======
 
-synapse command alias
+Synapse GraphQL Gateway CLI
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/synapse.svg)](https://npmjs.org/package/synapse)
@@ -19,7 +19,7 @@ $ npm install -g synapse
 $ synapse COMMAND
 running command...
 $ synapse (-v|--version|version)
-synapse/0.0.0 linux-x64 node-v16.5.0
+synapse/0.1.0 linux-x64 node-v16.5.0
 $ synapse --help [COMMAND]
 USAGE
   $ synapse COMMAND
@@ -47,7 +47,7 @@ DESCRIPTION
   Extra documentation goes here
 ```
 
-_See code: [src/commands/hello.js](https://github.com/gudsson/synapse/blob/v0.0.0/src/commands/hello.js)_
+_See code: [src/commands/hello.js](https://github.com/gudsson/synapse/blob/v0.1.0/src/commands/hello.js)_
 
 ## `synapse help [COMMAND]`
 

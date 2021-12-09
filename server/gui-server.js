@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 if (process.env.PRODUCTION === "false") {
-  mongourl = "mongodb://mongodb:27017/synapse";
+  mongourl = "mongodb://localhost:27017/synapse";
 }
 
 mongoose
@@ -72,5 +72,5 @@ app.listen(PORT, async () => {
       console.error(err);
     }
   }
-  console.log(`server is listening on port: ${4005}`);
+  console.log(`Vist your Synapse Gateway at http://localhost:${PORT}!`);
 });

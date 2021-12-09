@@ -3,13 +3,25 @@ const { spawn } = require("child_process");
 
 class UpCommand extends Command {
   async run() {
-    const rootDirectory = __dirname.split("/").slice(0, -3).join("/");
-    // const { flags } = this.parse(UpCommand);
-    // const name = flags.name || "world";
-    // this.log(`hello ${name} from ./src/commands/hello.js`);
-    // this.log(__dirname.split("/").slice(0, -3).join("/"));
-    const synapseInstance = spawn("sudo", ["docker-compose", "up"], {
-      rootDirectory,
+    const rootDirectory = `${__dirname
+      .split("/")
+      .slice(0, -3)
+      .join("/")}/server`;
+
+    const synapseInstance = spawn("sudo", ["docker-compose", "up", "-d"], {
+      cwd: rootDirectory,
+    });
+
+    const synapseGUI = spawn("node", ["gui-server.js"], {
+      cwd: rootDirectory,
+    });
+
+    synapseGUI.stdout.on("data", (s) => {
+      process.stdout.write(s);
+    });
+
+    synapseGUI.stderr.on("data", (s) => {
+      process.stdout.write(s);
     });
 
     synapseInstance.stdout.on("data", (s) => {
@@ -19,16 +31,24 @@ class UpCommand extends Command {
     synapseInstance.stderr.on("data", (s) => {
       process.stdout.write(s);
     });
+
+    process.stdin.pipe(synapseInstance.stdin);
+
+    const killWorker = () => {
+      console.log("\nExiting Synapse...");
+      synapseInstance.kill();
+      synapseGUI.kill();
+      spawn("sudo", ["docker-compose", "down"], {
+        cwd: rootDirectory,
+      });
+    };
+
+    process.on("uncaughtException", killWorker);
+    process.on("SIGINT", killWorker);
+    process.on("SIGTERM", killWorker);
   }
 }
 
-// UpCommand.description = `Describe the command here
-// ...
-// Extra documentation goes here
-// `
-
-// HelloCommand.flags = {
-//   name: flags.string({char: 'n', description: 'name to print'}),
-// }
+UpCommand.description = `Spin up your local Synapse Gateway instance`;
 
 module.exports = UpCommand;

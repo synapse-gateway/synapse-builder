@@ -1,7 +1,0 @@
-{
-  "extends": "oclif",
-  "root": true,
-  "rules": {
-    "node/no-missing-import": 1
-  }
-}
