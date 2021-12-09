@@ -12,24 +12,26 @@ class UpCommand extends Command {
       cwd: rootDirectory,
     });
 
-    const synapseGUI = spawn("node", ["gui-server.js"], {
-      cwd: rootDirectory,
-    });
-
-    synapseGUI.stdout.on("data", (s) => {
-      process.stdout.write(s);
-    });
-
-    synapseGUI.stderr.on("data", (s) => {
-      process.stdout.write(s);
-    });
-
     synapseInstance.stdout.on("data", (s) => {
       process.stdout.write(s);
     });
 
     synapseInstance.stderr.on("data", (s) => {
       process.stdout.write(s);
+    });
+
+    synapseInstance.on("exit", (s) => {
+      const synapseGUI = spawn("node", ["gui-server.js"], {
+        cwd: rootDirectory,
+      });
+
+      synapseGUI.stdout.on("data", (s) => {
+        process.stdout.write(s);
+      });
+
+      synapseGUI.stderr.on("data", (s) => {
+        process.stdout.write(s);
+      });
     });
 
     process.stdin.pipe(synapseInstance.stdin);
