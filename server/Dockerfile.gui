@@ -6,7 +6,7 @@ COPY package.json ./
 
 RUN yarn install
 
-VOLUME ./ ./
+COPY ./ ./
 
 ENV PRODUCTION=true
 ENV SERVICE_NAME=mongo
