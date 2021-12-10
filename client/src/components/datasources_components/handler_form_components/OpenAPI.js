@@ -10,6 +10,8 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
   const [schemaContent, setSchemaContent] = useState("");
   const [schemaFileType, setSchemaFileType] = useState("");
   const fileTypes = ["x-yaml", "json"];
+  const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
+  const [fileBtnDisabled, setFileBtnDisabled] = useState(true);
 
   const createTimeStamp = () => {
     var options = {
@@ -27,7 +29,13 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
     const schemaFileType = schemaFile.type.includes("json") ? "json" : "yaml";
     setSourceList([
       ...sourceList,
-      { name, schemaFileType, schemaFileContent, handler: "openapi", created: createTimeStamp() },
+      {
+        name,
+        schemaFileType,
+        schemaFileContent,
+        handler: "openapi",
+        created: createTimeStamp(),
+      },
     ]);
     setName("");
     // setUrl("");
@@ -46,6 +54,8 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
   //   setSchemaFile(null);
   // };
 
+  const nameError = name === "";
+
   return (
     <div>
       <div>
@@ -57,12 +67,20 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='openapi-name'
           name='openapi-name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={nameError ? "You must provide a Source name." : null}
         />
 
-        <DragDrop setFile={setSchemaFile} fileTypes={fileTypes} />
+        <DragDrop
+          setFileBtnDisabled={setFileBtnDisabled}
+          setFile={setSchemaFile}
+          fileTypes={fileTypes}
+        />
 
         {/* <TextField
           fullWidth
@@ -81,7 +99,12 @@ const OpenAPI = ({ sourceList, setSourceList, setOpen }) => {
         </Button> */}
       </div>
 
-      <Button sx={{ mt: 2 }} variant='contained' onClick={handleCreateClick}>
+      <Button
+        sx={{ mt: 2 }}
+        disabled={nameBtnDisabled || fileBtnDisabled}
+        variant='contained'
+        onClick={handleCreateClick}
+      >
         Create
       </Button>
     </div>

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import Signup from "./Signup";
-import { Tooltip } from "@mui/material"
+import { Tooltip } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -15,7 +15,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "5px solid #1976d2",
+  border: "5px solid #0A0188",
   borderRadius: "5px",
   boxShadow: 24,
   p: 4,
@@ -34,8 +34,16 @@ export default function AddUserModal({
 
   return (
     <div>
-      <Tooltip disableFocusListener disableTouchListener title="Create a new user">
-        <Button sx={{ mt: 3, mb: 3 }} onClick={handleOpen} variant='contained'>
+      <Tooltip
+        disableFocusListener
+        disableTouchListener
+        title='Create a new user'
+      >
+        <Button
+          sx={{ mt: 3, mb: 3, backgroundColor: "#FFBD3A", color: "#0A0188" }}
+          onClick={handleOpen}
+          variant='contained'
+        >
           Add User
         </Button>
       </Tooltip>

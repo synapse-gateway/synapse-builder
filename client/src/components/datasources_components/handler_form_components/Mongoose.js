@@ -10,6 +10,10 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
   const [models, setModels] = useState([]);
   const [modelFile, setModelFile] = useState(null);
   const fileTypes = ["javascript"];
+  const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
+  const [urlBtnDisabled, setUrlBtnDisabled] = useState(true);
+  const [modelBtnDisabled, setModelBtnDisabled] = useState(true);
+  const [fileBtnDisabled, setFileBtnDisabled] = useState(true);
 
   const createTimeStamp = () => {
     var options = {
@@ -34,14 +38,14 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
 
   const handleAddModelClick = async (e) => {
     e.preventDefault();
-    const modelContent = await modelFile.text()
-    setModels([
-      ...models,
-      { name: modelName, content: modelContent }
-    ]);
+    const modelContent = await modelFile.text();
+    setModels([...models, { name: modelName, content: modelContent }]);
     setModelName("");
     setModelFile(null);
   };
+  const nameError = name === "";
+  const sourceError = url === "";
+  const modelError = modelName === "";
 
   return (
     <div>
@@ -54,9 +58,13 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='mongoose-name'
           name='mongoose-name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={nameError ? "You must provide a Database name." : null}
         />
 
         <TextField
@@ -67,9 +75,13 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='mongoose-url'
           name='url'
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            setUrlBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={sourceError ? "You must provide a Source URL." : null}
         />
       </div>
 
@@ -92,9 +104,13 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='mongoose-model-name'
           name='mongoose-model-name'
           value={modelName}
-          onChange={(e) => setModelName(e.target.value)}
+          onChange={(e) => {
+            setModelName(e.target.value);
+            setModelBtnDisabled(!e.target.value.trim());
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
+          helperText={modelError ? "You must provide a Model name." : null}
         />
 
         {/* <TextField
@@ -110,14 +126,33 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
           sx={{ mb: 2 }}
         /> */}
 
-        <DragDrop setFile={setModelFile} fileTypes={fileTypes} />
+        <DragDrop
+          setFile={setModelFile}
+          setFileBtnDisabled={setFileBtnDisabled}
+          fileTypes={fileTypes}
+        />
 
-        <Button sx={{ mb: 2, mt: 2 }} variant='contained' onClick={handleAddModelClick}>
+        <Button
+          sx={{ mb: 2, mt: 2 }}
+          variant='contained'
+          disabled={modelBtnDisabled}
+          onClick={handleAddModelClick}
+        >
           Add Model
         </Button>
       </div>
 
-      <Button variant='contained' onClick={handleCreateClick} sx={{ mb: 2 }}>
+      <Button
+        variant='contained'
+        disabled={
+          nameBtnDisabled ||
+          urlBtnDisabled ||
+          modelBtnDisabled ||
+          fileBtnDisabled
+        }
+        onClick={handleCreateClick}
+        sx={{ mb: 2 }}
+      >
         Create
       </Button>
     </div>
