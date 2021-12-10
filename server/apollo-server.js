@@ -16,7 +16,7 @@ async function main() {
   let queryConn;
   try {
     if (process.env.PRODUCTION === "false") {
-      mongourl = "mongodb://localhost:27017/synapse";
+      mongourl = "mongodb://mongodb:27017/synapse";
     }
     queryConn = await mongoose.createConnection(mongourl);
   } catch (err) {
@@ -143,7 +143,7 @@ async function main() {
   });
 
   server.listen(process.env.NODE_DOCKER_PORT || 6868).then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
+    console.log(`🚀 Server ready at ${url}!`);
   });
 }
 main().catch((err) => console.error(err));

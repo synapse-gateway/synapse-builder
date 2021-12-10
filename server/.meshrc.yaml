@@ -1,5 +1,5 @@
 sources:
-  - name: hoth
+  - name: books
     handler:
-      graphql:
-        endpoint: http://uuu
+      openapi:
+        source: ./openapi-schemas/books-schema.yaml

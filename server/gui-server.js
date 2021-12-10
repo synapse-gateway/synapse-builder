@@ -22,11 +22,11 @@ mongoose
 app.use(express.json());
 app.use(cors());
 
-let path
+let path;
 if (process.env.PRODUCTION === "false") {
   path = __dirname + "/build-local/";
 } else {
-  console.log("here")
+  console.log("here");
   path = __dirname + "/build-prod/";
 }
 
@@ -65,12 +65,12 @@ app.listen(PORT, async () => {
         username: process.env.ADMIN_USERNAME,
         password: hashedPassword,
         admin: true,
-        root: true
+        root: true,
       });
       console.log("Root user successfully created");
     } catch (err) {
       console.error(err);
     }
   }
-  console.log(`server is listening on port: ${4005}`);
+  console.log(`Vist your Synapse Gateway at http://localhost:${PORT}!`);
 });
