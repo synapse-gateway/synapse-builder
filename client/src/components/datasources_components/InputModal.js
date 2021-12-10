@@ -15,12 +15,18 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "auto",
+  height: "100%",
+
   bgcolor: "background.paper",
   border: "5px solid #0A0188",
   borderRadius: "5px",
   boxShadow: 24,
   p: 4,
+  overflow: "scroll",
+  content: {
+    overflow: "scroll",
+  },
 };
 
 const selectMeshHandler = (handlerName, sourceList, setSourceList, setOpen) => {

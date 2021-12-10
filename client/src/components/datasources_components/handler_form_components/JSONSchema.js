@@ -19,6 +19,12 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
   const [nameBtnDisabled, setNameBtnDisabled] = useState(true);
   const [urlBtnDisabled, setUrlBtnDisabled] = useState(true);
   const [fileBtnDisabled, setFileBtnDisabled] = useState(true);
+  const [operationsBtn, setOperationsBtnDisabled] = useState({
+    operationType: true,
+    operationField: true,
+    operationPath: true,
+    operationMethod: true,
+  });
 
   const createTimeStamp = () => {
     var options = {
@@ -129,7 +135,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-operation-type'
           name='json-schema-operation-type'
           value={operationType}
-          onChange={(e) => setOperationType(e.target.value)}
+          onChange={(e) => {
+            setOperationType(e.target.value),
+              setOperationsBtnDisabled((oldState) => ({
+                ...oldState,
+                operationType: false,
+              }));
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
           helperText={
@@ -145,7 +157,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-operation-field'
           name='json-schema-operation-field'
           value={operationField}
-          onChange={(e) => setOperationField(e.target.value)}
+          onChange={(e) => {
+            setOperationField(e.target.value),
+              setOperationsBtnDisabled((oldState) => ({
+                ...oldState,
+                operationField: false,
+              }));
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
           helperText={
@@ -161,7 +179,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-operation-path'
           name='json-schema-operation-path'
           value={operationPath}
-          onChange={(e) => setOperationPath(e.target.value)}
+          onChange={(e) => {
+            setOperationPath(e.target.value),
+              setOperationsBtnDisabled((oldState) => ({
+                ...oldState,
+                operationPath: false,
+              }));
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
           helperText={
@@ -177,7 +201,13 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
           aria-describedby='json-schema-operation-method'
           name='json-schema-operation-method'
           value={operationMethod}
-          onChange={(e) => setOperationMethod(e.target.value)}
+          onChange={(e) => {
+            setOperationMethod(e.target.value),
+              setOperationsBtnDisabled((oldState) => ({
+                ...oldState,
+                operationMethod: false,
+              }));
+          }}
           variant='outlined'
           sx={{ mb: 2 }}
           helperText={
@@ -207,6 +237,12 @@ const JSONSchema = ({ sourceList, setSourceList, setOpen }) => {
         <Button
           sx={{ mb: 2, mt: 2 }}
           variant='contained'
+          disabled={
+            operationsBtn.operationType ||
+            operationsBtn.operationField ||
+            operationsBtn.operationPath ||
+            operationsBtn.operationMethod
+          }
           onClick={handleAddOperationClick}
         >
           Add Operation

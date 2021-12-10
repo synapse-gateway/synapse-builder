@@ -135,6 +135,7 @@ const Mongoose = ({ sourceList, setSourceList, setOpen }) => {
         <Button
           sx={{ mb: 2, mt: 2 }}
           variant='contained'
+          disabled={modelBtnDisabled}
           onClick={handleAddModelClick}
         >
           Add Model
