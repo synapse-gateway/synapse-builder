@@ -81,9 +81,9 @@ const createConfig = (req, res, next) => {
 
   const randomNumber = Math.random() * 100;
 
-  runCommand(`whoami`);
-  runCommand(`yarn mesh build && echo "${randomNumber}" >> trigger.js`);
+  runCommand(`yarn mesh build`);
   console.log("✓ Succesfully created .mesh directory");
+  runCommand(`echo "${randomNumber}" > trigger.js`);
 
   res.status(200).send();
 };

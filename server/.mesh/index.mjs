@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import ExternalModule_0 from '@graphql-mesh/cache-inmemory-lru';
 import ExternalModule_1 from '@graphql-mesh/openapi';
 import ExternalModule_2 from '@graphql-mesh/merger-bare';
-import ExternalModule_3 from './sources/bvooks/oas-schema.js';
+import ExternalModule_3 from './sources/bookz/oas-schema.js';
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: ExternalModule_0,
@@ -14,7 +14,7 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-bare"]: ExternalModule_2,
     // @ts-ignore
-    [".mesh/sources/bvooks/oas-schema.js"]: ExternalModule_3
+    [".mesh/sources/bookz/oas-schema.js"]: ExternalModule_3
 };
 const baseDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const syncImportFn = (moduleId) => {
@@ -39,7 +39,7 @@ import { DefaultLogger } from '@graphql-mesh/utils';
 import OpenapiHandler from '@graphql-mesh/openapi';
 import BareMerger from '@graphql-mesh/merger-bare';
 import { resolveAdditionalResolvers } from '@graphql-mesh/utils';
-export const rawConfig = { "sources": [{ "name": "bvooks", "handler": { "openapi": { "source": "./openapi-schemas/bvooks-schema.yaml" } } }] };
+export const rawConfig = { "sources": [{ "name": "bookz", "handler": { "openapi": { "source": "./openapi-schemas/bookz-schema.yaml" } } }] };
 export async function getMeshOptions() {
     const cache = new MeshCache({
         ...(rawConfig.cache || {}),
@@ -52,9 +52,9 @@ export async function getMeshOptions() {
     const logger = new DefaultLogger('🕸️');
     const sources = [];
     const transforms = [];
-    const bvooksTransforms = [];
+    const bookzTransforms = [];
     const additionalTypeDefs = [];
-    const bvooksHandler = new OpenapiHandler({
+    const bookzHandler = new OpenapiHandler({
         name: rawConfig.sources[0].name,
         config: rawConfig.sources[0].handler["openapi"],
         baseDir,
@@ -65,9 +65,9 @@ export async function getMeshOptions() {
         importFn
     });
     sources.push({
-        name: 'bvooks',
-        handler: bvooksHandler,
-        transforms: bvooksTransforms
+        name: 'bookz',
+        handler: bookzHandler,
+        transforms: bookzTransforms
     });
     const merger = new BareMerger({
         cache,

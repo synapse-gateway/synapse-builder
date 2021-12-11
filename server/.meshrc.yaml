@@ -1,5 +1,5 @@
 sources:
-  - name: bvooks
+  - name: bookz
     handler:
       openapi:
-        source: ./openapi-schemas/bvooks-schema.yaml
+        source: ./openapi-schemas/bookz-schema.yaml
