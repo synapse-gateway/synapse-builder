@@ -1,5 +1,5 @@
 sources:
-  - name: books74
+  - name: bvooks
     handler:
       openapi:
-        source: ./openapi-schemas/books74-schema.yaml
+        source: ./openapi-schemas/bvooks-schema.yaml

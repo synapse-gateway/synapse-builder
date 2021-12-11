@@ -134,20 +134,20 @@ export declare type Resolvers<ContextType = MeshContext> = ResolversObject<{
 }>;
 import { MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { InContextSdkMethod } from '@graphql-mesh/types';
-export declare type QueryBooks74Sdk = {
+export declare type QueryBvooksSdk = {
     getBooks: InContextSdkMethod<Query['getBooks'], QuerygetBooksArgs, MeshContext>;
     getBooksId: InContextSdkMethod<Query['getBooksId'], QuerygetBooksIdArgs, MeshContext>;
 };
-export declare type MutationBooks74Sdk = {};
-export declare type SubscriptionBooks74Sdk = {};
-export declare type Books74Context = {
-    ["books74"]: {
-        Query: QueryBooks74Sdk;
-        Mutation: MutationBooks74Sdk;
-        Subscription: SubscriptionBooks74Sdk;
+export declare type MutationBvooksSdk = {};
+export declare type SubscriptionBvooksSdk = {};
+export declare type BvooksContext = {
+    ["bvooks"]: {
+        Query: QueryBvooksSdk;
+        Mutation: MutationBvooksSdk;
+        Subscription: SubscriptionBvooksSdk;
     };
 };
-export declare type MeshContext = Books74Context & BaseMeshContext;
+export declare type MeshContext = BvooksContext & BaseMeshContext;
 import { GetMeshOptions } from '@graphql-mesh/runtime';
 import { YamlConfig } from '@graphql-mesh/types';
 export declare const rawConfig: YamlConfig.Config;

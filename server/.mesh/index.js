@@ -8,7 +8,7 @@ const path_1 = require("path");
 const cache_inmemory_lru_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/cache-inmemory-lru"));
 const openapi_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/openapi"));
 const merger_bare_1 = (0, tslib_1.__importDefault)(require("@graphql-mesh/merger-bare"));
-const oas_schema_js_1 = (0, tslib_1.__importDefault)(require("./sources/books74/oas-schema.js"));
+const oas_schema_js_1 = (0, tslib_1.__importDefault)(require("./sources/bvooks/oas-schema.js"));
 const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/cache-inmemory-lru"]: cache_inmemory_lru_1.default,
@@ -17,7 +17,7 @@ const importedModules = {
     // @ts-ignore
     ["@graphql-mesh/merger-bare"]: merger_bare_1.default,
     // @ts-ignore
-    [".mesh/sources/books74/oas-schema.js"]: oas_schema_js_1.default
+    [".mesh/sources/bvooks/oas-schema.js"]: oas_schema_js_1.default
 };
 const baseDir = (0, path_1.join)(__dirname, '..');
 const syncImportFn = (moduleId) => {
@@ -42,7 +42,7 @@ const utils_1 = require("@graphql-mesh/utils");
 const openapi_2 = (0, tslib_1.__importDefault)(require("@graphql-mesh/openapi"));
 const merger_bare_2 = (0, tslib_1.__importDefault)(require("@graphql-mesh/merger-bare"));
 const utils_2 = require("@graphql-mesh/utils");
-exports.rawConfig = { "sources": [{ "name": "books74", "handler": { "openapi": { "source": "./openapi-schemas/books74-schema.yaml" } } }] };
+exports.rawConfig = { "sources": [{ "name": "bvooks", "handler": { "openapi": { "source": "./openapi-schemas/bvooks-schema.yaml" } } }] };
 async function getMeshOptions() {
     const cache = new cache_inmemory_lru_2.default({
         ...(exports.rawConfig.cache || {}),
@@ -55,9 +55,9 @@ async function getMeshOptions() {
     const logger = new utils_1.DefaultLogger('🕸️');
     const sources = [];
     const transforms = [];
-    const books74Transforms = [];
+    const bvooksTransforms = [];
     const additionalTypeDefs = [];
-    const books74Handler = new openapi_2.default({
+    const bvooksHandler = new openapi_2.default({
         name: exports.rawConfig.sources[0].name,
         config: exports.rawConfig.sources[0].handler["openapi"],
         baseDir,
@@ -68,9 +68,9 @@ async function getMeshOptions() {
         importFn
     });
     sources.push({
-        name: 'books74',
-        handler: books74Handler,
-        transforms: books74Transforms
+        name: 'bvooks',
+        handler: bvooksHandler,
+        transforms: bvooksTransforms
     });
     const merger = new merger_bare_2.default({
         cache,

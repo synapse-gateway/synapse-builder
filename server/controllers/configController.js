@@ -79,8 +79,10 @@ const createConfig = (req, res, next) => {
 
   fs.writeFileSync(".meshrc.yaml", yaml.dump(yamlContent));
 
+  const randomNumber = Math.random() * 100;
+
   runCommand(`whoami`);
-  runCommand(`yarn mesh build`);
+  runCommand(`yarn mesh build && echo "${randomNumber}" >> trigger.js`);
   console.log("✓ Succesfully created .mesh directory");
 
   res.status(200).send();

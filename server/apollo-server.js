@@ -143,7 +143,7 @@ async function main() {
   });
 
   server.listen(process.env.NODE_DOCKER_PORT || 6868).then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}!`);
+    console.log(`🚀 Server ready at ${url}`);
   });
 }
 main().catch((err) => console.error(err));
