@@ -79,7 +79,8 @@ const createConfig = (req, res, next) => {
 
   fs.writeFileSync(".meshrc.yaml", yaml.dump(yamlContent));
 
-  runCommand(`yarn mesh build && sudo docker-compose restart apolloserver`);
+  runCommand(`whoami`);
+  runCommand(`yarn mesh build`);
   console.log("✓ Succesfully created .mesh directory");
 
   res.status(200).send();

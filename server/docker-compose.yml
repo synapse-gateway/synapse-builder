@@ -17,7 +17,7 @@ services:
       context: . #./server
       dockerfile: Dockerfile.apollo
     volumes:
-      - ./:/synapse/src
+      - .:/synapse/src
     restart: unless-stopped
     # env_file: ./server/.env
     env_file: .env
@@ -36,8 +36,10 @@ services:
     build:
       context: . #./server
       dockerfile: Dockerfile.gui
+    user: root
     volumes:
-      - ./:/synapse/src
+      - .:/synapse/src
+      # - .mesh:/home/node/synapse/src/.mesh
     restart: unless-stopped
     env_file: .env
     # env_file: ./server/.env
@@ -52,3 +54,5 @@ services:
       - mongo-network
 networks:
   mongo-network:
+# volumes:
+#   vol:

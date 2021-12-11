@@ -1,5 +1,5 @@
 sources:
-  - name: authors
+  - name: books74
     handler:
       openapi:
-        source: ./openapi-schemas/authors-schema.yaml
+        source: ./openapi-schemas/books74-schema.yaml
