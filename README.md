@@ -1,5 +1,5 @@
 <p align="center">
-    <img src='./images/synapse-logo.png' alt='synapse branding logo' width='250'/>
+    <img src='./images/synapse-logo-2.png' alt='synapse branding logo' width=''/>
 </p>
 
 ## The Team
