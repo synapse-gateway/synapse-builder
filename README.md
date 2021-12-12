@@ -56,21 +56,30 @@ Please have all of the following configured and ready to use on your local machi
 1. To clone the Synapse repository and set up the Gateway Manager run the following command: `npx @synapse-team/start-synapse`
 2. After running the above command, you will be prompted to input information for establishing a root user for the Gateway Manager
     - By default, the root user will have admin privileges and be able to create and manage users when your gateway is deployed (via AWS Copilot)
-    - In development, only the root account can be used for configuring and monitoring your GraphQL gateway
+    - During configuration, only the root account can be used for configuring and monitoring your GraphQL gateway
 3. Once the repository has been set up on your local environment, start up Synapse with following command: `synapse up`
     - This will run the Synapse architecture on your local machine, which includes starting up and running the Gateway Manager, the GraphQL Gateway, as well as a local instance of MongoDB
 4. If you ever need to stop or tear down Synapse, use the command `synapse down`
 
 ## Basic Usage
 
+### Two States of Synapse
+1. Configuration
+- During configuration, Synapse runs on the user's local machine and the GraphQL Gateway is configured through an intuitive GUI interface, known as the Gateway Manager. The developer is then able to test out their newly configured Gateway with a GraphQL Playground, as well as being able to view latencies of all requests and error data through the Gateway Manager.
+2. Production
+- In production, Synapse runs on AWS and the user is no longer able to configure their gateway through the deployed Gateway Manager. The production Gateway Manager instead allows admin and root user to be able manage users that are able to log onto the Gateway Manager to view monitoring data for the Gateway. 
+- Further changes to the Gateway must be made locally on the user's local machine and then can be reflected in the production version by the user running `synapse redeploy`.
+
+### Walkthrough
+
 1. Once the Gateway Manager is successfully up and running, visit `localhost:4005` to login and start configuring your GraphQL gateway
     - Log in with the root account created during the installation process
 2. Within the Data Sources tab, you can select, configure, and add all required data sources to be combined within your gateway
     - For more information on how to add specific sources and what sources are available please see the Adding Data Sources section on the docs
 3. After you have added all your required data sources, configure and generate your GraphQL gateway by clicking on the “Create Your Synapse” button
-    - Synapse will generate a default GraphQL schema for all your added data sources which can be customized by altering the `.meshrc` file located in the `server` directory. Once altered, run the following command: `synapse restart` and the Gateway will be reconfigured with your changes. Synapse is powered by GraphQL Mesh under the hood, for more information on customizing your gateway, please visit the [GraphQL Mesh Docs](https://www.graphql-mesh.com/docs/getting-started/introduction).
-4. To test your gateway you can naviagte to `localhost:6868`, where you will see a GraphQL playground you can use to test queries, mutations, and errors
-    - All queries and mutations made to the server will be recorded in your local MongoDB and can be viewed on the Gateway Manager. Note, this data will be reset once you’ve deployed your server to AWS
+    - Synapse will generate a default GraphQL schema for all your added data sources which can be customized by altering the `.meshrc` file located in the `server` directory. Once manually altered, run the following command: `synapse restart` and the Gateway will be reconfigured with your changes. Synapse is powered by GraphQL Mesh under the hood, for more information on customizing your gateway, please visit the [GraphQL Mesh Docs](https://www.graphql-mesh.com/docs/getting-started/introduction).
+4. To test your gateway you can navigate to `http://localhost:6868`, where you will see a GraphQL playground you can use to test queries, mutations, and errors.
+    - All queries and mutations made to the server will be recorded in your local MongoDB and can be viewed on the Gateway Manager. Note, this data will be reset once you’ve deployed your server to AWS.
 6. Deploy your Synapse GraphQL Gateway to AWS by running the following command: `synapse deploy`
     - Amazon CLI must configured with your credentials on your local machine
     - For more information about deployment, read the [Deployment](#deployment) section below
@@ -79,22 +88,22 @@ Please have all of the following configured and ready to use on your local machi
 
 ## Gateway Manager
 
-At its core, The Gateway Manager is an interface to manage the Synapse GraphQL Gateway. In development, the root user will be able to login and add data sources (API endpoints) to configure the gateway from the Data Sources menu tab. Once the data sources have been added, the user clicks on the “Create Your Synapse” button and Synapse automatically creates a unified, stitched GraphQL schema for all of the added data sources.
+At its core, The Gateway Manager is an interface to manage the Synapse GraphQL Gateway. During configuration, the root user will be able to login and add data sources (API endpoints) to configure the gateway from the Data Sources menu tab. Once the data sources have been added, the user clicks on the “Create Your Synapse” button and Synapse automatically creates a unified, stitched GraphQL schema for all of the added data sources.
 
-Synapse will also configure a GraphQL server that implements the generated schema automatically so that the user only needs to run a single command to start testing out their new GraphQL gateway. Every query and mutation made to this GraphQL gateway is then recorded and can be viewed from the Metrics & Logs menu tab in the Gateway Manager.
+Synapse will also configure a GraphQL server that implements the generated schema automatically so that the user can immediately start testing out their new GraphQL gateway. Every query and mutation made to this GraphQL gateway is recorded and can be viewed from the Dashboard tab in the Gateway Manager.
 
-## Query Monitoring
+### Query Monitoring
 
 The user has many choices for how they would like to view and monitor their gateway data. This can be done from the dropdown menu at the top of the dashboard page.
 
-## Client Requests vs. API Resolvers
+### Client Requests vs. API Resolvers
 
-At the top of the dashboard page, there are two buttons: Client Requests and API Resolvers. Client Requests will show data that encompasses the latencies of entire queries or mutations made to the Gateway. These can be further filtered by root fields of queries/mutations.
+At the top of the dashboard page, there are two buttons: Client Requests and API Resolvers. Client Requests will show data that encompasses the latencies of entire queries or mutations made to the Gateway. These can be further filtered by the root fields of those queries/mutations.
 
-API Resolvers will show data that encompasses the latencies of each indvidial resolver function that retrieves data on the backend. This data can be further filtered to just show an individual resolver or many combined.
+API Resolvers will show data that encompasses the latencies of each individual resolver function that retrieves data on the backend. This data can be further filtered to just show an individual resolver or many combined.
 
 
-## Viewing Data Options
+### Viewing Data Options
 
 - Choose a time frame to view all of the queries or mutations
 - View data on root queries
@@ -105,11 +114,11 @@ API Resolvers will show data that encompasses the latencies of each indvidial re
 
 There are two versions of the Gateway Manager, one for configuration and the other for production. There are some key distinctions between the two as explained below. 
 
-## Managing Users
+### Managing Users
 
-During configuration, only the root user is able to log in and no user accounts can be created. Therefore, this version does not have a user management tab. In the production version, however, root/admin users are able to view a “Manage Users” tab which will allow them to create and delete additional users. When creating a user, the admin is able to specify whether the new user will be an admin or not. The difference between an admin and non-admin user is that users with admin privileges are the only ones able to add and manage users in production but all users are able to view metrics/logs in production. 
+During configuration, only the root user is able to log in and no user accounts can be created. Therefore, this version does not have a user management tab. In the production version, however, root/admin users are able to view a “Manage Users” tab which will allow them to create and delete additional users. When creating a user, the admin is able to specify whether the new user will be an admin or not. The difference between an admin and non-admin user is that users with admin privileges are the only ones able to add and manage users in production, but all users are able to view metrics/logs in production. 
 
-## Synapse Configuration
+### Synapse Configuration
 
 The other key distinction between the production and configuration Gateway Manager is that the Synapse GraphQL Server can only be configured during configuration on your local machine. Once in production, the Gateway Manager no longer shows the Data Sources tab and loses the functionality of adding/deleting data sources from the gateway. Only the original root user is able to configure and modify the gateway in configuration locally before it is deployed
 
@@ -131,7 +140,7 @@ The user can visit `http://localhost:4005` and login with the root account they 
 
 ### Testing
 
-The gateway server will run on port 6868 by default. Navigating to `http://localhost:6868` will direct the user to a GraphQL playground where they are able to test out their server with different queries and mutations. If the user wants to make any changes to the gateway or add further customization at this point, they can do so, either through the Gateway Manager or manually in the repository. If changes are made manually in the repository, the user must run the command `synapse restart` for the changes to take effect. The user can then naviagte back to their Gateway for further testing. Once the user is satisfied with their gateway, they can deploy their gateway and a production Gateway Manager.
+The gateway server will run on port 6868 by default. Navigating to `http://localhost:6868` will direct the user to a GraphQL playground where they are able to test out their server with different queries and mutations. If the user wants to make any changes to the gateway or add further customization at this point, they can do so, either through the Gateway Manager or manually in the repository. If changes are made manually in the repository, the user must run the command `synapse restart` for the changes to take effect. The user can then navigate back to their Gateway for further testing. Once the user is satisfied with their gateway, they can deploy their gateway and a production Gateway Manager.
 
 ### Stopping or tearing down Synapse on Local Machine
 
