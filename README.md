@@ -1,4 +1,6 @@
-<img src='./images/synapse-logo.png' alt='synapse branding logo' width='250'/>
+<p align="center">
+    <img src='./images/synapse-logo.png' alt='synapse branding logo' width='250'/>
+</p>
 
 ## The Team
 
