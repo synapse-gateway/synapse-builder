@@ -1,4 +1,4 @@
-# ![Synapse-branding-logo](./images/synapse-logo.png)
+<img src='./images/synapse-logo.png' alt='synapse branding logo' width='250'/>
 
 ## The Team
 
