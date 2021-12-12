@@ -1,4 +1,4 @@
-# [![Synapse-branding-logo](<INSERT IMAGE URL>)][github]
+# ![Synapse-branding-logo](./images/synapse-logo.png)
 
 ## The Team
 
