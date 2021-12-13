@@ -18,7 +18,7 @@
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
-- [Installion](#installation)
+- [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Gateway Manager](#gateway-manager)
 - [Query Monitoring](#query-monitoring)
