@@ -170,10 +170,10 @@ const Dashboard = () => {
                   path='/'
                   element={<Monitoring loggedInUser={loggedInUser} />}
                 />
-                <Route
+                {/* <Route
                   path='/datasources'
                   element={<DataSources loggedInUser={loggedInUser} />}
-                />
+                /> */}
                 <Route
                   path='/manageusers'
                   element={
