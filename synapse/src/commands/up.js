@@ -8,8 +8,6 @@ class UpCommand extends Command {
       .slice(0, -3)
       .join("/")}/server`;
 
-    let synapseGUI;
-
     const synapseInstance = spawn("sudo", ["docker-compose", "up", "-d"], {
       cwd: rootDirectory,
     });
@@ -22,34 +20,7 @@ class UpCommand extends Command {
       process.stdout.write(s);
     });
 
-    synapseInstance.on("exit", (s) => {
-      synapseGUI = spawn("node", ["gui-server.js"], {
-        cwd: rootDirectory,
-      });
-
-      synapseGUI.stdout.on("data", (s) => {
-        process.stdout.write(s);
-      });
-
-      synapseGUI.stderr.on("data", (s) => {
-        process.stdout.write(s);
-      });
-    });
-
     process.stdin.pipe(synapseInstance.stdin);
-
-    const killWorker = () => {
-      console.log("\nExiting Synapse...");
-      synapseInstance.kill();
-      if (synapseGUI) synapseGUI.kill();
-      spawn("sudo", ["docker-compose", "down"], {
-        cwd: rootDirectory,
-      });
-    };
-
-    process.on("uncaughtException", killWorker);
-    process.on("SIGINT", killWorker);
-    process.on("SIGTERM", killWorker);
   }
 }
 

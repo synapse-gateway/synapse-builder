@@ -33,26 +33,26 @@ services:
       - mongo-network
     volumes:
       - ./:/synapse/src
-  # guiserver:
-  #   depends_on:
-  #     - mongodb
-  #   build:
-  #     context: . #./server
-  #     dockerfile: Dockerfile.gui
-  #   volumes:
-  #     # - vol:/synapse/src
-  #     - ./:/synapse/src
-  #   restart: unless-stopped
-  #   env_file: .env
-  #   # env_file: ./server/.env
-  #   ports:
-  #     - 4005:4005
-  #   environment:
-  #     - DB_HOST=mongodb
-  #     - PRODUCTION=false
-  #   stdin_open: true
-  #   tty: true
-  #   networks:
-  #     - mongo-network
+  guiserver:
+    depends_on:
+      - mongodb
+    build:
+      context: . #./server
+      dockerfile: Dockerfile.gui
+    volumes:
+      # - vol:/synapse/src
+      - ./:/synapse/src
+    restart: unless-stopped
+    env_file: .env
+    # env_file: ./server/.env
+    ports:
+      - 4005:4005
+    environment:
+      - DB_HOST=mongodb
+      - PRODUCTION=false
+    stdin_open: true
+    tty: true
+    networks:
+      - mongo-network
 networks:
   mongo-network:
