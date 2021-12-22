@@ -6,7 +6,7 @@
 
 **[Jay Gudsson](https://www.linkedin.com/in/gudsson/)** _Software Engineer_ (Vancouver, Canada)
 
-**[Justin Gustafson](https://www.linkedin.com/in/justin-gustafson-98063945/)** _Software Engineer_ (Narnia, Michigan)
+**[Justin Gustafson](https://www.linkedin.com/in/justin-gustafson-98063945/)** _Software Engineer_ (Grand Rapids, Michigan)
 
 **[Aneesh Patel](https://www.linkedin.com/in/aneesh-patel-62172b91/)** _Software Engineer_ (Virginia Beach, Virginia)
 
