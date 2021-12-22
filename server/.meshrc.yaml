@@ -1,5 +1,9 @@
 sources:
-  - name: bookz
+  - name: test_authors
     handler:
       openapi:
-        source: ./openapi-schemas/bookz-schema.yaml
+        source: ./openapi-schemas/test_authors-schema.yaml
+  - name: test_books
+    handler:
+      openapi:
+        source: ./openapi-schemas/test_books-schema.yaml

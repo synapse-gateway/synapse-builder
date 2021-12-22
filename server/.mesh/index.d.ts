@@ -27,6 +27,12 @@ export declare type Scalars = {
 };
 export declare type Query = {
     /**
+     * get all them authors
+     *
+     * Equivalent to GET /authors
+     */
+    getAuthors?: Maybe<Array<Maybe<AuthorsListItem>>>;
+    /**
      * retrieves all books
      *
      * Equivalent to GET /books
@@ -39,11 +45,18 @@ export declare type Query = {
      */
     getBooksId?: Maybe<Book>;
 };
+export declare type QuerygetAuthorsArgs = {
+    limit?: Maybe<Scalars['Int']>;
+};
 export declare type QuerygetBooksArgs = {
     limit?: Maybe<Scalars['Int']>;
 };
 export declare type QuerygetBooksIdArgs = {
     id: Scalars['String'];
+};
+export declare type AuthorsListItem = {
+    author?: Maybe<Scalars['String']>;
+    id?: Maybe<Scalars['Float']>;
 };
 export declare type BooksListItem = {
     authorId?: Maybe<Scalars['Float']>;
@@ -65,7 +78,16 @@ export declare type ResolverTypeWrapper<T> = Promise<T> | T;
 export declare type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
     resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export declare type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export declare type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
+    fragment: string;
+    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export declare type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
+    selectionSet: string;
+    resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export declare type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
+export declare type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs> | StitchingResolver<TResult, TParent, TContext, TArgs>;
 export declare type ResolverFn<TResult, TParent, TContext, TArgs> = (parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => Promise<TResult> | TResult;
 export declare type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
 export declare type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (parent: TParent, args: TArgs, context: TContext, info: GraphQLResolveInfo) => TResult | Promise<TResult>;
@@ -90,26 +112,34 @@ export declare type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {
 /** Mapping between all available schema types and the resolvers types */
 export declare type ResolversTypes = ResolversObject<{
     Query: ResolverTypeWrapper<{}>;
-    BooksListItem: ResolverTypeWrapper<BooksListItem>;
-    Float: ResolverTypeWrapper<Scalars['Float']>;
+    AuthorsListItem: ResolverTypeWrapper<AuthorsListItem>;
     String: ResolverTypeWrapper<Scalars['String']>;
+    Float: ResolverTypeWrapper<Scalars['Float']>;
     Int: ResolverTypeWrapper<Scalars['Int']>;
-    Book: ResolverTypeWrapper<Book>;
     Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+    BooksListItem: ResolverTypeWrapper<BooksListItem>;
+    Book: ResolverTypeWrapper<Book>;
 }>;
 /** Mapping between all available schema types and the resolvers parents */
 export declare type ResolversParentTypes = ResolversObject<{
     Query: {};
-    BooksListItem: BooksListItem;
-    Float: Scalars['Float'];
+    AuthorsListItem: AuthorsListItem;
     String: Scalars['String'];
+    Float: Scalars['Float'];
     Int: Scalars['Int'];
-    Book: Book;
     Boolean: Scalars['Boolean'];
+    BooksListItem: BooksListItem;
+    Book: Book;
 }>;
 export declare type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+    getAuthors?: Resolver<Maybe<Array<Maybe<ResolversTypes['AuthorsListItem']>>>, ParentType, ContextType, RequireFields<QuerygetAuthorsArgs, never>>;
     getBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['BooksListItem']>>>, ParentType, ContextType, RequireFields<QuerygetBooksArgs, never>>;
     getBooksId?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QuerygetBooksIdArgs, 'id'>>;
+}>;
+export declare type AuthorsListItemResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['AuthorsListItem'] = ResolversParentTypes['AuthorsListItem']> = ResolversObject<{
+    author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+    id?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 export declare type BooksListItemResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['BooksListItem'] = ResolversParentTypes['BooksListItem']> = ResolversObject<{
     authorId?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -129,25 +159,38 @@ export declare type BookResolvers<ContextType = MeshContext, ParentType extends 
 }>;
 export declare type Resolvers<ContextType = MeshContext> = ResolversObject<{
     Query?: QueryResolvers<ContextType>;
+    AuthorsListItem?: AuthorsListItemResolvers<ContextType>;
     BooksListItem?: BooksListItemResolvers<ContextType>;
     Book?: BookResolvers<ContextType>;
 }>;
 import { MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { InContextSdkMethod } from '@graphql-mesh/types';
-export declare type QueryBookzSdk = {
+export declare type QueryTestAuthorsSdk = {
+    getAuthors: InContextSdkMethod<Query['getAuthors'], QuerygetAuthorsArgs, MeshContext>;
+};
+export declare type MutationTestAuthorsSdk = {};
+export declare type SubscriptionTestAuthorsSdk = {};
+export declare type QueryTestBooksSdk = {
     getBooks: InContextSdkMethod<Query['getBooks'], QuerygetBooksArgs, MeshContext>;
     getBooksId: InContextSdkMethod<Query['getBooksId'], QuerygetBooksIdArgs, MeshContext>;
 };
-export declare type MutationBookzSdk = {};
-export declare type SubscriptionBookzSdk = {};
-export declare type BookzContext = {
-    ["bookz"]: {
-        Query: QueryBookzSdk;
-        Mutation: MutationBookzSdk;
-        Subscription: SubscriptionBookzSdk;
+export declare type MutationTestBooksSdk = {};
+export declare type SubscriptionTestBooksSdk = {};
+export declare type TestAuthorsContext = {
+    ["test_authors"]: {
+        Query: QueryTestAuthorsSdk;
+        Mutation: MutationTestAuthorsSdk;
+        Subscription: SubscriptionTestAuthorsSdk;
     };
 };
-export declare type MeshContext = BookzContext & BaseMeshContext;
+export declare type TestBooksContext = {
+    ["test_books"]: {
+        Query: QueryTestBooksSdk;
+        Mutation: MutationTestBooksSdk;
+        Subscription: SubscriptionTestBooksSdk;
+    };
+};
+export declare type MeshContext = TestAuthorsContext & TestBooksContext & BaseMeshContext;
 import { GetMeshOptions } from '@graphql-mesh/runtime';
 import { YamlConfig } from '@graphql-mesh/types';
 export declare const rawConfig: YamlConfig.Config;
