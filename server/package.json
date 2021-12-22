@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start-gui": "node gui-server.js",
-    "start-apollo": "node apollo-server.js",
+    "start-apollo": "nodemon -L apollo-server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon gui-server.js",
     "build:mesh": "yarn mesh build",
@@ -32,8 +32,8 @@
     "js-yaml": "^4.1.0",
     "mongoose": "^6.0.12"
   },
+  "proxy": "http://localhost:4005",
   "devDependencies": {
-    "nodemon": "^2.0.14"
-  },
-  "proxy": "http://localhost:4005"
+    "nodemon": "^2.0.15"
+  }
 }

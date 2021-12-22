@@ -16,9 +16,8 @@ services:
     build:
       context: . #./server
       dockerfile: Dockerfile.apollo
-    # volumes:
-    # - vol:/synapse/src
-    # - ./:/synapse/src
+    volumes:
+      - .:/synapse/src
     restart: unless-stopped
     # env_file: ./server/.env
     env_file: .env
@@ -31,28 +30,29 @@ services:
     tty: true
     networks:
       - mongo-network
+  guiserver:
+    depends_on:
+      - mongodb
+    build:
+      context: . #./server
+      dockerfile: Dockerfile.gui
+    user: root
     volumes:
-      - ./:/synapse/src
-  # guiserver:
-  #   depends_on:
-  #     - mongodb
-  #   build:
-  #     context: . #./server
-  #     dockerfile: Dockerfile.gui
-  #   volumes:
-  #     # - vol:/synapse/src
-  #     - ./:/synapse/src
-  #   restart: unless-stopped
-  #   env_file: .env
-  #   # env_file: ./server/.env
-  #   ports:
-  #     - 4005:4005
-  #   environment:
-  #     - DB_HOST=mongodb
-  #     - PRODUCTION=false
-  #   stdin_open: true
-  #   tty: true
-  #   networks:
-  #     - mongo-network
+      - .:/synapse/src
+      # - .mesh:/home/node/synapse/src/.mesh
+    restart: unless-stopped
+    env_file: .env
+    # env_file: ./server/.env
+    ports:
+      - 4005:4005
+    environment:
+      - DB_HOST=mongodb
+      - PRODUCTION=false
+    stdin_open: true
+    tty: true
+    networks:
+      - mongo-network
 networks:
   mongo-network:
+# volumes:
+#   vol:

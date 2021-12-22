@@ -79,8 +79,11 @@ const createConfig = (req, res, next) => {
 
   fs.writeFileSync(".meshrc.yaml", yaml.dump(yamlContent));
 
-  runCommand(`yarn mesh build && sudo docker-compose restart apolloserver`);
+  const randomNumber = Math.random() * 100;
+
+  runCommand(`yarn mesh build`);
   console.log("✓ Succesfully created .mesh directory");
+  runCommand(`echo "${randomNumber}" > trigger.js`);
 
   res.status(200).send();
 };

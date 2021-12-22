@@ -1,12 +1,24 @@
 FROM node:16-alpine
 
+# RUN mkdir /synapse
+# RUN cd synapse
+# RUN mkdir src
+# RUN useradd -ms /bin/bash newuser
+# RUN chown newuser:newuser /synapse/src
+# USER newuser
+
 WORKDIR /synapse/src
 
+# USER node
+
 COPY package.json ./
+COPY yarn.lock ./
 
 RUN yarn install
 
-VOLUME ./ ./
+COPY ./ ./
+
+RUN chmod -R 777 /root/
 
 ENV PRODUCTION=true
 ENV SERVICE_NAME=mongo
