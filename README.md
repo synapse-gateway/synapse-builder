@@ -2,6 +2,10 @@
     <img src='./images/synapse-logo-3.png' alt='synapse branding logo' width=''/>
 </p>
 
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/synapse.svg)](https://npmjs.org/package/synapse)
+[![Downloads/week](https://img.shields.io/npm/dw/synapse.svg)](https://npmjs.org/package/synapse)
+
 ## The Team
 
 **[Jay Gudsson](https://www.linkedin.com/in/gudsson/)** _Software Engineer_ (Vancouver, Canada)
